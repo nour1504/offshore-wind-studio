@@ -1,0 +1,1095 @@
+/* =============================================================================================
+   Offshore Wind Studio — design system
+   Colours: green and white (light), black and white (dark), one red for alerts (theme.ts maps
+   every other Mantine hue onto these). Motion: same curves and durations as src/motion.ts.
+   Typography: Manrope (bundled, SIL OFL); rounded controls.
+   ============================================================================================= */
+
+@font-face {
+  font-family: "Manrope Variable";
+  src: url("./assets/fonts/manrope-variable.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+/* ------------------------------------------------------------------------------- tokens */
+:root {
+  --ows-page-max: 1320px;
+  --ows-card-pad: 20px;
+  --ows-control-radius: 14px;
+  --ows-surface-radius: 12px;
+  --ows-page-in-x: 0px;
+  --ows-page-out-x: 0px;
+  --ows-loss: var(--mantine-color-ember-6);
+  --ows-gain: var(--mantine-color-teal-6);
+  --ows-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ows-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ows-ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ows-dur-micro: 120ms;
+  --ows-dur-state: 160ms;
+  --ows-dur-menu: 190ms;
+  --ows-dur-dialog: 240ms;
+  --ows-dur-large: 320ms;
+  --ows-dur-enter: 380ms;
+}
+
+:root[data-mantine-color-scheme="light"] {
+  --ows-farm-0: #2f9e5b; --ows-farm-1: #868e96; --ows-farm-2: #7ac996; --ows-farm-3: #1f7f48;
+  --ows-farm-4: #adb5bd; --ows-farm-5: #4fb67a; --ows-farm-6: #5c636a; --ows-farm-7: #a3d9b8;
+  --ows-domain-0: #0e4d2c; --ows-domain-1: #1f7f48; --ows-domain-2: #3aad66; --ows-domain-3: #495057; --ows-domain-4: #868e96;
+  --ows-app-bg: #f5f7f5;
+  --ows-canvas: #ffffff;
+  --ows-card: #ffffff;
+  --ows-tile: #f5f8f5;
+  --ows-border: rgba(14, 77, 44, 0.1);
+  --ows-border-strong: rgba(14, 77, 44, 0.17);
+  --ows-subtle: rgba(14, 77, 44, 0.05);
+  --ows-muted: #59675f;
+  --ows-nav-text: #43564b;
+  --ows-on-accent: #ffffff;
+  --ows-turbine: #0e4d2c;
+  --ows-shadow-card: none;
+  --ows-shadow-pop: 0 2px 6px rgba(14, 46, 30, 0.06), 0 16px 40px rgba(14, 46, 30, 0.14);
+  --mantine-color-body: var(--ows-canvas);
+  --mantine-color-text: #193126;
+  --mantine-color-dimmed: #59675f;
+}
+
+html[data-mantine-color-scheme="dark"]:root {
+  --ows-farm-0: #e7e7e7; --ows-farm-1: #9d9d9d; --ows-farm-2: #c8c8c8; --ows-farm-3: #aaa;
+  --ows-farm-4: #f7f7f7; --ows-farm-5: #bcbcbc; --ows-farm-6: #888; --ows-farm-7: #d8d8d8;
+  --ows-domain-0: #f2f2f2; --ows-domain-1: #bbb; --ows-domain-2: #949494; --ows-domain-3: #d0d0d0; --ows-domain-4: #aaa;
+  --ows-app-bg: #080808;
+  --ows-canvas: #101010;
+  --ows-card: rgba(255, 255, 255, 0.028);
+  --ows-tile: rgba(255, 255, 255, 0.03);
+  --ows-border: rgba(255, 255, 255, 0.075);
+  --ows-border-strong: rgba(255, 255, 255, 0.13);
+  --ows-subtle: rgba(255, 255, 255, 0.045);
+  --ows-muted: #9a9ba2;
+  --ows-nav-text: #b4b5bb;
+  --ows-on-accent: #0b0b0d;
+  --ows-turbine: #f2f3f5;
+  --ows-shadow-card: none;
+  --ows-shadow-pop: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 24px 64px rgba(0, 0, 0, 0.65);
+  --mantine-color-body: var(--ows-canvas);
+  --mantine-color-text: #ececef;
+  --mantine-color-dimmed: #9a9ba2;
+  --mantine-color-default: rgba(255, 255, 255, 0.04);
+  --mantine-color-default-hover: rgba(255, 255, 255, 0.08);
+  --mantine-color-default-border: rgba(255, 255, 255, 0.1);
+  --mantine-primary-color-filled: #f1f2f4;
+  --mantine-primary-color-filled-hover: #ffffff;
+  --mantine-primary-color-contrast: #0b0b0d;
+  --mantine-primary-color-light: rgba(255, 255, 255, 0.08);
+  --mantine-primary-color-light-hover: rgba(255, 255, 255, 0.13);
+  --mantine-primary-color-light-color: #f1f2f4;
+  --mantine-color-disabled: rgba(255, 255, 255, 0.06);
+  --mantine-color-disabled-color: #7d7e86;
+  --mantine-color-disabled-border: rgba(255, 255, 255, 0.08);
+}
+/* Dark mode: the accent is white, whatever green-family name a component asks for */
+html[data-mantine-color-scheme="dark"]:root {
+  --mantine-color-forest-filled: #f1f2f4;
+  --mantine-color-forest-filled-hover: #ffffff;
+  --mantine-color-forest-light: rgba(255, 255, 255, 0.08);
+  --mantine-color-forest-light-hover: rgba(255, 255, 255, 0.13);
+  --mantine-color-forest-light-color: #f1f2f4;
+  --mantine-color-forest-outline: rgba(255, 255, 255, 0.7);
+  --mantine-color-forest-text: #f1f2f4;
+  --mantine-color-green-filled: #f1f2f4;
+  --mantine-color-green-filled-hover: #ffffff;
+  --mantine-color-green-light: rgba(255, 255, 255, 0.08);
+  --mantine-color-green-light-hover: rgba(255, 255, 255, 0.13);
+  --mantine-color-green-light-color: #f1f2f4;
+  --mantine-color-green-outline: rgba(255, 255, 255, 0.7);
+  --mantine-color-green-text: #f1f2f4;
+  --mantine-color-teal-filled: #f1f2f4;
+  --mantine-color-teal-filled-hover: #ffffff;
+  --mantine-color-teal-light: rgba(255, 255, 255, 0.08);
+  --mantine-color-teal-light-hover: rgba(255, 255, 255, 0.13);
+  --mantine-color-teal-light-color: #f1f2f4;
+  --mantine-color-teal-outline: rgba(255, 255, 255, 0.7);
+  --mantine-color-teal-text: #f1f2f4;
+  --mantine-color-cyan-filled: #f1f2f4;
+  --mantine-color-cyan-filled-hover: #ffffff;
+  --mantine-color-cyan-light: rgba(255, 255, 255, 0.08);
+  --mantine-color-cyan-light-hover: rgba(255, 255, 255, 0.13);
+  --mantine-color-cyan-light-color: #f1f2f4;
+  --mantine-color-cyan-outline: rgba(255, 255, 255, 0.7);
+  --mantine-color-cyan-text: #f1f2f4;
+  --mantine-color-blue-filled: #f1f2f4;
+  --mantine-color-blue-filled-hover: #ffffff;
+  --mantine-color-blue-light: rgba(255, 255, 255, 0.08);
+  --mantine-color-blue-light-hover: rgba(255, 255, 255, 0.13);
+  --mantine-color-blue-light-color: #f1f2f4;
+  --mantine-color-blue-outline: rgba(255, 255, 255, 0.7);
+  --mantine-color-blue-text: #f1f2f4;
+  --mantine-color-lime-filled: #f1f2f4;
+  --mantine-color-lime-filled-hover: #ffffff;
+  --mantine-color-lime-light: rgba(255, 255, 255, 0.08);
+  --mantine-color-lime-light-hover: rgba(255, 255, 255, 0.13);
+  --mantine-color-lime-light-color: #f1f2f4;
+  --mantine-color-lime-outline: rgba(255, 255, 255, 0.7);
+  --mantine-color-lime-text: #f1f2f4;
+}
+
+/* ------------------------------------------------------------------------------- base */
+html, body, #root { min-height: 100%; }
+body {
+  background: var(--ows-app-bg);
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--mantine-primary-color-light-hover); }
+
+/* ------------------------------------------------------------------------------- frame */
+.ows-shell .mantine-AppShell-main { background: transparent; }
+/* Folding the sidebar: its width and the content's margin move together (not at the first load) */
+html:not(.ows-booting) .ows-shell .mantine-AppShell-main { transition: padding-inline-start var(--ows-dur-large) var(--ows-ease-out); }
+
+/* Sidebar: on the window's background, no border; folds down to its icons */
+.ows-sidebar.mantine-AppShell-navbar {
+  background: var(--ows-app-bg);
+  border: 0;
+  border-right: 1px solid var(--ows-border);
+  display: flex;
+  flex-direction: column;
+}
+html:not(.ows-booting) .ows-sidebar.mantine-AppShell-navbar {
+  transition-property: width, transform;
+  transition-duration: var(--ows-dur-large);
+  transition-timing-function: var(--ows-ease-out);
+}
+.ows-sidebar-head { height: 56px; padding: 0 12px 0 16px; flex: none; }
+.ows-shell[data-folded] .ows-sidebar-head { padding: 0; justify-content: center; flex-direction: column; height: auto; gap: 8px; padding-block: 12px; }
+.ows-brand { display: inline-flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; min-width: 0; }
+.ows-brand-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  flex: none;
+  color: #ffffff;
+  background: #176743;
+  transition: transform var(--ows-dur-large) var(--ows-ease-spring);
+}
+html[data-mantine-color-scheme="dark"] .ows-brand-mark {
+  color: #0b0b0d;
+  background: #f1f1f1;
+}
+.ows-brand:hover .ows-brand-mark { transform: rotate(-8deg) scale(1.06); }
+.ows-brand-name { font-weight: 600; font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ows-fold { color: var(--ows-muted); }
+
+/* Project switcher: a workspace selector */
+.ows-project-switcher .mantine-Input-input {
+  height: 36px;
+  font-weight: 600;
+  background: var(--ows-card);
+  border-color: var(--ows-border-strong);
+  box-shadow: var(--ows-shadow-card);
+}
+.ows-project-tile {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ows-on-accent);
+  background: var(--mantine-primary-color-filled);
+}
+.ows-project-mini { display: grid; place-items: center; width: 44px; height: 36px; margin-inline: auto; border-radius: 8px; }
+.ows-project-mini:hover { background: var(--ows-subtle); }
+
+/* Search (Ctrl K) */
+.ows-search-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 34px;
+  padding: 0 8px 0 10px;
+  border-radius: 8px;
+  border: 1px solid var(--ows-border);
+  background: var(--ows-subtle);
+  color: var(--ows-muted);
+  font-size: var(--mantine-font-size-sm);
+  transition: border-color var(--ows-dur-state) ease, background-color var(--ows-dur-state) ease, color var(--ows-dur-state) ease;
+}
+.ows-search-button:hover { border-color: var(--ows-border-strong); color: var(--mantine-color-text); }
+.ows-search-button[data-compact] { width: 44px; justify-content: center; padding: 0; margin-inline: auto; }
+.ows-search-label { flex: 1; text-align: left; }
+
+/* Menu entries */
+.ows-nav-scroll .mantine-ScrollArea-viewport { mask-image: linear-gradient(to bottom, #000 calc(100% - 24px), transparent); }
+.ows-nav-group { font-size: 12px; font-weight: 600; color: var(--ows-muted); padding: 2px 10px 4px; }
+.ows-nav-rule { display: block; height: 1px; margin: 4px 10px 6px; background: var(--ows-border); }
+.ows-nav-link.mantine-NavLink-root {
+  position: relative;
+  z-index: 1;
+  min-height: 32px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  color: var(--ows-nav-text);
+  font-size: 13.5px;
+  background: transparent;
+  transition: color var(--ows-dur-state) ease, background-color var(--ows-dur-state) ease;
+}
+.ows-nav-link.mantine-NavLink-root[data-active] { background: transparent; color: var(--mantine-color-text); font-weight: 600; }
+.ows-nav-link.mantine-NavLink-root:not([data-active]):hover { background: var(--ows-subtle); color: var(--mantine-color-text); }
+.ows-nav-link .mantine-NavLink-section { color: var(--ows-muted); transition: color var(--ows-dur-state) ease; }
+.ows-nav-link[data-active] .mantine-NavLink-section { color: var(--mantine-color-forest-7); }
+html[data-mantine-color-scheme="dark"] .ows-nav-link[data-active] .mantine-NavLink-section { color: #ffffff; }
+.ows-nav-link .mantine-NavLink-section svg { transition: transform var(--ows-dur-large) var(--ows-ease-spring); }
+.ows-nav-link:hover .mantine-NavLink-section svg { transform: scale(1.12) rotate(-4deg); }
+.ows-shell[data-folded] .ows-nav-link.mantine-NavLink-root { justify-content: center; padding-inline: 0; width: 44px; margin-inline: auto; }
+.ows-shell[data-folded] .ows-nav-link .mantine-NavLink-section { margin: 0; }
+.ows-nav-glide { border-radius: 8px; background: var(--ows-card); box-shadow: 0 0 0 1px var(--ows-border-strong), var(--ows-shadow-card); }
+html[data-mantine-color-scheme="dark"] .ows-nav-glide { background: rgba(255, 255, 255, 0.07); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.06); }
+.ows-sidebar-foot { flex: none; padding-top: 8px; padding-bottom: 14px; border-top: 1px solid var(--ows-border); }
+
+/* The canvas: a stable working surface, distinct from the navigation. */
+.ows-canvas {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--ows-canvas);
+  overflow: clip;
+}
+.ows-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 120;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 28px;
+  border-bottom: 1px solid var(--ows-border);
+  background: var(--ows-canvas);
+}
+.ows-canvas-body { padding: 24px 28px 56px; }
+.ows-canvas-body--project { padding-bottom: 120px; }
+.ows-crumbs { display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 13.5px; }
+.ows-crumb { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ows-crumb-link { color: var(--ows-muted); text-decoration: none; transition: color var(--ows-dur-state) ease; }
+.ows-crumb-link:hover { color: var(--mantine-color-text); }
+.ows-crumb-sep { color: var(--ows-muted); opacity: 0.6; flex: none; }
+.ows-crumb-current { display: inline-flex; align-items: center; gap: 7px; font-weight: 600; animation: ows-crumb-in var(--ows-dur-large) var(--ows-ease-out); }
+.ows-crumb-current svg { color: var(--ows-muted); }
+
+@media (max-width: 48em) {
+  .ows-canvas { margin: 0; border-radius: 0; border: 0; min-height: 100dvh; }
+  .ows-topbar { top: 0; box-shadow: none; padding-inline: 12px; }
+  .ows-canvas-body { padding: 20px 14px 48px; }
+  .ows-sidebar.mantine-AppShell-navbar { background: var(--ows-canvas); }
+}
+
+/* ------------------------------------------------------------------------------- page */
+.ows-page { padding-bottom: 8px; }
+.ows-page h1 { font-size: 1.625rem; font-weight: 600; line-height: 1.25; }
+.ows-page-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  margin-top: 2px;
+  color: var(--mantine-color-forest-8);
+  animation: ows-pop-in var(--ows-dur-enter) var(--ows-ease-spring) both;
+}
+html[data-mantine-color-scheme="dark"] .ows-page-icon {
+  color: #ffffff;
+}
+.ows-page-head h1 { animation: ows-rise var(--ows-dur-enter) var(--ows-ease-out) 40ms both; }
+.ows-page-actions { animation: ows-rise var(--ows-dur-enter) var(--ows-ease-out) 120ms both; }
+.ows-page-icon svg { width: 26px; height: 26px; }
+.ows-page .mantine-InputWrapper-label { margin-bottom: 6px; font-weight: 600; }
+.ows-page .mantine-InputWrapper-description { line-height: 1.5; }
+
+/* Preparation keeps every check and reason visible in a neutral tone before a run. */
+.ows-canvas-body:is([data-section="overview"], [data-section="data"], [data-section="domains"], [data-section="turbines"], [data-section="farms"], [data-section="physics"], [data-section="outputs"]) .mantine-Alert-root {
+  --alert-color: var(--ows-muted) !important;
+  --alert-bg: var(--ows-subtle) !important;
+  --alert-bd: 1px solid var(--ows-border) !important;
+}
+
+/* Blocks arrive one after the other */
+.ows-page .ows-section, .ows-page .ows-stat, .ows-page .mantine-Accordion-item {
+  animation: ows-enter var(--ows-dur-enter) var(--ows-ease-out) both;
+}
+.ows-page .ows-section:nth-of-type(1) { animation-delay: 110ms; }
+.ows-page .ows-section:nth-of-type(2) { animation-delay: 170ms; }
+.ows-page .ows-section:nth-of-type(3) { animation-delay: 230ms; }
+.ows-page .ows-section:nth-of-type(n + 4) { animation-delay: 280ms; }
+.ows-stat:nth-child(1) { animation-delay: 120ms; }
+.ows-stat:nth-child(2) { animation-delay: 170ms; }
+.ows-stat:nth-child(3) { animation-delay: 220ms; }
+.ows-stat:nth-child(n + 4) { animation-delay: 270ms; }
+
+@media (max-width: 47.99em) {
+  .ows-page h1 { font-size: 1.4rem; }
+  .ows-page-icon { width: 38px; height: 38px; }
+}
+
+/* ------------------------------------------------------------------------------- surfaces */
+.mantine-Card-root, .mantine-Paper-root[data-with-border], .mantine-Accordion-root[data-variant="separated"] .mantine-Accordion-item {
+  background: var(--ows-card);
+  border: 1px solid var(--ows-border);
+  box-shadow: var(--ows-shadow-card);
+}
+.mantine-Card-root, .mantine-Paper-root {
+  transition: border-color var(--ows-dur-state) ease, box-shadow var(--ows-dur-state) ease, background-color var(--ows-dur-state) ease,
+    transform var(--ows-dur-large) var(--ows-ease-out);
+}
+html[data-mantine-color-scheme="dark"] :is(.mantine-Card-root, .mantine-Paper-root[data-with-border]) {
+  background: rgba(255, 255, 255, 0.03);
+}
+/* A card inside a card is a flat tile */
+:is(.mantine-Card-root, .ows-workflow, .mantine-Modal-content) :is(.mantine-Paper-root[data-with-border], .mantine-Card-root) {
+  background: var(--ows-tile);
+  box-shadow: none;
+}
+html[data-mantine-color-scheme="dark"] :is(.mantine-Card-root, .ows-workflow, .mantine-Modal-content) :is(.mantine-Paper-root[data-with-border], .mantine-Card-root) {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+/* Clickable cards lift */
+.ows-choice { transition: transform var(--ows-dur-large) var(--ows-ease-out), box-shadow var(--ows-dur-state) ease, border-color var(--ows-dur-state) ease !important; }
+.ows-choice:hover { transform: translateY(-3px); border-color: var(--ows-border-strong); box-shadow: var(--ows-shadow-pop); }
+.mantine-SimpleGrid-root > .ows-choice { animation: ows-enter var(--ows-dur-enter) var(--ows-ease-out) both; }
+.mantine-SimpleGrid-root > .ows-choice:nth-child(1) { animation-delay: 120ms; }
+.mantine-SimpleGrid-root > .ows-choice:nth-child(2) { animation-delay: 180ms; }
+.mantine-SimpleGrid-root > .ows-choice:nth-child(3) { animation-delay: 240ms; }
+.mantine-SimpleGrid-root > .ows-choice:nth-child(n + 4) { animation-delay: 290ms; }
+
+/* Open sections and data strips, shared by preparation, results and settings. */
+.ows-section { padding-top: 22px; border-top: 1px solid var(--ows-border); min-width: 0; }
+.ows-section .ows-section { padding-top: 16px; }
+.ows-section-head .mantine-Title-root { font-size: 17px; font-weight: 600; }
+.ows-section-flush { padding-bottom: 0; }
+.ows-disclosure { min-width: 0; }
+.ows-disclosure-bar { display: flex; align-items: center; }
+.ows-disclosure-bar > .mantine-Accordion-control { flex: 1; min-width: 0; }
+/* The control sits in the bar: give it the rounded corners Mantine gives a direct child */
+.ows-disclosure .mantine-Accordion-item:first-of-type > .ows-disclosure-bar > .mantine-Accordion-control { border-start-start-radius: var(--accordion-radius); border-start-end-radius: var(--accordion-radius); }
+.ows-disclosure .mantine-Accordion-item:last-of-type > .ows-disclosure-bar > .mantine-Accordion-control { border-end-start-radius: var(--accordion-radius); border-end-end-radius: var(--accordion-radius); }
+.ows-disclosure-bar:has(.ows-disclosure-help) > .mantine-Accordion-control { border-start-end-radius: 0; border-end-end-radius: 0; }
+.ows-disclosure-help { display: flex; padding-right: 14px; animation: ows-enter var(--ows-dur-state) ease both; }
+.ows-disclosure-heading { min-width: 0; row-gap: 4px; }
+.ows-disclosure-title { min-width: 0; overflow-wrap: anywhere; }
+.ows-disclosure-summary { min-width: 0; overflow-wrap: anywhere; }
+.ows-disclosure .mantine-Accordion-panel .mantine-InputWrapper-root { min-width: 0; }
+@media (max-width: 48em) {
+  .ows-disclosure-summary { flex-basis: 100%; font-size: 12px; }
+}
+/* Results: four key figures in one band, the colour scale of the map, the timeline under it */
+.ows-kpis { border: 1px solid var(--ows-border); border-radius: 16px; background: var(--ows-card); overflow: hidden; }
+.ows-kpi { padding: 20px 24px; min-width: 0; animation: ows-stagger-in var(--ows-dur-enter) var(--ows-ease-out) both; }
+.ows-kpis > .ows-kpi + .ows-kpi { border-inline-start: 1px solid var(--ows-border); }
+.ows-kpis > .ows-kpi:nth-child(2) { animation-delay: 50ms; }
+.ows-kpis > .ows-kpi:nth-child(3) { animation-delay: 100ms; }
+.ows-kpis > .ows-kpi:nth-child(4) { animation-delay: 150ms; }
+.ows-kpi-value { font-size: 30px; font-weight: 600; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.ows-kpi-info { color: var(--ows-muted); flex: none; }
+@media (max-width: 62em) { .ows-kpis > .ows-kpi:nth-child(3) { border-inline-start: 0; } .ows-kpis > .ows-kpi:nth-child(n + 3) { border-top: 1px solid var(--ows-border); } }
+.ows-map-legend { justify-content: center; }
+.ows-map-legend-bar { flex: 0 1 360px; height: 10px; border-radius: 999px; border: 1px solid var(--ows-border); }
+.ows-map-timeline { padding-inline: 2px; }
+.ows-stat-grid { border-block: 1px solid var(--ows-border); }
+.ows-stat { background: transparent; min-width: 0; box-shadow: none; }
+.ows-stat-grid .ows-stat { border-inline-start: 1px solid var(--ows-border); }
+.ows-stat-grid .ows-stat:first-child { border-inline-start: 0; }
+.ows-stat-label { letter-spacing: 0; }
+.ows-stat-hint { line-height: 1.6; max-width: 36ch; }
+.ows-stat-value { font-weight: 600; }
+
+/* Projects and documentation: readable rows rather than tiles. */
+.ows-project-list { border-top: 1px solid var(--ows-border); }
+.ows-project.mantine-Card-root { display: grid !important; grid-template-columns: minmax(260px, 1.2fr) minmax(240px, 1fr); column-gap: 28px !important; row-gap: 8px !important; border: 0; border-bottom: 1px solid var(--ows-border); border-radius: 0; padding: 20px 8px; background: var(--ows-row-bg, transparent) !important; }
+.ows-project:hover { transform: none; --ows-row-bg: var(--ows-subtle); box-shadow: none; }
+.ows-project-heading { grid-column: 1; grid-row: 1; }
+.ows-project-heading .mantine-ThemeIcon-root { width: 34px; height: 34px; min-width: 34px; background: none; }
+.ows-project-meta { grid-column: 2; grid-row: 1; align-self: center; }
+.ows-project-description { grid-column: 1 / -1; grid-row: 2; padding-left: 46px; }
+.ows-help-topic.mantine-Paper-root { border: 0; border-bottom: 1px solid var(--ows-border); border-radius: 0; background: var(--ows-row-bg, transparent) !important; padding: 16px 8px; }
+.ows-help-topic:hover { transform: none; box-shadow: none; --ows-row-bg: var(--ows-subtle); }
+@media (max-width: 62em) {
+  .ows-engine-target-main { flex-wrap: wrap; }
+  .ows-engine-target-meta { flex-basis: 100%; padding-left: 50px; }
+}
+
+/* ------------------------------------------------------------------------------- controls */
+.mantine-Button-root, .mantine-ActionIcon-root, .mantine-CloseButton-root {
+  transition: background-color var(--ows-dur-state) ease, border-color var(--ows-dur-state) ease, box-shadow var(--ows-dur-state) ease,
+    color var(--ows-dur-state) ease, filter var(--ows-dur-state) ease, transform var(--ows-dur-micro) var(--ows-ease-out);
+}
+:is(.mantine-Button-root, .mantine-ActionIcon-root, .mantine-CloseButton-root):not(:disabled):not([data-disabled]):not([data-loading]):active {
+  transform: scale(0.96);
+  transition-duration: 60ms;
+}
+.mantine-Button-root { font-weight: 500; border-radius: var(--ows-control-radius); }
+.mantine-Button-section svg { transition: transform var(--ows-dur-large) var(--ows-ease-spring); }
+
+/* Default buttons: a card-like surface */
+.mantine-Button-root[data-variant="default"]:not(:disabled):not([data-disabled]) {
+  background-color: var(--ows-card);
+  border-color: var(--ows-border-strong);
+  box-shadow: var(--ows-shadow-card);
+}
+.mantine-Button-root[data-variant="default"]:not(:disabled):not([data-disabled]):hover { background-color: var(--ows-tile); }
+html[data-mantine-color-scheme="dark"] .mantine-Button-root[data-variant="default"]:not(:disabled):not([data-disabled]) { background-color: rgba(255, 255, 255, 0.045); }
+html[data-mantine-color-scheme="dark"] .mantine-Button-root[data-variant="default"]:not(:disabled):not([data-disabled]):hover { background-color: rgba(255, 255, 255, 0.08); }
+
+/* Inputs */
+.mantine-Input-input {
+  border-radius: 10px;
+  transition: border-color var(--ows-dur-state) ease, box-shadow var(--ows-dur-state) ease, background-color var(--ows-dur-state) ease;
+}
+:root[data-mantine-color-scheme="light"] .mantine-Input-input[data-variant="default"],
+:root[data-mantine-color-scheme="light"] .mantine-Input-input:not([data-variant]) { background: #ffffff; border-color: var(--ows-border-strong); }
+html[data-mantine-color-scheme="dark"] .mantine-Input-input[data-variant="default"],
+html[data-mantine-color-scheme="dark"] .mantine-Input-input:not([data-variant]) { background: rgba(255, 255, 255, 0.035); border-color: rgba(255, 255, 255, 0.09); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04); }
+.mantine-Input-input:hover:not(:focus):not(:disabled) { border-color: var(--ows-border-strong); }
+html[data-mantine-color-scheme="dark"] .mantine-Input-input:hover:not(:focus):not(:disabled) { border-color: rgba(255, 255, 255, 0.17); }
+.mantine-Input-input:focus { border-color: var(--mantine-primary-color-filled); box-shadow: 0 0 0 3px var(--mantine-primary-color-light); }
+html[data-mantine-color-scheme="dark"] .mantine-Input-input:focus { border-color: rgba(255, 255, 255, 0.4); box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08); }
+
+/* Switches settle with a spring; segmented controls on a soft track */
+.mantine-Switch-thumb { transition: inset-inline-start var(--ows-dur-large) var(--ows-ease-spring), background-color var(--ows-dur-state) ease, width var(--ows-dur-state) ease !important; }
+.mantine-Switch-track, .mantine-Checkbox-input, .mantine-Radio-radio { transition: background-color var(--ows-dur-state) ease, border-color var(--ows-dur-state) ease, box-shadow var(--ows-dur-state) ease; }
+.mantine-SegmentedControl-root { background: var(--ows-subtle); }
+.mantine-SegmentedControl-indicator { box-shadow: var(--ows-shadow-card); }
+html[data-mantine-color-scheme="dark"] .mantine-SegmentedControl-indicator { background: rgba(255, 255, 255, 0.12); }
+
+/* Tabs: the underline glides (ui/GlideTabs.tsx) */
+.ows-glide-tabs { position: relative; }
+.ows-glide-tabs .mantine-Tabs-tab { border-bottom-color: transparent !important; transition: color var(--ows-dur-state) ease, background-color var(--ows-dur-state) ease; }
+.ows-glide-tabs .mantine-Tabs-tab:not([data-active]) { color: var(--ows-muted); }
+.ows-tab-line {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--mantine-primary-color-filled);
+  transition: transform var(--ows-dur-large) var(--ows-ease-out), width var(--ows-dur-large) var(--ows-ease-out), opacity var(--ows-dur-state) ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Accordions: the chevron turns with the panel; the panel's content fades in */
+.mantine-Accordion-chevron { transition: transform var(--ows-dur-dialog) var(--ows-ease-out); }
+.mantine-Accordion-control { transition: background-color var(--ows-dur-state) ease; }
+.mantine-Accordion-item[data-active] .mantine-Accordion-content { animation: ows-rise var(--ows-dur-large) var(--ows-ease-out) both; }
+.mantine-Accordion-root[data-variant="separated"] .mantine-Accordion-item { border-radius: 12px; }
+
+.mantine-Badge-root { letter-spacing: 0; }
+.mantine-Anchor-root { text-underline-offset: 3px; }
+html[data-mantine-color-scheme="dark"] .mantine-Anchor-root { color: #f1f2f4; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.35); }
+html[data-mantine-color-scheme="dark"] .mantine-Anchor-root:hover { text-decoration-color: #ffffff; }
+
+/* Dark mode: filled elements of the accent are white, so their text and marks turn dark.
+   Alert colours (red family) and greys keep their light text. */
+html[data-mantine-color-scheme="dark"] :is(.mantine-Button-root, .mantine-ActionIcon-root, .mantine-ThemeIcon-root, .mantine-Badge-root):is([data-variant="filled"], :not([data-variant])):not(:disabled):not([data-disabled]):not([style*="-red-"]):not([style*="-orange-"]):not([style*="-yellow-"]):not([style*="-pink-"]):not([style*="-ember-"]):not([style*="-gray-"]):not([style*="-dark-"]):not([style*="-violet-"]):not([style*="-grape-"]):not([style*="-indigo-"]) {
+  --button-color: #0b0b0d !important;
+  --ai-color: #0b0b0d !important;
+  --ti-color: #0b0b0d !important;
+  --badge-color: #0b0b0d !important;
+  color: #0b0b0d !important;
+}
+html[data-mantine-color-scheme="dark"] .mantine-Switch-input:checked + .mantine-Switch-track .mantine-Switch-thumb { background-color: #0b0b0d; border-color: #0b0b0d; }
+html[data-mantine-color-scheme="dark"] :is(.mantine-Checkbox-icon, .mantine-Radio-icon) { color: #0b0b0d; }
+html[data-mantine-color-scheme="dark"] .mantine-Stepper-stepIcon[data-completed] { color: #0b0b0d; }
+
+/* ------------------------------------------------------------------------------- floating layers */
+.mantine-Popover-dropdown, .mantine-Menu-dropdown, .mantine-Combobox-dropdown, .mantine-HoverCard-dropdown, .mantine-Modal-content {
+  border: 1px solid var(--ows-border-strong);
+  box-shadow: var(--ows-shadow-pop);
+}
+.mantine-Popover-dropdown, .mantine-Menu-dropdown, .mantine-Combobox-dropdown, .mantine-HoverCard-dropdown { border-radius: 12px; }
+:root[data-mantine-color-scheme="light"] :is(.mantine-Popover-dropdown, .mantine-Menu-dropdown, .mantine-Combobox-dropdown, .mantine-HoverCard-dropdown, .mantine-Modal-content) { background: #ffffff; }
+html[data-mantine-color-scheme="dark"] :is(.mantine-Popover-dropdown, .mantine-Menu-dropdown, .mantine-Combobox-dropdown, .mantine-HoverCard-dropdown, .mantine-Modal-content) {
+  background: #1e1e22;
+}
+/* The title stays at the top while the content scrolls: it keeps the background of its window */
+.mantine-Modal-header { background: inherit; z-index: 2; }
+.mantine-Modal-title { font-weight: 600; }
+.mantine-Menu-item, .mantine-Combobox-option { border-radius: 7px; transition: background-color var(--ows-dur-micro) ease; }
+.mantine-Tooltip-tooltip { font-size: 12.5px; padding: 5px 9px; border-radius: 7px; }
+html[data-mantine-color-scheme="dark"] .mantine-Tooltip-tooltip { background: rgba(32, 32, 37, 0.96); color: #f1f2f4; border: 1px solid rgba(255, 255, 255, 0.1); }
+.mantine-Notification-root { border-radius: 12px; border: 1px solid var(--ows-border-strong); box-shadow: var(--ows-shadow-pop); }
+html[data-mantine-color-scheme="dark"] .mantine-Notification-root { background: #1e1e22; }
+
+/* ------------------------------------------------------------------------------- preparation guide */
+.ows-workflow { overflow: hidden; border-bottom: 1px solid var(--ows-border); padding-bottom: 8px; }
+.ows-workflow-heading { padding: 0 0 8px; }
+.ows-workflow-heading .mantine-Text-root { font-size: 12px; }
+.ows-workflow-heading svg { color: var(--mantine-color-forest-7); }
+html[data-mantine-color-scheme="dark"] .ows-workflow-heading svg { color: #ffffff; }
+.ows-workflow:not([data-expanded]) .ows-workflow-heading { padding-bottom: 6px; }
+/* A rail: numbered stops joined by a line, the marker sliding to the current stop */
+.ows-rail { position: relative; display: flex; list-style: none; margin: 0; padding: 0 0 8px; }
+.ows-rail-stop { position: relative; z-index: 1; display: flex; align-items: center; flex: 1 1 auto; min-width: 0; animation: ows-fade-in var(--ows-dur-enter) ease both; animation-delay: calc(var(--ows-i, 0) * 45ms); }
+.ows-rail-stop:last-child { flex: 0 0 auto; }
+.ows-rail-stop:not(:last-child)::after { content: ""; flex: 1 1 auto; min-width: 8px; height: 1px; margin: 0 4px; background: var(--ows-border); }
+.ows-workflow-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 5px;
+  border-radius: 999px;
+  color: var(--ows-nav-text);
+  text-decoration: none;
+  font-size: 12px;
+  white-space: nowrap;
+  transition: color var(--ows-dur-state) ease, background-color var(--ows-dur-state) ease;
+}
+.ows-workflow-step:not([aria-current]):hover { background: var(--ows-subtle); color: var(--mantine-color-text); }
+.ows-workflow-step[aria-current="step"] { color: var(--mantine-color-text); font-weight: 600; }
+.ows-workflow-number {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  flex: none;
+  border-radius: 50%;
+  border: 1px solid var(--ows-border-strong);
+  background: var(--ows-card);
+  font-size: 11.5px;
+  font-weight: 600;
+  transition: background-color var(--ows-dur-large) ease, color var(--ows-dur-large) ease, border-color var(--ows-dur-large) ease, transform var(--ows-dur-large) var(--ows-ease-spring);
+}
+.ows-workflow-step[aria-current="step"] .ows-workflow-number {
+  background: var(--mantine-primary-color-filled);
+  border-color: transparent;
+  color: var(--ows-on-accent);
+  box-shadow: none;
+}
+.ows-rail-glide { border-radius: 999px; background: var(--mantine-primary-color-light); pointer-events: none; transition-timing-function: var(--ows-ease-out); }
+.ows-next { font-size: 12px; }
+/* Narrow windows: only the current step keeps its name on screen (all keep it for readers) */
+@media (max-width: 1360px) {
+  .ows-workflow-step:not([aria-current]) .ows-workflow-label {
+    position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+  .ows-workflow-step:not([aria-current]) { padding-right: 5px; }
+}
+
+/* ------------------------------------------------------------------------------- next steps (overview) */
+.ows-next-steps { padding-block: 2px 8px; }
+.ows-next-steps-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; }
+.ows-step { position: relative; padding: 14px 4px; border-bottom: 1px solid var(--ows-border); min-width: 0; animation: ows-rise var(--ows-dur-enter) var(--ows-ease-out) both; }
+.ows-step:nth-child(2) { animation-delay: 25ms; }
+.ows-step:nth-child(3) { animation-delay: 50ms; }
+.ows-step:nth-child(n + 4) { animation-delay: 75ms; }
+.ows-step-icon { flex: none; }
+.ows-step[data-state="done"] .ows-step-icon { color: var(--ows-muted); background: transparent; }
+.ows-step[data-state="current"] { box-shadow: inset 2px 0 0 var(--mantine-primary-color-filled); padding-left: 12px; }
+.ows-step[data-state="done"] .ows-step-icon svg { animation: ows-pop-in var(--ows-dur-enter) var(--ows-ease-spring) both; }
+.ows-step a { text-underline-offset: 3px; }
+.ows-step a:hover { text-decoration: underline !important; }
+
+@media (max-width: 62em) {
+  .ows-project.mantine-Card-root { grid-template-columns: 1fr; }
+  .ows-project-meta { grid-column: 1; grid-row: 3; padding-left: 46px; }
+  .ows-stat-grid .ows-stat { border-inline-start: 0; border-bottom: 1px solid var(--ows-border); }
+}
+@media (max-width: 48em) {
+  .ows-next-steps-list { grid-template-columns: 1fr; }
+  .ows-next-steps > .mantine-Stack-root > .mantine-Group-root { align-items: flex-start; }
+  .ows-next-steps .mantine-Button-root { height: auto; min-height: 36px; padding-block: 7px; max-width: 100%; }
+  .ows-next-steps .mantine-Button-label { white-space: normal; text-align: left; }
+}
+
+/* ------------------------------------------------------------------------------- gliding highlights, pills */
+.ows-glide { border-radius: 8px; background: var(--mantine-primary-color-light); transition-timing-function: var(--ows-ease-out); pointer-events: none; }
+.ows-pills { position: relative; display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 3px; border-radius: 999px; background: var(--ows-subtle); }
+.ows-pill {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 0;
+  background: transparent;
+  color: var(--ows-nav-text);
+  font: inherit;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: color var(--ows-dur-state) ease, transform var(--ows-dur-micro) var(--ows-ease-out);
+}
+.ows-pill:not([data-active]):not(:disabled):hover { color: var(--mantine-color-text); }
+.ows-pill:not(:disabled):active { transform: scale(0.95); }
+.ows-pill[data-active] { color: var(--ows-on-accent); }
+.ows-pill:disabled { opacity: 0.45; cursor: not-allowed; }
+.ows-pill-dot { width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.85); }
+.ows-pill-glide { border-radius: 999px; background: var(--mantine-primary-color-filled); pointer-events: none; transition-timing-function: var(--ows-ease-out); }
+.ows-map-toolbar { border-bottom: 1px solid var(--ows-border); }
+
+/* ------------------------------------------------------------------------------- farm workspace */
+.ows-farms-workspace { border: 1px solid var(--ows-border); border-radius: var(--ows-surface-radius); overflow: clip; }
+.ows-farms-workspace > .mantine-Grid-inner { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(320px, 1fr); gap: 0; align-items: stretch; }
+.ows-farms-map-column, .ows-farms-inspector { max-width: none; width: auto; min-width: 0; }
+/* The map fills the whole height beside the inspector: no empty band under it */
+.ows-farms-map-column { position: sticky !important; top: 64px; align-self: start; display: flex; flex-direction: column; }
+.ows-farms-map-frame.mantine-Paper-root { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; border: 0; border-radius: 0; background: transparent; }
+.ows-farms .ows-map { flex: none; height: clamp(440px, calc(100vh - 345px), 900px) !important; min-height: 0; border: 0; border-radius: 0; }
+.ows-farms-inspector { padding: 20px; border-left: 1px solid var(--ows-border); background: var(--ows-subtle); }
+.ows-farms-inspector > .mantine-Stack-root { gap: 24px; }
+.ows-farms-inspector .mantine-Text-root[style*="--text-fz: var(--mantine-font-size-lg)"] { font-size: 14px; font-weight: 600; }
+.ows-farms .ows-map-toolbar { padding: 10px 12px; }
+.ows-farms .ows-map-toolbar .mantine-Text-root { font-size: 12px; }
+.ows-farms .ows-pills { padding: 2px; }
+.ows-farms .ows-pill { height: 27px; padding-inline: 10px; font-size: 12px; }
+.ows-farm-item { width: 100%; padding: 12px 14px; border: 1px solid var(--ows-border); border-left: 3px solid; border-radius: var(--ows-control-radius); background: var(--ows-card); box-shadow: none; transition: border-color var(--ows-dur-state) ease; }
+.ows-farm-item[data-selected] { border-top-color: var(--ows-border-strong); border-right-color: var(--ows-border-strong); border-bottom-color: var(--ows-border-strong); }
+.ows-farm-head { flex: 1; min-width: 0; }
+.ows-farm-item .mantine-Text-root { font-size: 14px; }
+.ows-farm-item .mantine-Text-root[data-size="sm"] { font-size: 12px; }
+.ows-appearance { display: grid; grid-template-columns: 64px minmax(0, 1fr); align-items: center; row-gap: 10px; }
+.ows-appearance .ows-appearance-label { font-size: 12px; }
+.ows-appearance-row { display: flex; align-items: center; justify-content: space-between; min-height: 26px; }
+.ows-swatch { cursor: pointer; border: 0; transition: transform var(--ows-dur-dialog) var(--ows-ease-spring); }
+.ows-swatch:hover { transform: scale(1.14); }
+.ows-swatch[aria-checked="true"] { box-shadow: 0 0 0 2px var(--ows-card), 0 0 0 3.5px var(--ows-border-strong); }
+.ows-swatch-other { border: 1px dashed var(--ows-border-strong); color: var(--mantine-color-dimmed); }
+.ows-symbol[aria-checked="true"] { border-color: var(--ows-border-strong); }
+.ows-farm-ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; }
+.ows-farm-ways > .mantine-Button-root { height: 58px; padding-inline: 6px; font-size: 12px; font-weight: 500; }
+.ows-farm-ways .mantine-Button-inner { flex-direction: column; justify-content: center; gap: 6px; }
+.ows-farm-ways .mantine-Button-label { height: auto; }
+.ows-farm-ways .mantine-Button-section[data-position="left"] { margin: 0; }
+.ows-farm-ways .mantine-Button-section svg { color: var(--mantine-primary-color-filled); transition: transform var(--ows-dur-dialog) var(--ows-ease-spring); }
+.ows-farm-ways > .mantine-Button-root:hover .mantine-Button-section svg { transform: scale(1.12); }
+.ows-farm-table .mantine-Accordion-control { padding-inline: 0; }
+.ows-farm-table .mantine-Input-input { background: transparent; border-color: transparent; box-shadow: none; }
+.ows-farm-table .mantine-Input-input:hover { border-color: var(--ows-border); }
+.ows-farm-table .mantine-Input-input:focus { background: var(--ows-card); border-color: var(--mantine-primary-color-filled); }
+.ows-map[data-picking] { outline: 2px solid var(--mantine-primary-color-filled); outline-offset: -2px; }
+/* Lasso on: a cross everywhere on the map (not the hand of a turbine) and the map's edge marked */
+.ows-map[data-lasso] { position: relative; }
+.ows-map[data-lasso]::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; box-shadow: inset 0 0 0 2px var(--mantine-primary-color-filled); }
+.ows-map[data-lasso] .maplibregl-canvas { cursor: crosshair !important; }
+/* What to do with the selected turbines, at the bottom of the map */
+.ows-farms-map-frame { position: relative; }
+.ows-selection-bar { position: absolute; left: 50%; bottom: 14px; z-index: 3; transform: translateX(-50%); animation: ows-selection-in 240ms var(--ows-ease-spring) both; }
+.ows-selection-bar .ows-toolbar { background: var(--mantine-color-body); border-color: var(--ows-border-strong); box-shadow: 0 4px 16px rgb(0 0 0 / 0.2); }
+.ows-selection-count { display: grid; place-items: center; min-width: 30px; height: 30px; padding: 0 8px; font-size: 12.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ows-tool[data-danger]:hover { color: var(--mantine-color-red-6); }
+@keyframes ows-selection-in { from { opacity: 0; transform: translate(-50%, 8px); } }
+@media (prefers-reduced-motion: reduce) { .ows-selection-bar { animation: none; } }
+@media (max-width: 1150px) {
+  .ows-farms-workspace > .mantine-Grid-inner { grid-template-columns: 1fr; }
+  .ows-farms-inspector { border-left: 0; border-top: 1px solid var(--ows-border); }
+  .ows-farm-tools > .mantine-SimpleGrid-root { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .ows-farms .ows-map { flex: none; height: 440px !important; min-height: 0; }
+  .ows-farms-map-column { position: static !important; }
+}
+@media (max-width: 767px) {
+  .ows-farm-tools > .mantine-SimpleGrid-root { grid-template-columns: 1fr; gap: 0; }
+}
+
+/* ------------------------------------------------------------------------------- save bar */
+.ows-savebar {
+  position: fixed;
+  left: calc(50% + var(--app-shell-navbar-offset, 0px) / 2);
+  bottom: 24px;
+  transform: translate(-50%, 0);
+  z-index: 150;
+  width: min(760px, calc(100vw - var(--app-shell-navbar-offset, 0px) - 40px));
+  padding: 10px 10px 10px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--ows-border-strong);
+  box-shadow: var(--ows-shadow-pop);
+}
+:root[data-mantine-color-scheme="light"] .ows-savebar { background: #ffffff; }
+html[data-mantine-color-scheme="dark"] .ows-savebar { background: #1e1e22; }
+.ows-savebar-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--mantine-primary-color-filled);
+}
+
+/* ------------------------------------------------------------------------------- command palette */
+.ows-palette .mantine-Modal-content { overflow: hidden; border-radius: 16px; }
+.ows-palette-input { border-bottom: 1px solid var(--ows-border); }
+.ows-palette-input .mantine-Input-input, .ows-palette-input .mantine-Input-input:focus { background: transparent !important; border: 0 !important; box-shadow: none !important; }
+.ows-palette-item { position: relative; z-index: 1; display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 10px; border-radius: 8px; color: var(--mantine-color-text); }
+.ows-palette-item svg:first-child { color: var(--mantine-color-dimmed); transition: color var(--ows-dur-state) ease; }
+.ows-palette-item[data-active] svg:first-child { color: var(--mantine-color-text); }
+.ows-palette-arrow { opacity: 0; transform: translateX(-4px); transition: opacity var(--ows-dur-state) ease, transform var(--ows-dur-state) var(--ows-ease-out); }
+.ows-palette-item[data-active] .ows-palette-arrow { opacity: 0.7; transform: none; }
+.ows-palette-foot { border-top: 1px solid var(--ows-border); background: var(--ows-subtle); }
+
+/* ------------------------------------------------------------------------------- data */
+.ows-num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ows-mono { font-family: var(--mantine-font-family-monospace); font-size: 0.8125rem; }
+/* Turbine catalogue: one row per model, figures in aligned columns */
+.ows-catalog { border: 1px solid var(--ows-border); border-radius: 12px; overflow: hidden; }
+.ows-catalog-row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 14px; border-bottom: 1px solid var(--ows-border); transition: background-color 120ms ease; }
+.ows-catalog-row:last-child { border-bottom: 0; }
+button.ows-catalog-row:hover { background: var(--ows-subtle); }
+.ows-catalog-head { background: var(--ows-subtle); padding-block: 8px; }
+.ows-catalog-name { flex: 1 1 auto; min-width: 0; }
+.ows-catalog-figure { flex: 0 0 84px; text-align: right; }
+.mantine-Table-th { color: var(--ows-muted); font-size: 0.8rem; font-weight: 600; }
+/* Numbers line up in every table */
+.mantine-Table-td { font-variant-numeric: tabular-nums; }
+.mantine-Table-td { padding-top: 10px; padding-bottom: 10px; }
+.mantine-Table-tr { transition: background-color var(--ows-dur-micro) ease; }
+.mantine-Table-tr[aria-selected="true"] > .mantine-Table-td:first-child { box-shadow: inset 2px 0 0 var(--mantine-primary-color-filled); }
+.mantine-Table-th svg { transition: transform var(--ows-dur-state) var(--ows-ease-out), opacity var(--ows-dur-state) ease; }
+:root[data-mantine-color-scheme="light"] .mantine-Table-thead[data-sticky] .mantine-Table-th { background-color: rgba(255, 255, 255, 0.97); }
+html[data-mantine-color-scheme="dark"] .mantine-Table-thead[data-sticky] .mantine-Table-th { background-color: #151518; }
+html[data-mantine-color-scheme="dark"] .mantine-Table-table { --table-border-color: rgba(255, 255, 255, 0.07); }
+.ows-section-flush { padding-bottom: 0; }
+.ows-section-flush :is(.mantine-Table-th, .mantine-Table-td):first-child { padding-left: var(--ows-card-pad); }
+.ows-section-flush :is(.mantine-Table-th, .mantine-Table-td):last-child { padding-right: var(--ows-card-pad); }
+.mantine-Progress-section { transition-timing-function: var(--ows-ease-out) !important; }
+.mantine-Progress-root { background: var(--ows-subtle); }
+
+
+/* Map */
+.ows-map { width: 100%; height: 100%; min-height: 420px; border-radius: 10px; overflow: hidden; border: 1px solid var(--ows-border); }
+.ows-map .maplibregl-ctrl-scale { background: rgba(255, 255, 255, 0.75); border-color: #343a40; color: #343a40; }
+.ows-map .maplibregl-ctrl-group { border-radius: 10px; box-shadow: var(--ows-shadow-card); }
+.ows-map-note { padding: 4px 9px; border: 1px solid var(--ows-border); border-radius: 999px; background: var(--mantine-color-body); color: var(--mantine-color-dimmed); font: 600 11.5px/1.3 var(--mantine-font-family); pointer-events: none; }
+.ows-map-note[hidden] { display: none; }
+.ows-map-farm-summary { display: flex; align-items: center; gap: 7px; padding: 7px 10px; border: 1px solid var(--ows-border-strong); border-radius: 12px; background: var(--mantine-color-body); color: var(--mantine-color-text); box-shadow: var(--ows-shadow-card); font: 600 12px/1.2 var(--mantine-font-family); cursor: pointer; white-space: nowrap; }
+.ows-map-farm-summary svg { width: 18px; height: 18px; color: var(--farm-color); flex-shrink: 0; }
+.ows-map-farm-summary:hover { border-color: var(--farm-color); }
+.ows-map-farm-summary:focus-visible { outline: 2px solid var(--farm-color); outline-offset: 3px; }
+.ows-map-farm-summary[data-disabled="true"] { border-style: dashed; opacity: 0.75; }
+.ows-map[data-picking] .ows-map-farm-summary { pointer-events: none; }
+/* Seen from afar: a small round mark with the farm's symbol and colour, no name */
+.ows-map-farm-summary[data-level="icon"] { padding: 5px; border-radius: 999px; border-color: var(--ows-border); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16); }
+.ows-map-farm-summary[data-level="icon"] svg { width: 12px; height: 12px; }
+/* Beside its drawn turbines, the name is a lighter tag above the farm */
+.ows-map-farm-summary[data-level="turbines"] { padding: 4px 8px; gap: 5px; border-radius: 999px; border-color: var(--ows-border); box-shadow: none; font-size: 11px; }
+.ows-map-farm-summary[data-level="turbines"] svg { width: 11px; height: 11px; }
+.ows-map-farm-summary > * { animation: ows-fade-in var(--ows-dur-state) var(--ows-ease-out) both; }
+
+/* Search fields that propose entries (WRF variables, namelist options) */
+.ows-picker { padding: 4px; border-radius: 12px; }
+.ows-picker .mantine-Combobox-header { padding: 6px 10px 4px; border: 0; }
+.ows-picker-option { padding: 8px 10px; border-radius: 8px; }
+.ows-picker-option[data-combobox-selected] { background: var(--mantine-primary-color-light); color: inherit; }
+.ows-picker-code { color: var(--mantine-primary-color-filled); font-weight: 600; letter-spacing: 0.01em; }
+html[data-mantine-color-scheme="dark"] .ows-picker-code { color: #f1f1f1; }
+.ows-unit { padding: 1px 7px; border-radius: 999px; background: var(--ows-subtle); border: 1px solid var(--ows-border); color: var(--ows-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ows-variable-list { border-top: 1px solid var(--ows-border); }
+.ows-variable-row { padding: 8px 2px; border-bottom: 1px solid var(--ows-border); animation: ows-fade-in var(--ows-dur-state) var(--ows-ease-out) both; }
+
+/* Empty text elements take no room */
+.mantine-Text-root:empty { display: none; }
+
+/* Empty states */
+.ows-empty-icon { animation: ows-pop-in var(--ows-dur-enter) var(--ows-ease-spring) both; }
+
+/* Live things (an import running): a breathing dot */
+.ows-live-dot { position: relative; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.ows-live-dot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: currentColor; animation: ows-ping 1.8s var(--ows-ease-out) infinite; }
+.ows-value-in { animation: ows-value-in var(--ows-dur-dialog) var(--ows-ease-out); }
+
+/* ------------------------------------------------------------------------------- accessibility */
+:focus-visible { outline: 2px solid var(--mantine-primary-color-filled); outline-offset: 2px; }
+html[data-mantine-color-scheme="dark"] :focus-visible { outline-color: rgba(255, 255, 255, 0.55); }
+.ows-skip-link { position: absolute; left: -9999px; top: 0; z-index: 1000; padding: 8px 12px; background: var(--mantine-primary-color-filled); color: var(--ows-on-accent); }
+.ows-skip-link:focus { left: 8px; top: 8px; }
+
+/* First load: the menu entries arrive one after the other (class set briefly by main.tsx) */
+/* (opacity only: the gliding highlight measures the entries while they arrive) */
+html.ows-booting .ows-nav-link { animation: ows-fade-in var(--ows-dur-enter) ease both; animation-delay: calc(var(--ows-i, 0) * 25ms); }
+html.ows-booting .ows-sidebar-head, html.ows-booting .ows-topbar { animation: ows-fade-in 600ms ease both; }
+
+/* Calculation windows (spiral staircase): at the opening, the rail is drawn and the steps rise
+   one after the other, from the first date to the last (delays set by WindowStairs); the label
+   and the tooltip of the hovered step fade in */
+.ows-stair-in { animation: ows-stair-in 460ms var(--ows-ease-out) both; }
+.ows-rail-in { stroke-dasharray: 1; animation: ows-draw linear both; }
+.ows-stair-ground { animation: ows-fade-in 600ms ease both; }
+.ows-stair-lift { animation: ows-stair-lift var(--ows-dur-state) var(--ows-ease-out) both; }
+.ows-stair-label { animation: ows-enter var(--ows-dur-state) ease both; }
+.ows-stair-tip { animation: ows-fade-in var(--ows-dur-micro) ease both; }
+.ows-stairs:focus-visible { outline: 2px solid var(--mantine-primary-color-filled); outline-offset: 2px; border-radius: 8px; }
+@media (prefers-reduced-motion: reduce) { .ows-stair-in, .ows-rail-in, .ows-stair-ground, .ows-stair-lift, .ows-stair-label, .ows-stair-tip { animation: none; } }
+
+/* ------------------------------------------------------------------------------- keyframes */
+@keyframes ows-stair-in { from { opacity: 0; transform: translateY(14px); } }
+@keyframes ows-stair-lift { from { transform: translateY(0); opacity: 0.4; } to { transform: translateY(-3px); opacity: 1; } }
+@keyframes ows-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes ows-enter { from { opacity: 0; } }
+@keyframes ows-rise { from { opacity: 0; } }
+@keyframes ows-pop-in { from { opacity: 0; } }
+@keyframes ows-slide-right { from { opacity: 0; transform: translateX(-10px); } }
+@keyframes ows-crumb-in { from { opacity: 0; } }
+@keyframes ows-value-in { from { opacity: 0.2; } }
+@keyframes ows-ping { 0% { transform: scale(1); opacity: 0.55; } 80%, 100% { transform: scale(2.8); opacity: 0; } }
+@keyframes ows-breathe { 0%, 100% { box-shadow: 0 0 0 0 var(--mantine-primary-color-light); } 50% { box-shadow: 0 0 0 6px var(--mantine-primary-color-light); } }
+@keyframes ows-fade-in { from { opacity: 0; } }
+@keyframes ows-fade-out { to { opacity: 0; } }
+@keyframes ows-page-in { from { opacity: 0; } }
+@keyframes ows-page-out { to { opacity: 0; } }
+
+/* ------------------------------------------------------------------------------- view transitions
+   Page changes: only the content cross-fades (the old one leaves quickly, the new one rises); the
+   sidebar, the top bar and the guide stay live, so their highlights glide on their own. */
+#ows-page-root { view-transition-name: ows-page; }
+::view-transition-group(*) { animation-duration: var(--ows-dur-dialog); animation-timing-function: var(--ows-ease-out); }
+html.ows-vt-page::view-transition-old(root), html.ows-vt-page::view-transition-new(root) { animation: none; }
+html.ows-vt-page::view-transition-old(root) { display: none; }
+html.ows-vt-page::view-transition-old(ows-page) { animation: ows-page-out 140ms ease-in both; }
+html.ows-vt-page::view-transition-new(ows-page) { animation: ows-page-in 320ms var(--ows-ease-out) both; }
+
+/* Light or dark: the new look spreads in a circle from the button */
+html.ows-vt-theme #ows-page-root { view-transition-name: none; }
+html.ows-vt-theme::view-transition-old(root) { animation: none; }
+html.ows-vt-theme::view-transition-new(root) { animation: ows-reveal 620ms var(--ows-ease-in-out); }
+@keyframes ows-reveal {
+  from { clip-path: circle(0 at var(--ows-reveal-x, 0) var(--ows-reveal-y, 100%)); }
+  to { clip-path: circle(var(--ows-reveal-r, 150vmax) at var(--ows-reveal-x, 0) var(--ows-reveal-y, 100%)); }
+}
+
+/* ------------------------------------------------------------------------------- reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ------------------------------------------------------------------------------- technical sheets (Compute) */
+.ows-sheet { border-top: 2px solid var(--mantine-color-text); padding-top: 16px; }
+.ows-sheet + .ows-sheet, .ows-sheet + .ows-fold, .ows-sheet + * { margin-top: 36px; }
+.ows-sheet-title { margin: 0; font-size: 17px; font-weight: 600; }
+.ows-sheet-rows { display: grid; grid-template-columns: 200px minmax(0, 1fr); column-gap: 16px; row-gap: 12px; margin-top: 16px; font-size: 14px; align-items: baseline; }
+.ows-sheet-key { color: var(--ows-muted); }
+.ows-sheet-value { min-width: 0; overflow-wrap: anywhere; }
+.ows-sheet-link { color: var(--mantine-primary-color-filled); font-size: 14px; font-weight: 500; }
+.ows-sheet-link:hover:not(:disabled) { text-decoration: underline; text-underline-offset: 3px; }
+.ows-sheet-link:disabled { color: var(--ows-muted); opacity: 0.6; cursor: default; }
+.ows-sheet-link[data-danger] { color: var(--mantine-color-red-7); }
+.ows-sheet-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; background: var(--mantine-color-red-6); vertical-align: 1px; }
+.ows-sheet-dot[data-ok] { background: var(--mantine-primary-color-filled); }
+@media (max-width: 48em) { .ows-sheet-rows { grid-template-columns: 1fr; row-gap: 4px; } .ows-sheet-key { margin-top: 8px; } }
+
+/* Hovering a grid cell of the farm domain: the turbines it holds */
+.ows-cell-tip .maplibregl-popup-content { padding: 6px 10px; border-radius: 8px; font-size: 12px; line-height: 1.45; color: var(--mantine-color-text); background: var(--mantine-color-body); border: 1px solid var(--ows-border-strong); box-shadow: var(--ows-shadow-pop); }
+.ows-cell-tip .maplibregl-popup-tip { display: none; }
+.ows-stair-centre { animation: ows-enter var(--ows-dur-state) ease both; pointer-events: none; }
+/* Icon tools above maps and 3D views (ui/ToolBar.tsx) */
+.ows-toolbar { display: inline-flex; align-items: center; padding: 3px; border: 1px solid var(--ows-border); border-radius: 10px; background: var(--ows-card); box-shadow: 0 1px 2px rgb(0 0 0 / 0.05); }
+.ows-tool-group, .ows-tool-choice { display: inline-flex; align-items: center; gap: 2px; position: relative; }
+.ows-toolbar > * + * { margin-left: 9px; }
+.ows-toolbar > * + *::before { content: ""; position: absolute; left: -5px; top: 5px; bottom: 5px; width: 1px; background: var(--ows-border); }
+.ows-tool-choice { position: relative; }
+.ows-tool { display: grid; place-items: center; position: relative; z-index: 1; border-radius: 7px; color: color-mix(in srgb, var(--mantine-color-text) 85%, transparent); transition: color 160ms ease, background-color 160ms ease, transform 240ms var(--ows-ease-spring); }
+.ows-tool:hover:not([data-active]) { color: var(--mantine-color-text); background: var(--ows-subtle); }
+.ows-tool:active { transform: scale(0.88); }
+.ows-tool:focus-visible { outline: 2px solid var(--mantine-primary-color-filled); outline-offset: 1px; }
+.ows-tool[data-active] { color: var(--mantine-primary-color-filled); }
+.ows-tool-group .ows-tool[data-active], .ows-tool-slider { background: color-mix(in srgb, var(--mantine-primary-color-filled) 16%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mantine-primary-color-filled) 30%, transparent); }
+.ows-tool[data-active] svg { animation: ows-tool-pop 280ms var(--ows-ease-spring); }
+.ows-tool-slider { position: absolute; top: 0; left: 0; border-radius: 7px; transition: transform 340ms var(--ows-ease-spring); }
+.ows-tool-hint { opacity: 0.75; font-size: 12px; }
+@keyframes ows-tool-pop { 0% { transform: scale(0.72); } 60% { transform: scale(1.14); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .ows-tool, .ows-tool-slider, .ows-tool[data-active] svg { transition: none; animation: none; } }
+.ows-slider-icon { display: grid; place-items: center; color: var(--ows-muted); flex: none; }
+.ows-field-warning { color: var(--mantine-color-orange-6); }
+.ows-advice { position: absolute; top: 100%; left: 0; margin-top: 6px; display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--mantine-primary-color-filled); white-space: nowrap; animation: ows-enter var(--ows-dur-state) ease both; }
+.ows-advice:hover { text-decoration: underline; }
+/* Map tools (ui/map/ProjectMap.tsx): the icon bar in the top left, the measured distance */
+.maplibregl-ctrl.ows-map-tools { margin: 10px 0 0 10px; }
+/* Over a map, a solid bar: readable on any base map */
+.ows-map-tools .ows-toolbar { background: var(--mantine-color-body); border-color: var(--ows-border-strong); box-shadow: 0 1px 4px rgb(0 0 0 / 0.18); }
+.ows-measure-label { display: inline-block; padding: 3px 8px; border-radius: 6px; background: var(--mantine-primary-color-filled); color: var(--ows-on-accent); font-size: 12px; font-weight: 650; white-space: nowrap; box-shadow: 0 1px 3px rgb(0 0 0 / 0.25); animation: ows-tool-pop 240ms var(--ows-ease-spring) both; pointer-events: none; }
+/* Lists that arrive one item after the other (motion.dev "stagger") */
+.ows-stagger > * { animation: ows-stagger-in var(--ows-dur-enter) var(--ows-ease-out) both; }
+@keyframes ows-stagger-in { from { opacity: 0; transform: translateY(6px); } }
+.ows-stagger > :nth-child(2) { animation-delay: 40ms; }
+.ows-stagger > :nth-child(3) { animation-delay: 80ms; }
+.ows-stagger > :nth-child(4) { animation-delay: 120ms; }
+.ows-stagger > :nth-child(5) { animation-delay: 160ms; }
+.ows-stagger > :nth-child(6) { animation-delay: 200ms; }
+/* Square choices of a list (quantities of an export): a thin frame, the accent when chosen */
+.ows-pick { padding: 10px 12px; border: 1px solid var(--ows-border-strong); background: transparent; transition: border-color 120ms, background-color 120ms; }
+.ows-pick:hover { background: var(--ows-border); }
+.ows-pick[data-checked] { border-color: var(--mantine-primary-color-filled); }
+/* Energy bars (results/EnergyBars.tsx): bars scrolling under a fixed axis, edges fading where
+   there is more to see, bars rising once from left to right, the bar under the pointer kept */
+.ows-bars-scroll { flex: 1; min-width: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; cursor: grab; touch-action: pan-x; }
+.ows-bars-scroll:active { cursor: grabbing; }
+.ows-bars-scroll:not([data-start]):not([data-end]) { mask-image: linear-gradient(to right, transparent, #000 28px, #000 calc(100% - 28px), transparent); }
+.ows-bars-scroll[data-start]:not([data-end]) { mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent); }
+.ows-bars-scroll[data-end]:not([data-start]) { mask-image: linear-gradient(to right, transparent, #000 28px); }
+.ows-bars-grow > g { transform-box: fill-box; transform-origin: 50% 100%; animation: ows-bar-rise 460ms var(--ows-ease-out) both; transition: opacity var(--ows-dur-micro, 120ms); }
+@keyframes ows-bar-rise { from { transform: scaleY(0); opacity: 0.4; } }
+.ows-bars-grow[data-hovering] > g:not([data-lit]) { opacity: 0.45; }
+.ows-bars-key { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+.ows-bars-key-pale { opacity: 0.4; }
+.ows-bars-tip { position: absolute; top: 0; transform: translateX(-50%); min-width: 170px; padding: 8px 10px; border-radius: 8px; background: var(--mantine-color-body); border: 1px solid var(--ows-border-strong); box-shadow: 0 6px 18px rgb(0 0 0 / 0.18); pointer-events: none; animation: ows-stagger-in 140ms var(--ows-ease-out) both; }
+/* Roses per direction sector (analyses/PointCharts.tsx): petals growing from the centre once,
+   clockwise; the sector under the pointer kept, the others stepping back */
+.ows-rose-grow > g { transform-box: view-box; transform-origin: 180px 180px; animation: ows-rose-in 520ms var(--ows-ease-out) both; transition: opacity var(--ows-dur-micro, 120ms); }
+@keyframes ows-rose-in { from { transform: scale(0); opacity: 0; } }
+.ows-curve-draw { stroke-dasharray: 1; animation: ows-draw 640ms var(--ows-ease-out) both; }
+.ows-curve-draw[data-dashed] { stroke-dasharray: 6 4; animation: ows-fade-in 640ms var(--ows-ease-out) both; }
+.ows-dots-in { animation: ows-fade-in 520ms var(--ows-ease-out) 160ms both; }
+.ows-equations { padding: 8px 0 12px; }
+.ows-equation { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+.ows-equation .katex-display { margin: 4px 0; }
+/* Equations in the interface's typeface (Manrope), at a size close to the text; KaTeX keeps its
+   own fonts only for what Manrope cannot draw: large operators, radicals and tall delimiters */
+.ows-equation .katex { font-family: "Manrope Variable", sans-serif; font-size: 1.35em; color: var(--mantine-color-text); }
+.ows-equation .katex .mathnormal, .ows-equation .katex .mathit, .ows-equation .katex .boldsymbol { font-family: "Manrope Variable", sans-serif; font-style: italic; }
+.ows-equation .katex .mathrm, .ows-equation .katex .textrm, .ows-equation .katex .text { font-family: "Manrope Variable", sans-serif; }
+.ows-rose-grow[data-hovering] > g:not([data-lit]) { opacity: 0.4; }
+/* Items of a FlipRow on their way out (ui/Motion.tsx) */
+.ows-flip-item[data-leaving] { animation: ows-flip-out var(--ows-dur-state, 160ms) var(--ows-ease-out) forwards; pointer-events: none; }
+@keyframes ows-flip-out { to { opacity: 0; transform: scale(0.94); } }
+/* The preview of an exported table: a header and two rows, square cells */
+.ows-preview { display: flex; gap: 0; overflow-x: auto; scrollbar-width: thin; border: 1px solid var(--ows-border-strong); border-radius: 4px; }
+.ows-preview .ows-flip-item { flex: none; width: 128px; border-left: 1px solid var(--ows-border); }
+.ows-preview .ows-flip-item:first-child { border-left: none; }
+.ows-preview-head { height: 44px; padding: 6px 10px; font-size: 11.5px; line-height: 1.3; font-weight: 600; background: var(--ows-border); display: flex; align-items: center; }
+.ows-preview-cell { padding: 5px 10px; font-size: 12px; font-variant-numeric: tabular-nums; color: var(--ows-muted); border-top: 1px solid var(--ows-border); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Files written by an export: each one appears with its tick (delay set per file) */
+.ows-written > * { animation: ows-stagger-in 260ms var(--ows-ease-out) both; }
+.ows-stagger > :nth-child(n + 7) { animation-delay: 240ms; }
+.ows-turbine-tip .maplibregl-popup-content { padding: 7px 10px; border-radius: 8px; font-size: 12px; line-height: 1.5; color: var(--mantine-color-text); background: var(--mantine-color-body); border: 1px solid var(--ows-border-strong); box-shadow: var(--ows-shadow-pop); }
+.ows-turbine-tip .maplibregl-popup-content strong { display: block; font-weight: 600; }
+.ows-turbine-tip .maplibregl-popup-content div { color: var(--ows-muted); }
+.ows-turbine-tip .maplibregl-popup-tip { display: none; }
+
+/* ------------------------------------------------------------------ folder explorer (ui/FolderExplorer.tsx) */
+.ows-fx-canvas {
+  position: relative; height: min(62vh, 580px); overflow: hidden; touch-action: none; cursor: grab;
+  border: 1px solid var(--ows-border); border-radius: var(--ows-surface-radius);
+  background-color: var(--ows-tile);
+  background-image: radial-gradient(var(--ows-border-strong) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.ows-fx-canvas[data-held] { cursor: grabbing; }
+.ows-fx-canvas[data-static] { cursor: default; background-image: none; }
+.ows-fx-wait { position: absolute; inset: 0; margin: auto; }
+.ows-fx-world { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; transition: transform var(--ows-dur-large) var(--ows-ease-out); }
+.ows-fx-canvas[data-held] .ows-fx-world, .ows-fx-canvas[data-still] .ows-fx-world { transition: none; }
+.ows-fx-links { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+.ows-fx-node { position: absolute; left: 0; top: 0; transition: transform var(--ows-dur-large) var(--ows-ease-out); }
+
+/* A block: arrives from its parent (6 px, fading), leaves back into it, shorter */
+.ows-fx-block {
+  display: flex; align-items: center; gap: 8px; width: 100%; height: 100%; padding: 0 6px 0 10px;
+  border-radius: 10px; border: 1px solid var(--ows-border-strong); background: var(--ows-canvas);
+  font-size: 13px; line-height: 1; color: var(--mantine-color-text); cursor: pointer; user-select: none; outline: none;
+  animation: ows-fx-in var(--ows-dur-dialog) var(--ows-ease-out) var(--ows-fx-delay, 0ms) both;
+  transition: border-color var(--ows-dur-state) var(--ows-ease-out), background-color var(--ows-dur-state) var(--ows-ease-out), box-shadow var(--ows-dur-state) var(--ows-ease-out), opacity var(--ows-dur-state) var(--ows-ease-out);
+}
+.ows-fx-block:hover { border-color: color-mix(in srgb, var(--mantine-primary-color-filled) 45%, var(--ows-border-strong)); }
+.ows-fx-block[data-marked] { background: var(--mantine-primary-color-light); }
+.ows-fx-block[data-selected] { border-color: var(--mantine-primary-color-filled); box-shadow: 0 0 0 1px var(--mantine-primary-color-filled); }
+.ows-fx-block:focus-visible { box-shadow: 0 0 0 2px var(--mantine-primary-color-filled), 0 0 0 4px color-mix(in srgb, var(--mantine-primary-color-filled) 25%, transparent); }
+.ows-fx-block[data-disabled] { color: var(--ows-muted); cursor: default; }
+.ows-fx-block[data-dim] { opacity: 0.35; }
+.ows-fx-block[data-leaving] { pointer-events: none; animation: ows-fx-out var(--ows-dur-state) var(--ows-ease-out) both; }
+@keyframes ows-fx-in { from { opacity: 0; transform: translateX(-6px); } }
+@keyframes ows-fx-out { to { opacity: 0; transform: translateX(-6px); } }
+.ows-fx-icon { flex: none; color: var(--ows-muted); transition: color var(--ows-dur-state) var(--ows-ease-out), opacity var(--ows-dur-state) var(--ows-ease-out); }
+.ows-fx-icon[data-role] { color: var(--mantine-color-text); }
+.ows-fx-icon[data-expected], .ows-fx-block[data-selected] .ows-fx-icon { color: var(--mantine-primary-color-filled); }
+.ows-fx-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ows-fx-end { flex: none; display: flex; width: 22px; justify-content: center; }
+.ows-fx-chevron svg { transition: transform var(--ows-dur-state) var(--ows-ease-out); }
+.ows-fx-chevron[data-open] svg { transform: rotate(180deg); }
+/* Far away: names stay, chevrons and icons fade */
+.ows-fx-canvas[data-far] .ows-fx-end, .ows-fx-canvas[data-far] .ows-fx-icon:not([data-role]) { opacity: 0; }
+
+/* Links: drawn once from the parent, then follow their blocks; the chosen branch in colour */
+.ows-fx-edge {
+  fill: none; stroke: var(--ows-border-strong); stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 1;
+  animation: ows-fx-draw var(--ows-dur-large) var(--ows-ease-out) var(--ows-fx-delay, 0ms) both;
+  transition: d var(--ows-dur-large) var(--ows-ease-out), stroke var(--ows-dur-state) var(--ows-ease-out);
+}
+.ows-fx-edge[data-active] { stroke: var(--mantine-primary-color-filled); }
+.ows-fx-edge[data-leaving] { animation: ows-fx-fade var(--ows-dur-state) var(--ows-ease-out) both; }
+@keyframes ows-fx-draw { from { stroke-dashoffset: 1; } }
+@keyframes ows-fx-fade { to { opacity: 0; } }
+
+.ows-fx-tools { position: absolute; right: 10px; bottom: 10px; padding: 4px; border-radius: 10px; background: var(--ows-canvas); border: 1px solid var(--ows-border); }
+.ows-fx-crumb { padding: 2px 4px; border-radius: 6px; font-size: 13px; color: var(--ows-muted); transition: color var(--ows-dur-micro) var(--ows-ease-out), background-color var(--ows-dur-micro) var(--ows-ease-out); }
+.ows-fx-crumb:hover { color: var(--mantine-color-text); background: var(--ows-subtle); }
+.ows-fx-crumb[data-current] { color: var(--mantine-color-text); font-weight: 600; }
+.ows-fx-detail { animation: ows-fx-in var(--ows-dur-menu) var(--ows-ease-out) both; }
+
+/* The same tree as a list */
+.ows-fx-list { overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+.ows-fx-row { height: 34px; flex: none; padding-inline-start: calc(var(--ows-fx-depth) * 22px); }
+.ows-fx-row .ows-fx-block { border-color: transparent; background: transparent; }
+.ows-fx-row .ows-fx-block:hover { background: var(--ows-subtle); }
+.ows-fx-row .ows-fx-block[data-selected] { background: var(--mantine-primary-color-light); box-shadow: none; }
+.ows-fx-row .ows-fx-chevron[data-open] svg { transform: rotate(90deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ows-fx-world, .ows-fx-node, .ows-fx-block, .ows-fx-edge, .ows-fx-icon, .ows-fx-chevron svg, .ows-fx-crumb, .ows-fx-detail { transition: none; animation: none; }
+}
+
+/* ------------------------------------------------------------- files found in a folder (ui/FoundTree.tsx) */
+.ows-found {
+  overflow: auto; max-height: 380px; padding: 14px;
+  border: 1px solid var(--ows-border); border-radius: var(--ows-surface-radius); background-color: var(--ows-tile);
+}
+.ows-found-world { position: relative; }
+.ows-found .ows-fx-block { cursor: default; }
+.ows-found .ows-fx-block[data-action] { cursor: pointer; }
+.ows-found .ows-fx-block:not([data-action]):hover { border-color: var(--ows-border-strong); }
+.ows-found-lines { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
+.ows-found-mono { font-family: var(--mantine-font-family-monospace); font-size: 12px; }
+.ows-found-range { color: var(--ows-muted); }
+
+/* ---------------------------------------------------------------- calculation state (run/RunProgress.tsx) */
+.ows-run-value { font-size: 22px; font-weight: 600; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ows-run-state { display: inline-flex; align-items: center; gap: 8px; color: var(--ows-muted); }
+.ows-run-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ows-muted); flex: none; }
+.ows-run-state[data-state="running"] { color: var(--mantine-color-text); }
+.ows-run-state[data-state="running"] .ows-run-dot { background: var(--mantine-primary-color-filled); animation: ows-run-pulse 1.6s var(--ows-ease-in-out) infinite; }
+.ows-run-state[data-state="done"] .ows-run-dot { background: var(--mantine-primary-color-filled); }
+.ows-run-state[data-state="error"] { color: var(--mantine-color-red-6); }
+.ows-run-state[data-state="error"] .ows-run-dot { background: var(--mantine-color-red-6); }
+@keyframes ows-run-pulse { 50% { opacity: 0.35; } }
+.ows-estimate { color: var(--ows-muted); font-size: 13px; }
+.ows-estimate[data-load="busy"] { color: var(--mantine-color-orange-6); }
+.ows-estimate[data-load="full"] { color: var(--mantine-color-red-6); }
+@media (prefers-reduced-motion: reduce) { .ows-run-state[data-state="running"] .ows-run-dot { animation: none; } }
+
+/* ------------------------------------------------------------ engine installation (compute/EngineWizard.tsx) */
+.ows-install-checks { border: 1px solid var(--ows-border); border-radius: var(--ows-surface-radius); }
+.ows-install-check { padding: 12px 14px; min-width: 0; }
+.ows-install-check + .ows-install-check { border-inline-start: 1px solid var(--ows-border); }
+.ows-install-value { margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color var(--ows-dur-state) var(--ows-ease-out); }
+.ows-install-value[data-ok="true"] { color: var(--mantine-primary-color-filled); }
+.ows-install-value[data-ok="false"] { color: var(--mantine-color-red-6); }
+.ows-install-checks[data-loading] .ows-install-value { opacity: 0.55; }
+.ows-install-note { min-height: 18px; }
+.ows-install-link { font-size: 12px; color: var(--ows-muted); text-decoration: underline; text-decoration-color: var(--ows-border-strong); text-underline-offset: 3px; transition: color var(--ows-dur-micro) var(--ows-ease-out); }
+.ows-install-link:hover { color: var(--mantine-color-text); }
+.ows-install-fixed { padding: 8px 12px; border: 1px solid var(--ows-border); border-radius: var(--ows-control-radius); color: var(--ows-muted); }
+.ows-install-progress { animation: ows-fx-in var(--ows-dur-dialog) var(--ows-ease-out) both; }
+.ows-install-log { margin: 0; max-height: 240px; overflow: auto; white-space: pre-wrap; color: var(--ows-muted); }
+@media (prefers-reduced-motion: reduce) { .ows-install-progress { animation: none; } }
+/* The folds of the window are lighter than those of a page */
+.ows-install-fold .mantine-Accordion-control { padding-block: 10px !important; }
+.ows-install-fold .ows-disclosure-title { font-size: 14px !important; }
+.ows-install-fold .mantine-Accordion-content { padding-bottom: 16px !important; }

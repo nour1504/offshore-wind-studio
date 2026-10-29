@@ -1,0 +1,373 @@
+import { defineMessages } from "../../../i18n";
+
+/** Texts of the turbine models page and its parts. */
+export const messages = defineMessages({
+  en: {
+    description:
+      "Define turbine models: dimensions, rated power and curves.",
+    addCatalog: "Add from the catalogue",
+    close: "Close",
+    addBlank: "Create a model",
+    blankName: "Custom turbine {n}",
+    copyName: "{name} (copy)",
+    unnamed: "Unnamed model",
+    typeN: "Model {n}",
+    list: {
+      title: "Models in this project",
+      type: "Type",
+      model: "Model",
+      power: "Rated power",
+      specific: "Specific power",
+      usedBy: "Used by",
+      actions: "Actions",
+      builtIn: "Built into WRF",
+      notDefined: "Not defined",
+      unused: "Not assigned yet",
+      disabled: "disabled",
+      farmCount: "{name} · {n}",
+      inUse: "in use",
+      emptyTitle: "No turbine model",
+      emptyText:
+        "Add a catalogue model or create one from curves.",
+    },
+    builtIn: {
+      title: "Model 1 · {name}",
+      fallbackName: "WRF generic 2 MW",
+      text:
+        "WRF example turbine (2 MW), for tests. For a study, use a catalogue model or the manufacturer's curves.",
+    },
+    missing: {
+      title: "Model {n} is not defined",
+      text:
+        "{count|# turbine uses|# turbines use} model {n}, not defined in the project. Define it or assign another model.",
+      catalog: "Choose from the catalogue",
+      blank: "Start from a blank curve",
+    },
+    editor: {
+      characteristics: "Main characteristics",
+      characteristicsHelp: "Shared characteristics of every turbine assigned to this model.",
+      name: "Model name",
+      rated: "Rated power",
+      ratedInfo:
+        "Maximum electrical power. Used to check the curve and for the capacity factor.",
+      rotor: "Rotor diameter",
+      rotorInfo:
+        "Diameter swept by the blades. A larger rotor gives a stronger wake.",
+      hub: "Hub height",
+      hubInfo:
+        "Hub height above the sea. WRF applies the drag on the model levels between hub − radius and hub + radius.",
+      standing: "Standing thrust coefficient",
+      standingInfo:
+        "Ct of the stopped turbine, used outside the curve (below cut-in, above cut-out). Typical value: 0.05 to 0.15.",
+      positive: "Must be greater than zero",
+      notNegative: "Cannot be negative",
+      duplicate: "Duplicate",
+      delete: "Delete",
+      deleteTitle: "Delete type {n} ({name})?",
+      deleteText: "The model is removed from the project. No turbine uses it.",
+      deleted: "Type {n} deleted.",
+      inUse: "Used by {count|# turbine|# turbines}: give them another type before deleting this model.",
+      restore: "Restore WRF's table",
+      restoreTitle: "Restore WRF's table for type 1?",
+      restoreText:
+        "Type 1 definition removed: type 1 turbines use the generic 2 MW WRF table again.",
+      restored: "Type 1 uses WRF's table again.",
+    },
+    use: {
+      button: "Use this model",
+      title: "Assign this model to farms",
+      forFarm: "Use for {farm}",
+      inUse: "Used by all {n} turbines of {farm}",
+      partly: "{farm}: {used} of {total} turbines",
+      ready: "Model ready. Next step: place the turbines in Wind farms.",
+      goFarms: "Place the wind farms",
+      label: "Use model {n} for every turbine of {farm}",
+    },
+    metrics: {
+      specific: "Specific power",
+      specificInfo:
+        "Rated power divided by swept area. Below about 300 W/m², the rotor is large for its power: rated power is reached at lower wind speeds and the capacity factor is higher.",
+      maxCp: "Max power coefficient",
+      maxCpHint: "{ws} m/s · Betz {betz}",
+      maxCpInfo:
+        "Cp = P / (½ ρ A U³), ρ = 1.225 kg/m³. Betz limit: 16/27. Above it, check the power unit and the rotor diameter.",
+      rated: "Rated wind speed",
+      ratedHint: "{cutIn} → {cutOut} m/s",
+      ratedInfo:
+        "Read on the curve: cut-in = first speed with power, rated = first speed at rated power, cut-out = last speed with power.",
+      grid: "Farm grid spacing",
+      gridHint: "{dx} km · d0{domain} · {min} D at least",
+      gridNone: "No wind farm scheme selected",
+      gridInfo:
+        "WRF README.windturbine: grid spacing of at least 5 rotor diameters. Below that, the farm scheme assumptions no longer hold.",
+    },
+    problems: {
+      errors: "To fix",
+      blocking: "Corrections needed before the project can be checked and saved.",
+      warnings: "To check",
+      valid: "Consistent curve: increasing speeds, Cp below the Betz limit, rated power reached.",
+      tooFew: "The curve needs at least two rows.",
+      notFinite: "Empty or unreadable values: {rows|row #|rows #}.",
+      negative: "Values cannot be negative: {rows|row #|rows #}.",
+      notIncreasing:
+        "Speeds not strictly increasing: {rows|row #|rows #}. Correct or sort the table.",
+      characteristics: "Rated power, rotor diameter and hub height must be greater than zero, and the standing thrust coefficient zero or more.",
+      betz:
+        "The power coefficient exceeds the Betz limit (16/27 ≈ 0.593) at {speeds} m/s: check that power is in kW and that the rotor diameter is right.",
+      aboveRated: "The curve exceeds the rated power by more than 5 % (maximum {max} kW).",
+      belowRated:
+        "The curve does not reach the rated power (maximum {max} kW for {rated} kW). Check the unit (kW) or the rated power.",
+      ctBelowCp:
+        "Ct below Cp at {speeds} m/s, physically impossible. Power and Ct columns swapped?",
+    },
+    curve: {
+      title: "Power and thrust curves",
+      description:
+        "One line per wind speed at hub height. Outside the curve, the turbine is stopped.",
+      rows: "{n|# row|# rows}",
+      add: "Add a row",
+      sort: "Sort by wind speed",
+      paste: "Paste from a spreadsheet",
+      speed: "Wind speed",
+      power: "Power",
+      ct: "Ct",
+      cp: "Cp",
+      row: "Row",
+      speedRow: "Wind speed, row {n}",
+      powerRow: "Power, row {n}",
+      ctRow: "Thrust coefficient, row {n}",
+      removeRow: "Remove row {n}",
+      unordered: "Not above the previous wind speed",
+      tableLabel: "Curve of type {n}",
+    },
+    charts: {
+      power: "Power curve",
+      powerLabel: "Power (kW) against wind speed (m/s)",
+      coefficients: "Thrust and power coefficients",
+      coefficientsLabel: "Thrust coefficient Ct and power coefficient Cp against wind speed (m/s), with the Betz limit",
+      powerSeries: "Power",
+      ctSeries: "Thrust coefficient Ct",
+      cpSeries: "Power coefficient Cp",
+      betz: "Betz limit 16/27",
+      rated: "Rated power",
+      wind: "Wind speed (m/s)",
+    },
+    paste: {
+      title: "Paste a curve",
+      help:
+        "Paste from a spreadsheet: wind speed (m/s), power, Ct, one row per speed. Separators: tab, semicolon or space. Decimal comma accepted. With a header line, columns can come in any order. WRF wind-turbine-N.tbl files are accepted.",
+      label: "Rows to read",
+      file: "Read a file",
+      fileInfo: "CSV, text or .tbl file. Its content is shown before anything is replaced.",
+      unit: "Power of the pasted rows in",
+      unitFromHeader: "Unit named in the header.",
+      read: "{n|# row read|# rows read}, from {from} to {to} m/s, up to {max} kW in the table.",
+      columns: "Columns found from the header: {columns}.",
+      columnNames: { speed: "wind speed", power: "power", ct: "Ct" },
+      wrf: "WRF table recognised: hub height, rotor diameter, standing Ct and rated power replaced too.",
+      setRated: "Also set the rated power to the curve maximum ({mw} MW)",
+      replace: "Replace the curve",
+      replaced: "Curve replaced: {n|# row|# rows}.",
+      empty: "Paste at least two rows.",
+      tooFew: "At least two rows are needed.",
+      line: "Line {line} unreadable: “{text}”. Expected: wind speed, power, Ct.",
+      fileError: "The file could not be read.",
+    },
+    wrf: {
+      title: "WRF table",
+      description:
+        "The file WRF reads for this type, written with each run as wind-turbine-{n}.tbl when an enabled farm uses it. Line 1: number of rows; line 2: hub height (m), rotor diameter (m), standing thrust coefficient, rated power (MW); then wind speed (m/s), Ct and power (kW) on each row.",
+      show: "Show the table",
+      hide: "Hide the table",
+      download: "Download",
+      fixFirst: "Fix the errors of the model to see its WRF table.",
+      label: "Content of wind-turbine-{n}.tbl",
+    },
+  },
+  fr: {
+    description:
+      "Définissez les modèles d'éolienne : dimensions, puissance nominale et courbes.",
+    addCatalog: "Ajouter depuis le catalogue",
+    close: "Fermer",
+    addBlank: "Créer un modèle",
+    blankName: "Éolienne personnalisée {n}",
+    copyName: "{name} (copie)",
+    unnamed: "Modèle sans nom",
+    typeN: "Modèle {n}",
+    list: {
+      title: "Modèles de ce projet",
+      type: "Type",
+      model: "Modèle",
+      power: "Puissance nominale",
+      specific: "Puissance spécifique",
+      usedBy: "Utilisé par",
+      actions: "Actions",
+      builtIn: "Fourni par WRF",
+      notDefined: "Non défini",
+      unused: "Pas encore attribué",
+      disabled: "désactivé",
+      farmCount: "{name} · {n}",
+      inUse: "utilisé",
+      emptyTitle: "Aucun modèle",
+      emptyText:
+        "Ajouter un modèle du catalogue ou le créer à partir de courbes.",
+    },
+    builtIn: {
+      title: "Modèle 1 · {name}",
+      fallbackName: "Générique WRF 2 MW",
+      text:
+        "Éolienne d'exemple de WRF (2 MW), pour les essais. Pour une étude, utiliser un modèle du catalogue ou les courbes du constructeur.",
+    },
+    missing: {
+      title: "Le modèle {n} n'est pas défini",
+      text:
+        "{count|# éolienne utilise|# éoliennes utilisent} le modèle {n}, non défini dans le projet. Définir ce modèle ou en attribuer un autre.",
+      catalog: "Choisir dans le catalogue",
+      blank: "Partir d'une courbe vierge",
+    },
+    editor: {
+      characteristics: "Caractéristiques principales",
+      characteristicsHelp: "Caractéristiques communes aux éoliennes utilisant ce modèle.",
+      name: "Nom du modèle",
+      rated: "Puissance nominale",
+      ratedInfo:
+        "Puissance électrique maximale. Sert au contrôle de la courbe et au facteur de charge.",
+      rotor: "Diamètre du rotor",
+      rotorInfo:
+        "Diamètre balayé par les pales. Un rotor plus grand donne un sillage plus fort.",
+      hub: "Hauteur de moyeu",
+      hubInfo:
+        "Hauteur du moyeu au-dessus de la mer. WRF applique la traînée sur les niveaux compris entre moyeu − rayon et moyeu + rayon.",
+      standing: "Coefficient de poussée à l'arrêt",
+      standingInfo:
+        "Ct de l'éolienne à l'arrêt, utilisé hors de la courbe (sous le démarrage, au-dessus de la coupure). Valeur courante : 0,05 à 0,15.",
+      positive: "Doit être supérieur à zéro",
+      notNegative: "Ne peut pas être négatif",
+      duplicate: "Dupliquer",
+      delete: "Supprimer",
+      deleteTitle: "Supprimer le type {n} ({name}) ?",
+      deleteText: "Le modèle est retiré du projet. Aucune éolienne ne l'utilise.",
+      deleted: "Type {n} supprimé.",
+      inUse:
+        "Utilisé par {count|# éolienne|# éoliennes} : attribuez-leur un autre type avant de supprimer ce modèle.",
+      restore: "Revenir à la table de WRF",
+      restoreTitle: "Revenir à la table de WRF pour le type 1 ?",
+      restoreText:
+        "Définition du type 1 supprimée : les éoliennes de type 1 reprennent la table générique 2 MW de WRF.",
+      restored: "Le type 1 utilise de nouveau la table de WRF.",
+    },
+    use: {
+      button: "Utiliser ce modèle",
+      title: "Attribuer ce modèle aux parcs",
+      forFarm: "Utiliser pour {farm}",
+      inUse: "Utilisé par les {n} éoliennes de {farm}",
+      partly: "{farm} : {used} éoliennes sur {total}",
+      ready: "Modèle prêt. Étape suivante : placer les éoliennes dans Parcs éoliens.",
+      goFarms: "Placer les parcs éoliens",
+      label: "Utiliser le modèle {n} pour toutes les éoliennes de {farm}",
+    },
+    metrics: {
+      specific: "Puissance spécifique",
+      specificInfo:
+        "Puissance nominale divisée par la surface balayée. Sous 300 W/m² environ, le rotor est grand pour sa puissance : la puissance nominale est atteinte plus tôt et le facteur de charge est plus élevé.",
+      maxCp: "Coefficient de puissance max.",
+      maxCpHint: "{ws} m/s · Betz {betz}",
+      maxCpInfo:
+        "Cp = P / (½ ρ A U³), ρ = 1,225 kg/m³. Limite de Betz : 16/27. Au-dessus, vérifier l'unité de puissance et le diamètre du rotor.",
+      rated: "Vitesse nominale",
+      ratedHint: "{cutIn} → {cutOut} m/s",
+      ratedInfo:
+        "Lues sur la courbe : démarrage = première vitesse avec puissance, nominale = première vitesse à puissance nominale, coupure = dernière vitesse avec puissance.",
+      grid: "Maille du parc",
+      gridHint: "{dx} km · d0{domain} · {min} D au moins",
+      gridNone: "Aucun schéma de parc choisi",
+      gridInfo:
+        "README.windturbine de WRF : maille d'au moins 5 diamètres de rotor. En dessous, les hypothèses des schémas de parc ne tiennent plus.",
+    },
+    problems: {
+      errors: "À corriger",
+      blocking: "Corrections nécessaires avant vérification et enregistrement du projet.",
+      warnings: "À vérifier",
+      valid:
+        "Courbe cohérente : vitesses croissantes, Cp sous la limite de Betz, puissance nominale atteinte.",
+      tooFew: "La courbe doit compter au moins deux lignes.",
+      notFinite: "Valeurs vides ou illisibles : {rows|ligne #|lignes #}.",
+      negative: "Les valeurs ne peuvent pas être négatives : {rows|ligne #|lignes #}.",
+      notIncreasing:
+        "Vitesses non strictement croissantes : {rows|ligne #|lignes #}. Corriger ou trier le tableau.",
+      characteristics:
+        "La puissance nominale, le diamètre du rotor et la hauteur de moyeu doivent être supérieurs à zéro, et le coefficient de poussée à l'arrêt positif ou nul.",
+      betz:
+        "Le coefficient de puissance dépasse la limite de Betz (16/27 ≈ 0,593) à {speeds} m/s : vérifiez que la puissance est en kW et que le diamètre du rotor est juste.",
+      aboveRated: "La courbe dépasse la puissance nominale de plus de 5 % (maximum {max} kW).",
+      belowRated:
+        "La courbe n'atteint pas la puissance nominale (maximum {max} kW pour {rated} kW). Vérifier l'unité (kW) ou la puissance nominale.",
+      ctBelowCp:
+        "Ct inférieur à Cp à {speeds} m/s, physiquement impossible. Colonnes puissance et Ct inversées ?",
+    },
+    curve: {
+      title: "Courbes de puissance et de poussée",
+      description:
+        "Une ligne par vitesse de vent à hauteur de moyeu. En dehors de la courbe, l'éolienne est arrêtée.",
+      rows: "{n|# ligne|# lignes}",
+      add: "Ajouter une ligne",
+      sort: "Trier par vitesse",
+      paste: "Coller depuis un tableur",
+      speed: "Vitesse du vent",
+      power: "Puissance",
+      ct: "Ct",
+      cp: "Cp",
+      row: "Ligne",
+      speedRow: "Vitesse du vent, ligne {n}",
+      powerRow: "Puissance, ligne {n}",
+      ctRow: "Coefficient de poussée, ligne {n}",
+      removeRow: "Supprimer la ligne {n}",
+      unordered: "Pas supérieure à la vitesse précédente",
+      tableLabel: "Courbe du type {n}",
+    },
+    charts: {
+      power: "Courbe de puissance",
+      powerLabel: "Puissance (kW) en fonction de la vitesse du vent (m/s)",
+      coefficients: "Coefficients de poussée et de puissance",
+      coefficientsLabel:
+        "Coefficient de poussée Ct et coefficient de puissance Cp en fonction de la vitesse du vent (m/s), avec la limite de Betz",
+      powerSeries: "Puissance",
+      ctSeries: "Coefficient de poussée Ct",
+      cpSeries: "Coefficient de puissance Cp",
+      betz: "Limite de Betz 16/27",
+      rated: "Puissance nominale",
+      wind: "Vitesse du vent (m/s)",
+    },
+    paste: {
+      title: "Coller une courbe",
+      help:
+        "Coller depuis un tableur : vitesse du vent (m/s), puissance, Ct, une ligne par vitesse. Séparateurs : tabulation, point-virgule ou espace. Virgule décimale acceptée. Avec une ligne d'en-tête, les colonnes peuvent être dans n'importe quel ordre. Fichiers WRF wind-turbine-N.tbl acceptés.",
+      label: "Lignes à lire",
+      file: "Lire un fichier",
+      fileInfo: "Fichier CSV, texte ou .tbl. Le contenu est affiché avant tout remplacement.",
+      unit: "Puissance des lignes collées en",
+      unitFromHeader: "Unité indiquée dans l'en-tête.",
+      read: "{n|# ligne lue|# lignes lues}, de {from} à {to} m/s, jusqu'à {max} kW dans le tableau.",
+      columns: "Colonnes repérées grâce à l'en-tête : {columns}.",
+      columnNames: { speed: "vitesse du vent", power: "puissance", ct: "Ct" },
+      wrf: "Table WRF reconnue : hauteur de moyeu, diamètre du rotor, Ct à l'arrêt et puissance nominale aussi remplacés.",
+      setRated: "Régler aussi la puissance nominale sur le maximum de la courbe ({mw} MW)",
+      replace: "Remplacer la courbe",
+      replaced: "Courbe remplacée : {n|# ligne|# lignes}.",
+      empty: "Collez au moins deux lignes.",
+      tooFew: "Il faut au moins deux lignes.",
+      line: "Ligne {line} illisible : « {text} ». Attendu : vitesse du vent, puissance, Ct.",
+      fileError: "Le fichier n'a pas pu être lu.",
+    },
+    wrf: {
+      title: "Table WRF",
+      description:
+        "Le fichier que WRF lit pour ce type, écrit à chaque calcul sous le nom wind-turbine-{n}.tbl quand un parc actif l'utilise. Ligne 1 : nombre de lignes ; ligne 2 : hauteur de moyeu (m), diamètre du rotor (m), coefficient de poussée à l'arrêt, puissance nominale (MW) ; puis vitesse du vent (m/s), Ct et puissance (kW) sur chaque ligne.",
+      show: "Afficher la table",
+      hide: "Masquer la table",
+      download: "Télécharger",
+      fixFirst: "Corrigez les erreurs du modèle pour voir sa table WRF.",
+      label: "Contenu de wind-turbine-{n}.tbl",
+    },
+  },
+});

@@ -1,0 +1,20 @@
+# Managed build environment (conda-forge only). Direct versions are pinned; the installer
+# records every resolved package with its build and checksum in environment.lock.
+channels:
+  - conda-forge
+dependencies:
+  - gcc_linux-64=13.3.0
+  - gxx_linux-64=13.3.0
+  - gfortran_linux-64=13.3.0
+  - openmpi=4.1.6
+  - libnetcdf=4.9.2=nompi_*
+  - netcdf-fortran=4.6.1=nompi_*
+  - python=3.12
+  - make
+  - perl
+  - m4
+  - tcsh
+  - git
+  # envsubst and gettext, which git submodule calls; often absent from minimal Linux
+  - gettext
+  - curl

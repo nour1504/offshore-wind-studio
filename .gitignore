@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+frontend/dist/
+
+# Simulation data never goes into Git
+*.nc
+wrfout_*
+wrfrst_*
+met_em.*
+geo_em.*
+*.grib
+*.grib2
+/cases/
+/data/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Generated files of local runs
+.owstudio/
+
+# Build outputs
+/build/
+/dist/
+backend/src/owstudio/web/
+frontend/*.tsbuildinfo
+# Isolated GUI verification workspace (no test data in distributables).
+.qa/
+.qa-server.*.log

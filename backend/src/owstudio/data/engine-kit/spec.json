@@ -1,0 +1,163 @@
+{
+  "schema": 2,
+  "id": "wrf4.8.0-wps4.7.0-gnu13-v1",
+  "wrf": {
+    "version": "4.8.0",
+    "tag": "v4.8.0",
+    "commit": "06d4240ae989cc3e50af412bb472df3d9048783c",
+    "url": "https://github.com/wrf-model/WRF.git",
+    "build": "em_real, GNU gfortran/gcc, dmpar, basic nesting"
+  },
+  "wps": {
+    "version": "4.7.0",
+    "tag": "v4.7.0",
+    "commit": "5feccecd63384381b6942371c7a837f66e4ccb84",
+    "url": "https://github.com/wrf-model/WPS.git",
+    "build": "GNU gfortran, dmpar, GRIB1/GRIB2 (zlib 1.2.11, libpng 1.6.37 and JasPer 1.900.29 built from WPS's external folder, JasPer without JPEG)"
+  },
+  "platform": "Linux x86_64 (glibc 2.17 or later)",
+  "micromamba": {
+    "version": "2.3.2",
+    "url": "https://api.anaconda.org/download/conda-forge/micromamba/2.3.2/linux-64/micromamba-2.3.2-0.tar.bz2",
+    "sha256": "5512233cdd8564a671626081026dc861537a963baa06706baab08fac6f3bb9d2"
+  },
+  "dependencies": {
+    "GNU C/C++/Fortran": "13.3.0",
+    "OpenMPI": "4.1.6",
+    "NetCDF C": "4.9.2",
+    "NetCDF Fortran": "4.6.1",
+    "Python (installer helper)": "3.12"
+  },
+  "bundled_by_wps": {
+    "zlib": "1.2.11",
+    "libpng": "1.6.37",
+    "JasPer": "1.900.29"
+  },
+  "disk_gb": {
+    "build": 6,
+    "managed_libraries": 3
+  },
+  "geography": [
+    {
+      "id": "mandatory-high",
+      "url": "https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_high_res_mandatory.tar.gz",
+      "unpacked_gb": 29,
+      "minimum_free_gb": 45,
+      "description": "Mandatory static data at the highest resolution (official NCAR package, recommended)",
+      "download_bytes": 2772782816
+    },
+    {
+      "id": "mandatory-low",
+      "url": "https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_low_res_mandatory.tar.gz",
+      "unpacked_gb": 0.5,
+      "minimum_free_gb": 12,
+      "description": "Mandatory static data at the lowest resolution, for tests and teaching only",
+      "download_bytes": 149872777
+    },
+    {
+      "id": "existing",
+      "url": null,
+      "unpacked_gb": 0,
+      "minimum_free_gb": 10,
+      "description": "An existing WPS_GEOG folder on the target",
+      "download_bytes": 0
+    }
+  ],
+  "complements": [
+    {
+      "id": "thompson28",
+      "url": "https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_thompson28_chem.tar.gz",
+      "when": [
+        [
+          "mp_physics",
+          "28"
+        ]
+      ],
+      "description": "Thompson aerosol-aware microphysics (mp_physics = 28) and dust emission",
+      "download_bytes": 1413244
+    },
+    {
+      "id": "noahmp",
+      "url": "https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_noahmp.tar.gz",
+      "when": [
+        [
+          "sf_surface_physics",
+          "4"
+        ]
+      ],
+      "description": "Noah-MP crop, drainage and irrigation data (sf_surface_physics = 4)",
+      "download_bytes": 2051500949
+    },
+    {
+      "id": "lake_depth",
+      "url": "https://www2.mmm.ucar.edu/wrf/src/wps_files/lake_depth.tar.bz2",
+      "when": [
+        [
+          "sf_lake_physics",
+          "1"
+        ]
+      ],
+      "description": "Lake depth for the lake model (sf_lake_physics = 1)",
+      "download_bytes": 2425674
+    },
+    {
+      "id": "gsl_gwd",
+      "url": "https://www2.mmm.ucar.edu/wrf/src/wps_files/gsl_gwd.tar.bz2",
+      "when": [
+        [
+          "gwd_opt",
+          "3"
+        ]
+      ],
+      "description": "GSL gravity wave drag orography (gwd_opt = 3)",
+      "download_bytes": 104550985
+    },
+    {
+      "id": "topobath",
+      "url": "https://www2.mmm.ucar.edu/wrf/src/wps_files/topobath_30s.tar.bz2",
+      "when": [
+        [
+          "shalwater_z0",
+          "1"
+        ]
+      ],
+      "description": "Bathymetry for shallow-water roughness (shalwater_z0 = 1)",
+      "download_bytes": 571806993
+    },
+    {
+      "id": "ssib",
+      "url": "https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_ssib.tar.gz",
+      "when": [
+        [
+          "sf_surface_physics",
+          "8"
+        ]
+      ],
+      "description": "SSiB land use (sf_surface_physics = 8)",
+      "download_bytes": 2427486
+    },
+    {
+      "id": "px",
+      "url": "https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_px.tar.gz",
+      "when": [
+        [
+          "sf_surface_physics",
+          "7"
+        ]
+      ],
+      "description": "Pleim-Xiu NLCD data, United States only (sf_surface_physics = 7)",
+      "download_bytes": 1114163566
+    }
+  ],
+  "references": [
+    "https://www2.mmm.ucar.edu/wrf/users/download/get_sources_wps_geog.html",
+    "https://github.com/wrf-model/WRF/releases/tag/v4.8.0",
+    "https://github.com/wrf-model/WPS/releases/tag/v4.7.0"
+  ],
+  "notes": [
+    "The installer downloads and compiles the official pinned sources on the target machine.",
+    "Managed libraries need no administrator account on Linux. On a cluster, its own compilers, MPI and NetCDF (modules) may be used instead.",
+    "A compiled engine is tied to its machine architecture, installation folder and MPI: it is not copied between machines.",
+    "The installer neither downloads meteorological data nor runs a simulation."
+  ]
+}

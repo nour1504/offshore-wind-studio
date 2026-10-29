@@ -1,0 +1,253 @@
+#!/usr/bin/env python3
+"""Target-side helper of the engine installer, exported as manifest.py.
+
+Standard library only, Python 3.6 or later (cluster login nodes may have an old Python):
+  extract ARCHIVE DEST            unpack an archive without leaving DEST (no links outside it)
+  adapt TREE CSH                  point build scripts' #!/bin/csh lines at the available csh
+  adopt-geography UNPACKED DEST   move the unpacked WPS_GEOG folder to DEST
+  merge-geography UNPACKED DEST   add complement datasets to DEST without replacing any
+  record ROOT KIT GEOG ID MODE EXTRAS   write engine-manifest.json after a successful build
+  verify ROOT KIT                 check a completed engine and print its manifest
+"""
+
+import hashlib
+import json
+import os
+import platform
+import shutil
+import subprocess
+import sys
+import tarfile
+from datetime import datetime, timezone
+from pathlib import Path
+
+EXECUTABLES = [
+    "WRF/main/wrf.exe", "WRF/main/real.exe", "WRF/main/ndown.exe", "WRF/main/tc.exe",
+    "WPS/geogrid.exe", "WPS/ungrib.exe", "WPS/metgrid.exe",
+]
+
+
+def digest(path):
+    h = hashlib.sha256()
+    with Path(path).open("rb") as source:
+        for block in iter(lambda: source.read(1024 * 1024), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+def write_json(path, value):
+    path = Path(path)
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text(json.dumps(value, indent=2), encoding="utf-8")
+    os.replace(str(temporary), str(path))
+
+
+def output(command):
+    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                            universal_newlines=True, timeout=60)
+    if result.returncode:
+        raise RuntimeError(" ".join(command) + ": " + result.stderr[-1500:])
+    return result.stdout.strip()
+
+
+def inside(path, root):
+    path, root = os.path.realpath(str(path)), os.path.realpath(str(root))
+    return path == root or path.startswith(root + os.sep)
+
+
+def extract(archive, destination):
+    destination = Path(destination)
+    destination.mkdir(parents=True, exist_ok=True)
+    with tarfile.open(str(archive)) as source:
+        if hasattr(tarfile, "data_filter"):
+            # Python 3.12 (and patched 3.8+): blocks absolute paths, traversal, outside links, devices
+            source.extractall(str(destination), filter="data")
+            return
+        for member in source.getmembers():
+            target = destination / member.name
+            if member.name.startswith("/") or ".." in Path(member.name).parts or not inside(target, destination):
+                raise RuntimeError("Unsafe path in archive: " + member.name)
+            if member.issym() or member.islnk():
+                link = (target.parent / member.linkname) if member.issym() else destination / member.linkname
+                if os.path.isabs(member.linkname) or not inside(link, destination):
+                    raise RuntimeError("Unsafe link in archive: " + member.name)
+            elif not (member.isfile() or member.isdir()):
+                raise RuntimeError("Unexpected special file in archive: " + member.name)
+            source.extract(member, str(destination))
+
+
+def adapt(tree, interpreter):
+    """Build scripts only: the scientific sources are untouched; recorded in the manifest."""
+    found = subprocess.run(["git", "-C", str(tree), "grep", "-l", "^#!/bin/csh"],
+                           stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    if found.returncode not in (0, 1):
+        raise RuntimeError(found.stderr)
+    for name in found.stdout.splitlines():
+        target = Path(tree) / name
+        content = target.read_bytes()
+        if content.startswith(b"#!/bin/csh"):
+            target.write_bytes(b"#!" + interpreter.encode() + content[len(b"#!/bin/csh"):])
+
+
+def dataset_root(unpacked):
+    """The folder whose children are datasets (WPS_GEOG, WPS_GEOG_LOW_RES or the archive root)."""
+    unpacked = Path(unpacked)
+    entries = [p for p in unpacked.iterdir() if not p.name.startswith(".")]
+    if len(entries) == 1 and entries[0].is_dir() and not (entries[0] / "index").is_file():
+        children = [p for p in entries[0].iterdir() if p.is_dir()]
+        if any(has_index(child) for child in children):
+            return entries[0]
+    return unpacked
+
+
+def has_index(folder):
+    folder = Path(folder)
+    if (folder / "index").is_file():
+        return True
+    return any((child / "index").is_file() or any((sub / "index").is_file() for sub in child.iterdir() if sub.is_dir())
+               for child in folder.iterdir() if child.is_dir())
+
+
+def datasets(geog):
+    geog = Path(geog)
+    if not geog.is_dir():
+        return []
+    return sorted(p.name for p in geog.iterdir() if p.is_dir() and not p.name.startswith(".") and has_index(p))
+
+
+def adopt_geography(unpacked, destination):
+    root = dataset_root(unpacked)
+    found = datasets(root)
+    if not found:
+        raise RuntimeError("The archive contains no WPS geography dataset (no index file)")
+    destination = Path(destination)
+    if destination.exists():
+        raise RuntimeError("Geography folder already exists: " + str(destination))
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    os.replace(str(root), str(destination))
+    print(json.dumps({"datasets": found}))
+
+
+def merge_geography(unpacked, destination):
+    root = dataset_root(unpacked)
+    added, kept = [], []
+    for name in datasets(root):
+        target = Path(destination) / name
+        if target.exists():
+            kept.append(name)  # never replace a dataset that is already there
+        else:
+            os.replace(str(Path(root) / name), str(target))
+            added.append(name)
+    if not added and not kept:
+        raise RuntimeError("The complement archive contains no WPS geography dataset")
+    print(json.dumps({"added": added, "already_present": kept}))
+
+
+def check_linked(path):
+    linked = subprocess.run(["ldd", str(path)], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    if linked.returncode or "not found" in linked.stdout:
+        raise RuntimeError("Unresolved shared libraries for " + str(path) + ":\n" + linked.stdout[-1500:])
+
+
+def first_line(command):
+    try:
+        return output(command).splitlines()[0]
+    except (OSError, RuntimeError, IndexError):
+        return ""
+
+
+def record(root, kit, geog, geography_id, mode, extras):
+    root, kit = Path(root), Path(kit)
+    spec = json.loads((kit / "spec.json").read_text(encoding="utf-8"))
+    executables = {}
+    for name in EXECUTABLES:
+        path = root / name
+        if not path.is_file() or not os.access(str(path), os.X_OK):
+            raise RuntimeError("Build incomplete: " + name + " is missing or not executable")
+        check_linked(path)
+        executables[name] = digest(path)
+    found = datasets(geog)
+    if not found:
+        raise RuntimeError("The geography folder contains no WPS dataset: " + str(geog))
+    packages = []
+    meta = root / "runtime" / "conda-meta"
+    if meta.is_dir():
+        for path in sorted(meta.glob("*.json")):
+            p = json.loads(path.read_text(encoding="utf-8"))
+            packages.append({k: p.get(k) for k in ("name", "version", "build", "channel", "sha256", "md5")})
+    wrf_commit = output(["git", "-C", str(root / "WRF"), "rev-parse", "HEAD"])
+    wps_commit = output(["git", "-C", str(root / "WPS"), "rev-parse", "HEAD"])
+    if wrf_commit != spec["wrf"]["commit"] or wps_commit != spec["wps"]["commit"]:
+        raise RuntimeError("The sources are not the official pinned commits")
+    adapted = []
+    for tree in ("WRF", "WPS"):
+        changed = output(["git", "-C", str(root / tree), "diff", "--name-only"]).splitlines()
+        adapted += [tree + "/" + name for name in changed]
+    versions = {
+        "compiler": first_line(["gfortran", "--version"]),
+        "c_compiler": first_line(["gcc", "--version"]),
+        "mpi": first_line(["mpirun", "--version"]),
+        "netcdf_c": first_line(["nc-config", "--version"]),
+        "netcdf_fortran": first_line(["nf-config", "--version"]),
+    }
+    value = {
+        "schema": 2, "id": spec["id"], "state": "ready", "prefix": os.path.realpath(str(root)),
+        "wrf_version": spec["wrf"]["version"], "wps_version": spec["wps"]["version"],
+        "wrf_commit": wrf_commit, "wps_commit": wps_commit, "build": spec["wrf"]["build"],
+        "wps_build": spec["wps"]["build"], "platform": platform.platform(),
+        "architecture": platform.machine(), "dependency_mode": mode, "versions": versions,
+        "packages": packages, "executables": executables,
+        "geography": {"id": geography_id, "path": os.path.realpath(str(geog)), "datasets": found,
+                      "complements": [e for e in extras.split() if e]},
+        "build_adaptations": adapted, "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    write_json(root / "engine-manifest.json", value)
+    print(json.dumps(value))
+
+
+def verify(root, kit):
+    root, kit = Path(root), Path(kit)
+    spec = json.loads((kit / "spec.json").read_text(encoding="utf-8"))
+    manifest = json.loads((root / "engine-manifest.json").read_text(encoding="utf-8"))
+    if manifest.get("id") != spec["id"] or manifest.get("state") != "ready":
+        raise RuntimeError("This folder does not hold a completed engine of this version")
+    if manifest.get("prefix") != os.path.realpath(str(root)):
+        raise RuntimeError("The engine was moved: binaries are tied to the folder they were built in")
+    for relative, expected in manifest["executables"].items():
+        target = root / relative
+        if not inside(target, root) or not target.is_file():
+            raise RuntimeError("Missing engine executable: " + relative)
+        if digest(target) != expected:
+            raise RuntimeError("Engine executable changed since it was built: " + relative)
+        check_linked(target)
+    geog = manifest["geography"]["path"]
+    present = datasets(geog)
+    missing = [d for d in manifest["geography"].get("datasets", []) if d not in present]
+    if not present or missing:
+        raise RuntimeError("Geography datasets missing in " + geog + ": " + ", ".join(missing or ["all"]))
+    manifest["geography"]["datasets"] = present
+    manifest["verified_at"] = datetime.now(timezone.utc).isoformat()
+    print(json.dumps(manifest))
+
+
+def main():
+    action, args = sys.argv[1], sys.argv[2:]
+    actions = {
+        "extract": lambda: extract(*args),
+        "adapt": lambda: adapt(*args),
+        "adopt-geography": lambda: adopt_geography(*args),
+        "merge-geography": lambda: merge_geography(*args),
+        "record": lambda: record(*args),
+        "verify": lambda: verify(*args),
+    }
+    if action not in actions:
+        raise SystemExit("Unknown action: " + action)
+    try:
+        actions[action]()
+    except RuntimeError as error:
+        print(str(error), file=sys.stderr)
+        raise SystemExit(1)
+
+
+if __name__ == "__main__":
+    main()

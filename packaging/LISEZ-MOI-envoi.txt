@@ -1,0 +1,98 @@
+OFFSHORE WIND STUDIO {VERSION}
+Version de démonstration en cours de validation
+
+Ce dossier contient trois installateurs. Prenez celui de votre ordinateur :
+  - Windows 10 ou 11 :                                 OffshoreWindStudio-{VERSION}-setup.exe
+  - Linux, avec le mot de passe administrateur :       offshore-wind-studio_{VERSION}_amd64.deb
+  - Linux, sans mot de passe administrateur (travail) : OffshoreWindStudio-{VERSION}-linux-setup.run
+
+INSTALLATION SOUS WINDOWS
+1. Ouvrez OffshoreWindStudio-{VERSION}-setup.exe.
+   L'installateur n'est pas encore signé : Windows peut afficher « Windows a protégé
+   votre ordinateur » ou « Éditeur inconnu ». Vérifiez d'abord que l'empreinte SHA256
+   du fichier est bien celle indiquée en bas de ce document, puis cliquez sur
+   « Informations complémentaires » et « Exécuter quand même ».
+2. Suivez les étapes de l'installateur (aucun compte administrateur nécessaire).
+3. Lancez Offshore Wind Studio depuis le menu Démarrer ou le Bureau.
+Microsoft WebView2 est nécessaire pour la fenêtre ; l'installateur le vérifie et
+l'installe au besoin (connexion Internet).
+
+INSTALLATION SOUS LINUX (Debian, Scibian, Ubuntu et autres Linux 64 bits)
+Avec le mot de passe administrateur : le fichier .deb
+1. Double-cliquez sur offshore-wind-studio_{VERSION}_amd64.deb.
+2. La logithèque s'ouvre : cliquez sur « Installer » et tapez votre mot de passe.
+   (Sinon, dans un terminal : sudo apt install ./offshore-wind-studio_{VERSION}_amd64.deb)
+3. Lancez Offshore Wind Studio depuis le menu des applications.
+   Pour le désinstaller : la logithèque, ou sudo apt remove offshore-wind-studio.
+
+Sans mot de passe administrateur : le fichier .run
+1. Faites un clic droit sur OffshoreWindStudio-{VERSION}-linux-setup.run, puis
+   « Exécuter » (ou « Ouvrir avec… Exécuter »). Si rien ne se passe, ouvrez un
+   terminal dans ce dossier et tapez :
+     sh OffshoreWindStudio-{VERSION}-linux-setup.run
+2. Un message confirme l'installation (dans votre dossier personnel).
+3. Lancez Offshore Wind Studio depuis le menu des applications.
+   Pour le désinstaller : « Désinstaller Offshore Wind Studio » dans le même menu.
+Une nouvelle version remplace l'ancienne. Vos projets (~/OffshoreWindStudio) et vos
+réglages (~/.config/OffshoreWindStudio) ne sont jamais supprimés.
+
+Sous Linux, le logiciel s'ouvre dans sa propre fenêtre quand le Linux le permet,
+sinon dans votre navigateur (Firefox, Chrome…) : fermez-le alors avec le bouton
+« Quitter » en bas du menu de gauche.
+
+Sans rien d'autre à installer, le logiciel ouvre et prépare les projets
+et analyse des sorties WRF existantes.
+
+PROJET D'EXEMPLE
+Ce dossier contient aussi un projet prêt à ouvrir :
+{PROJETS}
+Ne le décompressez pas : dans le logiciel, Projets > Importer un projet, puis choisissez
+ce fichier tel quel. Il contient case.yaml (le projet) et project.json (son étiquette :
+version et date d'export). Il s'ouvre
+avec sa période, ses domaines, ses parcs et ses réglages (sans calcul ni résultat).
+Il utilise les données ERA5 : le script de téléchargement exporté demande votre propre
+accès Copernicus sur la machine qui télécharge. Vous pouvez de même exporter vos projets (menu « … » d'un projet >
+Exporter) pour les envoyer à quelqu'un.
+
+INSTALLATION DU MOTEUR DE CALCUL (WRF/WPS)
+L'installation du moteur est facultative pour préparer les fichiers ou analyser les sorties.
+Dans Calcul > Installer un moteur, deux cibles sont proposées :
+  - Windows : la distribution Linux WSL dédiée ;
+  - Linux : cet ordinateur, dans le dossier de votre choix, sans mot de passe administrateur.
+La cible compatible avec votre système est disponible. Le logiciel n'installe pas de
+moteur à distance ; sur un cluster, utilisez celui fourni par votre administrateur.
+L'assistant affiche les versions installées : WRF 4.8.0 et WPS 4.7.0 (sources
+officielles), compilateurs GNU 13.3.0, OpenMPI 4.1.6, NetCDF 4.9.2 (C) et 4.6.1
+(Fortran). Il vérifie la cible et l'espace disque, puis télécharge et compile tout
+sur la cible, y compris la géographie officielle du NCAR (2,8 Go à télécharger,
+environ 29 Go une fois décompressée). Prévoyez environ 45 Go libres et 1 à 2 heures.
+Sous Windows, une autorisation administrateur et un redémarrage peuvent être
+demandés pour activer WSL. L'installation peut être fermée et reprise.
+Le profil de calcul est ensuite configuré automatiquement.
+
+PRÉPARER UN CALCUL
+1. Enregistrez le projet et ouvrez Fichiers WRF.
+2. Choisissez Cluster (Slurm) ou Ordinateur Linux ; renseignez les chemins, les motifs
+   des données et les ressources. Pour Slurm, adaptez l'en-tête et les modules du cluster.
+3. Extraire tous les fichiers ou Télécharger le zip. Le LISEZ-MOI du paquet donne
+   l'ordre d'exécution, les dates UTC et les conventions des résultats.
+4. Après calcul, importez le paquet ou son dossier wrf/ dans Résultats et énergie.
+Le logiciel ne lance pas les simulations lui-même. Les scripts exportés exécutent
+WPS année par année, puis les fenêtres WRF de la dernière à la première.
+
+Ce dossier ne contient ni moteur, ni géographie, ni données météorologiques :
+ils sont téléchargés depuis leurs sources officielles au moment de l'installation.
+
+ÉTAT DE LA VERSION
+{ETAT}
+Consultez l'onglet Aide (méthodes, réglages, limites) avant une étude scientifique.
+
+Ce dossier contient uniquement les installateurs, le projet d'exemple et ce fichier.
+Aucune autre donnée personnelle, aucun réglage ni code source n'est fourni.
+
+EMPREINTES SHA256
+{SHA256}
+Vérification sous Windows (PowerShell) :
+  Get-FileHash .\OffshoreWindStudio-{VERSION}-setup.exe -Algorithm SHA256
+Vérification sous Linux (terminal) :
+  sha256sum offshore-wind-studio_{VERSION}_amd64.deb OffshoreWindStudio-{VERSION}-linux-setup.run

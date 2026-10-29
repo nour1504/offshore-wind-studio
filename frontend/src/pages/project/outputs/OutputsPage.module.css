@@ -1,0 +1,18 @@
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(300px, 1fr);
+  border: 1px solid var(--ows-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.map { min-width: 0; }
+.points { min-width: 0; border-left: 1px solid var(--ows-border); }
+.pointList { max-height: 329px; overflow-y: auto; }
+.point { padding: 14px 16px; border-top: 1px solid var(--ows-border); }
+
+@media (max-width: 1050px) {
+  .workspace { grid-template-columns: minmax(0, 1fr); }
+  .points { border-left: 0; border-top: 1px solid var(--ows-border); }
+  .pointList { max-height: 300px; }
+}

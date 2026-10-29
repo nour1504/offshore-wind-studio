@@ -1,0 +1,60 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "owstudio"
+version = "0.6.12"
+description = "Graphical front end for the official WRF/WPS models, focused on offshore wind"
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2",
+    "pyyaml>=6",
+    "f90nml>=1.4",
+    "numpy>=2",
+    "pandas>=2",
+    "xarray>=2024.1",
+    "netCDF4>=1.7",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "pyproj>=3.6",
+    "matplotlib>=3.9",
+    "reportlab>=4",
+    "imageio-ffmpeg>=0.5",
+    "pyshp>=2.3",
+    "shapely>=2",
+    "psutil>=5.9",
+]
+
+[project.optional-dependencies]
+desktop = ["pywebview>=6", "pyinstaller>=6"]
+dev = [
+    "pytest>=8",
+    "httpx>=0.27",
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "pandas-stubs",
+    "types-PyYAML",
+    "types-psutil",
+    # Checks the bash scripts of the export (tests skip it when absent)
+    "shellcheck-py>=0.10",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/owstudio"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.mypy]
+strict = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["f90nml", "webview", "shapefile", "shapely", "shapely.*", "reportlab", "reportlab.*", "imageio_ffmpeg"]
+ignore_missing_imports = true
