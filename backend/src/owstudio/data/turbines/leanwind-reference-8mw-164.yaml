@@ -1,0 +1,145 @@
+id: leanwind-reference-8mw-164
+name: LEANWIND Reference 8MW 164
+origin: reference model
+power_curve_type: theoretical
+cut_in_wind_speed: 4
+rated_wind_speed: 12.5
+cut_out_wind_speed: 25
+source: https://raw.githubusercontent.com/NatLabRockies/turbine-models/main/turbine_models/data/Offshore/LEANWIND_Reference_8MW_164.csv
+license: BSD-3-Clause (NREL turbine-models)
+turbine:
+  name: LEANWIND Reference 8MW 164
+  hub_height_m: 110.0
+  rotor_diameter_m: 164.0
+  standing_thrust_coefficient: 0.1
+  rated_power_mw: 8.0
+  curve:
+  - wind_speed: 4.0
+    thrust_coefficient: 0.92
+    power_kw: 110.0
+  - wind_speed: 4.5
+    thrust_coefficient: 0.88
+    power_kw: 350.0
+  - wind_speed: 5.0
+    thrust_coefficient: 0.85
+    power_kw: 600.0
+  - wind_speed: 5.5
+    thrust_coefficient: 0.83
+    power_kw: 850.0
+  - wind_speed: 6.0
+    thrust_coefficient: 0.82
+    power_kw: 1140.0
+  - wind_speed: 6.5
+    thrust_coefficient: 0.81
+    power_kw: 1490.0
+  - wind_speed: 7.0
+    thrust_coefficient: 0.8
+    power_kw: 1900.0
+  - wind_speed: 7.5
+    thrust_coefficient: 0.79
+    power_kw: 2370.0
+  - wind_speed: 8.0
+    thrust_coefficient: 0.78
+    power_kw: 2900.0
+  - wind_speed: 8.5
+    thrust_coefficient: 0.77
+    power_kw: 3500.0
+  - wind_speed: 9.0
+    thrust_coefficient: 0.76
+    power_kw: 4155.0
+  - wind_speed: 9.5
+    thrust_coefficient: 0.75
+    power_kw: 4870.0
+  - wind_speed: 10.0
+    thrust_coefficient: 0.73
+    power_kw: 5630.0
+  - wind_speed: 10.5
+    thrust_coefficient: 0.71
+    power_kw: 6420.0
+  - wind_speed: 11.0
+    thrust_coefficient: 0.67
+    power_kw: 7150.0
+  - wind_speed: 11.5
+    thrust_coefficient: 0.6
+    power_kw: 7610.0
+  - wind_speed: 12.0
+    thrust_coefficient: 0.52
+    power_kw: 7865.0
+  - wind_speed: 12.5
+    thrust_coefficient: 0.45
+    power_kw: 7940.0
+  - wind_speed: 13.0
+    thrust_coefficient: 0.39
+    power_kw: 7970.0
+  - wind_speed: 13.5
+    thrust_coefficient: 0.34
+    power_kw: 8000.0
+  - wind_speed: 14.0
+    thrust_coefficient: 0.3
+    power_kw: 8000.0
+  - wind_speed: 14.5
+    thrust_coefficient: 0.27
+    power_kw: 8000.0
+  - wind_speed: 15.0
+    thrust_coefficient: 0.24
+    power_kw: 8000.0
+  - wind_speed: 15.5
+    thrust_coefficient: 0.22
+    power_kw: 8000.0
+  - wind_speed: 16.0
+    thrust_coefficient: 0.19
+    power_kw: 8000.0
+  - wind_speed: 16.5
+    thrust_coefficient: 0.18
+    power_kw: 8000.0
+  - wind_speed: 17.0
+    thrust_coefficient: 0.16
+    power_kw: 8000.0
+  - wind_speed: 17.5
+    thrust_coefficient: 0.15
+    power_kw: 8000.0
+  - wind_speed: 18.0
+    thrust_coefficient: 0.14
+    power_kw: 8000.0
+  - wind_speed: 18.5
+    thrust_coefficient: 0.13
+    power_kw: 8000.0
+  - wind_speed: 19.0
+    thrust_coefficient: 0.12
+    power_kw: 8000.0
+  - wind_speed: 19.5
+    thrust_coefficient: 0.11
+    power_kw: 8000.0
+  - wind_speed: 20.0
+    thrust_coefficient: 0.1
+    power_kw: 8000.0
+  - wind_speed: 20.5
+    thrust_coefficient: 0.09
+    power_kw: 8000.0
+  - wind_speed: 21.0
+    thrust_coefficient: 0.09
+    power_kw: 8000.0
+  - wind_speed: 21.5
+    thrust_coefficient: 0.08
+    power_kw: 8000.0
+  - wind_speed: 22.0
+    thrust_coefficient: 0.08
+    power_kw: 8000.0
+  - wind_speed: 22.5
+    thrust_coefficient: 0.07
+    power_kw: 8000.0
+  - wind_speed: 23.0
+    thrust_coefficient: 0.07
+    power_kw: 8000.0
+  - wind_speed: 23.5
+    thrust_coefficient: 0.06
+    power_kw: 8000.0
+  - wind_speed: 24.0
+    thrust_coefficient: 0.06
+    power_kw: 8000.0
+  - wind_speed: 24.5
+    thrust_coefficient: 0.06
+    power_kw: 8000.0
+  - wind_speed: 25.0
+    thrust_coefficient: 0.05
+    power_kw: 8000.0

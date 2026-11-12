@@ -1,0 +1,1535 @@
+/* =============================================================================================
+   Offshore Wind Studio — design system
+   Colours: green and white (light), black and one dark green (dark), one red for alerts (theme.ts
+   maps every other Mantine hue onto these). Motion: same curves and durations as src/motion.ts.
+   Typography: Manrope (bundled, SIL OFL); rounded controls.
+   ============================================================================================= */
+
+@font-face {
+  font-family: "Manrope Variable";
+  src: url("./assets/fonts/manrope-variable.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+/* ------------------------------------------------------------------------------- tokens */
+:root {
+  --ows-page-max: 1320px;
+  --ows-card-pad: 20px;
+  --ows-control-radius: 14px;
+  --ows-surface-radius: 12px;
+  --ows-page-in-x: 0px;
+  --ows-page-out-x: 0px;
+  --ows-loss: var(--mantine-color-ember-6);
+  --ows-map-natural-accent: #176743; --ows-map-natural-mark: #3aad66; --ows-map-natural-ink: #0e4d2c;
+  --ows-map-ripple: #46d483;
+  /* Ink on the light accent (save button), text on a strong colour or a picture, run states */
+  --ows-on-accent-2: #06130b;
+  --ows-on-colour: #ffffff;
+  --ows-state-ok: #3aad66;
+  --ows-state-failed: #e03131;
+  --ows-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ows-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ows-dur-micro: 120ms;
+  --ows-dur-state: 160ms;
+  --ows-dur-menu: 190ms;
+  --ows-dur-dialog: 240ms;
+  --ows-dur-large: 320ms;
+  --ows-dur-enter: 380ms;
+}
+
+:root[data-mantine-color-scheme="light"] {
+  --ows-app-bg: #f5f7f5;
+  --ows-canvas: #ffffff;
+  --ows-card: #ffffff;
+  --ows-tile: #f5f8f5;
+  --ows-border: rgba(14, 77, 44, 0.1);
+  --ows-border-strong: rgba(14, 77, 44, 0.17);
+  --ows-subtle: rgba(14, 77, 44, 0.05);
+  --ows-muted: #59675f;
+  --ows-nav-text: #43564b;
+  --ows-on-accent: #ffffff;
+  --ows-accent: #1f7f48;
+  --ows-accent-2: #3aad66;
+  --ows-accent-soft: #dcefe3;
+  --ows-faint: #8a988f;
+  --ows-danger: #c6382e;
+  --ows-amber: #b7791f;
+  --ows-shadow-card: none;
+  --ows-shadow-pop: 0 2px 6px rgba(14, 46, 30, 0.06), 0 16px 40px rgba(14, 46, 30, 0.14);
+  /* Maps in the theme's colours (the coloured base map keeps natural ones), then the home background */
+  --ows-map-water: #edf3ef; --ows-map-land: #e0e9df; --ows-map-line: #b4c6b8; --ows-map-text: #405449; --ows-map-halo: #ffffff;
+  --ows-map-accent: #176743; --ows-map-mark: #3aad66; --ows-map-ink: #0e4d2c; --ows-map-shade: #526656;
+  --ows-map-relief-0: #cfdfcf; --ows-map-relief-1: #b9cfb8; --ows-map-relief-2: #d9e2d7; --ows-map-relief-3: #eeeeee;
+  --ows-map-deep: rgba(42, 78, 57, 0.35); --ows-map-shelf: rgba(42, 78, 57, 0.12);
+  /* Ordered classes of the charts (calm to strong wind): one hue, light to dark */
+  --ows-ramp-0: #7ebd93; --ows-ramp-1: #64aa7c; --ows-ramp-2: #4a9767; --ows-ramp-3: #318453;
+  --ows-ramp-4: #187141; --ows-ramp-5: #045d32; --ows-ramp-6: #024926; --ows-ramp-7: #01351a;
+  --ows-nebula-bg: #ffffff; --ows-nebula-gas-1: #d2efdd; --ows-nebula-gas-2: #52c483; --ows-nebula-gas-3: #0b5a31;
+  --ows-nebula-dust-0: #86d6a6; --ows-nebula-dust-1: #23935a; --ows-nebula-dust-2: #0f5c35; --ows-nebula-dust-3: #08331d;
+  --ows-pop: #ffffff;
+  --ows-code: var(--mantine-primary-color-filled);
+  --mantine-color-body: var(--ows-canvas);
+  --mantine-color-text: #193126;
+  --mantine-color-dimmed: #59675f;
+}
+
+html[data-mantine-color-scheme="dark"]:root {
+  /* Black with a faint green, backgrounds and touches in one dark green, text a green-tinted white */
+  --ows-app-bg: #020403;
+  --ows-canvas: #050806;
+  --ows-card: rgba(23, 102, 59, 0.075);
+  --ows-tile: rgba(23, 102, 59, 0.095);
+  --ows-border: rgba(23, 102, 59, 0.23);
+  --ows-border-strong: rgba(23, 102, 59, 0.42);
+  --ows-subtle: rgba(23, 102, 59, 0.13);
+  --ows-muted: #8fa99a;
+  --ows-nav-text: #b6cbbe;
+  --ows-on-accent: #ffffff;
+  --ows-on-accent-2: #ffffff;
+  --ows-accent: #17663b;
+  --ows-accent-2: #17663b;
+  --ows-accent-soft: rgba(23, 102, 59, 0.31);
+  --ows-faint: #6f8277;
+  --ows-danger: #e7685f;
+  --ows-amber: #e0b05a;
+  --ows-shadow-card: none;
+  --ows-shadow-pop: inset 0 1px 0 rgba(23, 102, 59, 0.3), 0 24px 64px rgba(0, 0, 0, 0.7);
+  --ows-state-ok: #17663b;
+  --ows-map-water: #040806; --ows-map-land: #101713; --ows-map-line: #35433b; --ows-map-text: #cfe3d6; --ows-map-halo: #040806;
+  --ows-map-accent: #17663b; --ows-map-mark: #e9f6ee; --ows-map-ink: #e6f3eb; --ows-map-shade: #000000; --ows-map-ripple: #17663b;
+  /* Every domain outline in the dark green (their names in the map's text colour) */
+  --ows-map-domain: #17663b;
+  --ows-map-relief-0: #17211b; --ows-map-relief-1: #243229; --ows-map-relief-2: #425449; --ows-map-relief-3: #b0c0b6;
+  --ows-map-deep: rgba(0, 0, 0, 0.65); --ows-map-shelf: rgba(0, 0, 0, 0.3);
+  /* Ordered classes: from the dark green to the light text */
+  --ows-ramp-0: #17663b; --ows-ramp-1: #387850; --ows-ramp-2: #538b66; --ows-ramp-3: #6d9e7d;
+  --ows-ramp-4: #87b194; --ows-ramp-5: #a1c5ac; --ows-ramp-6: #bcd9c4; --ows-ramp-7: #d7eddd;
+  --ows-nebula-bg: #010402; --ows-nebula-gas-1: #08381d; --ows-nebula-gas-2: #1ba556; --ows-nebula-gas-3: #8ff5bd;
+  --ows-nebula-dust-0: #0f6b39; --ows-nebula-dust-1: #34c472; --ows-nebula-dust-2: #a6f5c6; --ows-nebula-dust-3: #f4fff8;
+  --ows-pop: #0b1510;
+  --ows-code: #f1f1f1;
+  --ows-tip: rgba(9, 19, 13, 0.96);
+  --ows-link-hover: #1b7244;
+  --mantine-color-body: var(--ows-canvas);
+  --mantine-color-text: #e6f3eb;
+  --mantine-color-dimmed: #8fa99a;
+  --mantine-color-default: rgba(23, 102, 59, 0.105);
+  --mantine-color-default-hover: rgba(23, 102, 59, 0.2);
+  --mantine-color-default-border: rgba(23, 102, 59, 0.3);
+  --mantine-primary-color-filled: #17663b;
+  --mantine-primary-color-filled-hover: #1b7244;
+  --mantine-primary-color-contrast: #ffffff;
+  --mantine-primary-color-light: rgba(23, 102, 59, 0.255);
+  --mantine-primary-color-light-hover: rgba(23, 102, 59, 0.38);
+  --mantine-primary-color-light-color: #e6f3eb;
+  --mantine-color-disabled: rgba(23, 102, 59, 0.14);
+  --mantine-color-disabled-color: #6f8277;
+  --mantine-color-disabled-border: rgba(23, 102, 59, 0.18);
+}
+
+/* ------------------------------------------------------------------------------- base */
+html, body, #root { min-height: 100%; }
+/* What is brought into view stops under the sticky top bar */
+html { scroll-padding-top: 56px; }
+body {
+  background: var(--ows-app-bg);
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--mantine-primary-color-light-hover); }
+
+/* ------------------------------------------------------------------------------- frame */
+.ows-shell .mantine-AppShell-main { background: transparent; }
+/* Folding the sidebar: its width and the content's margin move together (not at the first load) */
+html:not(.ows-booting) .ows-shell .mantine-AppShell-main { transition: padding-inline-start var(--ows-dur-large) var(--ows-ease-out); }
+
+/* Sidebar: on the window's background, no border; folds down to its icons */
+.ows-sidebar.mantine-AppShell-navbar {
+  background: var(--ows-app-bg);
+  border: 0;
+  border-right: 1px solid var(--ows-border);
+  display: flex;
+  flex-direction: column;
+}
+html:not(.ows-booting) .ows-sidebar.mantine-AppShell-navbar {
+  transition-property: width, transform;
+  transition-duration: var(--ows-dur-large);
+  transition-timing-function: var(--ows-ease-out);
+}
+.ows-sidebar-head { height: 45px; padding: 0 0 0 17px; flex: none; }
+.ows-shell[data-folded] .ows-sidebar-head { padding: 0; justify-content: center; }
+.ows-fold { color: var(--ows-muted); }
+
+/* Project switcher: a workspace selector */
+.ows-project-switcher .mantine-Input-input {
+  height: 36px;
+  font-weight: 600;
+  background: var(--ows-card);
+  border-color: var(--ows-border-strong);
+  box-shadow: var(--ows-shadow-card);
+}
+.ows-project-mini { display: grid; place-items: center; width: 44px; height: 36px; margin-inline: auto; border-radius: 8px; color: var(--ows-muted); }
+.ows-project-mini:hover { background: var(--ows-subtle); color: var(--mantine-color-text); }
+
+/* Search (Ctrl K) */
+.ows-search-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 34px;
+  padding: 0 8px 0 10px;
+  border-radius: 8px;
+  border: 1px solid var(--ows-border);
+  background: var(--ows-subtle);
+  color: var(--ows-muted);
+  font-size: var(--mantine-font-size-sm);
+  transition: border-color var(--ows-dur-state) ease, background-color var(--ows-dur-state) ease, color var(--ows-dur-state) ease;
+}
+.ows-search-button:hover { border-color: var(--ows-border-strong); color: var(--mantine-color-text); }
+.ows-search-button[data-compact] { width: 44px; justify-content: center; padding: 0; margin-inline: auto; }
+.ows-search-label { flex: 1; text-align: left; }
+
+/* Menu entries */
+.ows-nav-scroll .mantine-ScrollArea-viewport { mask-image: linear-gradient(to bottom, #000 calc(100% - 24px), transparent); }
+.ows-nav-group { font-size: 12px; font-weight: 600; color: var(--ows-muted); padding: 2px 10px 4px; }
+.ows-nav-rule { display: block; height: 1px; margin: 4px 10px 6px; background: var(--ows-border); }
+.ows-nav-link.mantine-NavLink-root {
+  position: relative;
+  z-index: 1;
+  min-height: 32px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  color: var(--ows-nav-text);
+  font-size: 13px;
+  background: transparent;
+  transition: color var(--ows-dur-state) ease, background-color var(--ows-dur-state) ease;
+}
+.ows-nav-link.mantine-NavLink-root[data-active] { background: transparent; color: var(--mantine-color-text); font-weight: 600; }
+.ows-nav-link.mantine-NavLink-root:not([data-active]):hover { background: transparent; color: var(--mantine-color-text); }
+/* The hover highlight that follows the pointer (NavSnake) */
+.ows-nav-snake { position: absolute; z-index: 0; border-radius: 8px; background: var(--ows-subtle); pointer-events: none; }
+.ows-nav-link .mantine-NavLink-section { color: var(--ows-muted); transition: color var(--ows-dur-state) ease; }
+.ows-nav-link[data-active] .mantine-NavLink-section { color: var(--mantine-color-forest-7); }
+html[data-mantine-color-scheme="dark"] .ows-nav-link[data-active] .mantine-NavLink-section { color: var(--ows-accent-2); }
+.ows-nav-link .mantine-NavLink-section svg { transition: transform var(--ows-dur-large) var(--ows-ease-out); }
+.ows-nav-link:hover .mantine-NavLink-section svg { transform: scale(1.12) rotate(-4deg); }
+.ows-shell[data-folded] .ows-nav-link.mantine-NavLink-root { justify-content: center; padding-inline: 0; width: 44px; margin-inline: auto; }
+.ows-shell[data-folded] .ows-nav-link .mantine-NavLink-section { margin: 0; }
+.ows-nav-glide { border-radius: 8px; background: var(--ows-card); box-shadow: 0 0 0 1px var(--ows-border-strong), var(--ows-shadow-card); }
+html[data-mantine-color-scheme="dark"] .ows-nav-glide { background: color-mix(in srgb, var(--ows-accent) 19%, transparent); box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ows-accent) 30%, transparent), 0 0 0 1px color-mix(in srgb, var(--ows-accent) 30%, transparent); }
+.ows-sidebar-foot { flex: none; padding-top: 8px; padding-bottom: 14px; border-top: 1px solid var(--ows-border); }
+
+/* The canvas: a stable working surface, distinct from the navigation. */
+.ows-canvas {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--ows-canvas);
+  overflow: clip;
+}
+.ows-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 120;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 28px;
+  border-bottom: 1px solid var(--ows-border);
+  /* Frosted: the page shows through, blurred, as it scrolls under */
+  background: color-mix(in srgb, var(--ows-canvas) 74%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.5);
+  backdrop-filter: blur(14px) saturate(1.5);
+}
+.ows-canvas-body { padding: 24px 28px 56px; }
+.ows-canvas-body--project { padding-bottom: 120px; }
+.ows-crumbs { display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 13px; }
+.ows-crumb { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ows-crumb-link { color: var(--ows-muted); text-decoration: none; transition: color var(--ows-dur-state) ease; }
+.ows-crumb-link:hover { color: var(--mantine-color-text); }
+.ows-crumb-sep { color: var(--ows-muted); opacity: 0.6; flex: none; }
+.ows-crumb-current { display: inline-flex; align-items: center; gap: 7px; font-weight: 600; }
+.ows-crumb-current svg { color: var(--ows-muted); }
+
+@media (max-width: 48em) {
+  .ows-canvas { margin: 0; border-radius: 0; border: 0; min-height: 100dvh; }
+  .ows-topbar { top: 0; box-shadow: none; padding-inline: 12px; }
+  .ows-canvas-body { padding: 20px 14px 48px; }
+  .ows-sidebar.mantine-AppShell-navbar { background: var(--ows-canvas); }
+}
+
+/* ------------------------------------------------------------------------------- page */
+.ows-page { padding-bottom: 8px; }
+.ows-page h1 { font-size: 1.625rem; font-weight: 600; line-height: 1.25; }
+.ows-page-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  margin-top: 2px;
+  color: var(--mantine-color-forest-8);
+  animation: ows-blur-in 460ms var(--ows-ease-out) both;
+}
+html[data-mantine-color-scheme="dark"] .ows-page-icon {
+  color: var(--ows-accent-2);
+}
+.ows-page-actions { animation: ows-blur-in 480ms var(--ows-ease-out) 220ms both; }
+.ows-page-help { display: inline-flex; animation: ows-blur-in 420ms var(--ows-ease-out) 300ms both; }
+.ows-page-icon svg { width: 26px; height: 26px; }
+.ows-page .mantine-InputWrapper-label { margin-bottom: 6px; font-weight: 600; }
+.ows-page .mantine-InputWrapper-description { line-height: 1.5; }
+
+/* Preparation keeps every check and reason visible in a neutral tone before a run. */
+.ows-canvas-body:is([data-section="overview"], [data-section="data"], [data-section="domains"], [data-section="turbines"], [data-section="farms"], [data-section="physics"], [data-section="outputs"]) .mantine-Alert-root {
+  --alert-color: var(--ows-muted) !important;
+  --alert-bg: var(--ows-subtle) !important;
+  --alert-bd: 1px solid var(--ows-border) !important;
+}
+
+/* Blocks come out of a blur one after the other (--ows-at: when each one starts) */
+.ows-page-content > :nth-child(1) { --ows-at: 120ms; }
+.ows-page-content > :nth-child(2) { --ows-at: 190ms; }
+.ows-page-content > :nth-child(3) { --ows-at: 250ms; }
+.ows-page-content > :nth-child(4) { --ows-at: 300ms; }
+.ows-page-content > :nth-child(5) { --ows-at: 340ms; }
+.ows-page-content > :nth-child(n + 6) { --ows-at: 380ms; }
+.ows-page .ows-section, .ows-page .ows-stat, .ows-page .mantine-Accordion-item {
+  animation: ows-block-in 520ms var(--ows-ease-out) both;
+  animation-delay: var(--ows-at, 120ms);
+}
+.ows-stat:nth-child(2) { --ows-at: 190ms; }
+.ows-stat:nth-child(3) { --ows-at: 250ms; }
+.ows-stat:nth-child(n + 4) { --ows-at: 300ms; }
+@keyframes ows-block-in { from { opacity: 0; filter: blur(6px); transform: translateY(8px); } }
+
+@media (max-width: 47.99em) {
+  .ows-page h1 { font-size: 1.25rem; }
+  .ows-page-icon { width: 38px; height: 38px; }
+}
+
+/* ------------------------------------------------------------------------------- surfaces */
+.mantine-Card-root, .mantine-Paper-root[data-with-border], .mantine-Accordion-root[data-variant="separated"] .mantine-Accordion-item {
+  background: var(--ows-card);
+  border: 1px solid var(--ows-border);
+  box-shadow: var(--ows-shadow-card);
+}
+.mantine-Card-root, .mantine-Paper-root {
+  transition: border-color var(--ows-dur-state) ease, box-shadow var(--ows-dur-state) ease, background-color var(--ows-dur-state) ease,
+    transform var(--ows-dur-large) var(--ows-ease-out);
+}
+html[data-mantine-color-scheme="dark"] :is(.mantine-Card-root, .mantine-Paper-root[data-with-border]) {
+  background: color-mix(in srgb, var(--ows-accent) 8%, transparent);
+}
+/* A card inside a card is a flat tile */
+:is(.mantine-Card-root, .ows-workflow, .mantine-Modal-content) :is(.mantine-Paper-root[data-with-border], .mantine-Card-root) {
+  background: var(--ows-tile);
+  box-shadow: none;
+}
+html[data-mantine-color-scheme="dark"] :is(.mantine-Card-root, .ows-workflow, .mantine-Modal-content) :is(.mantine-Paper-root[data-with-border], .mantine-Card-root) {
+  background: color-mix(in srgb, var(--ows-accent) 6.5%, transparent);
+}
+
+/* Clickable cards lift */
+.ows-choice { transition: transform var(--ows-dur-large) var(--ows-ease-out), box-shadow var(--ows-dur-state) ease, border-color var(--ows-dur-state) ease !important; }
+.ows-choice:hover { transform: translateY(-3px); border-color: var(--ows-border-strong); box-shadow: var(--ows-shadow-pop); }
+.mantine-SimpleGrid-root > .ows-choice { animation: ows-enter var(--ows-dur-enter) var(--ows-ease-out) both; }
+.mantine-SimpleGrid-root > .ows-choice:nth-child(1) { animation-delay: 120ms; }
+.mantine-SimpleGrid-root > .ows-choice:nth-child(2) { animation-delay: 180ms; }
+.mantine-SimpleGrid-root > .ows-choice:nth-child(3) { animation-delay: 240ms; }
+.mantine-SimpleGrid-root > .ows-choice:nth-child(n + 4) { animation-delay: 290ms; }
+
+/* Open sections and data strips, shared by preparation, results and settings. */
+.ows-section { padding-top: 22px; border-top: 1px solid var(--ows-border); min-width: 0; }
+.ows-section .ows-section { padding-top: 16px; }
+.ows-section-head .mantine-Title-root { font-size: 17px; font-weight: 600; }
+.ows-section-flush { padding-bottom: 0; }
+.ows-disclosure { min-width: 0; }
+.ows-disclosure-bar { display: flex; align-items: center; }
+.ows-disclosure-bar > .mantine-Accordion-control { flex: 1; min-width: 0; }
+/* The control sits in the bar: give it the rounded corners Mantine gives a direct child */
+.ows-disclosure .mantine-Accordion-item:first-of-type > .ows-disclosure-bar > .mantine-Accordion-control { border-start-start-radius: var(--accordion-radius); border-start-end-radius: var(--accordion-radius); }
+.ows-disclosure .mantine-Accordion-item:last-of-type > .ows-disclosure-bar > .mantine-Accordion-control { border-end-start-radius: var(--accordion-radius); border-end-end-radius: var(--accordion-radius); }
+.ows-disclosure-bar:has(.ows-disclosure-help) > .mantine-Accordion-control { border-start-end-radius: 0; border-end-end-radius: 0; }
+.ows-disclosure-help { display: flex; padding-right: 14px; animation: ows-enter var(--ows-dur-state) ease both; }
+.ows-disclosure-heading { min-width: 0; row-gap: 4px; }
+.ows-disclosure-title { min-width: 0; overflow-wrap: anywhere; }
+.ows-disclosure-summary { min-width: 0; overflow-wrap: anywhere; }
+.ows-disclosure .mantine-Accordion-panel .mantine-InputWrapper-root { min-width: 0; }
+@media (max-width: 48em) {
+  .ows-disclosure-summary { flex-basis: 100%; font-size: 12px; }
+}
+/* An open section in two columns: what it is on the left, in large type; what sets it on the right.
+   Its summary steps back while it is open, the value having travelled from there. */
+.ows-disclosure-summary { transition: opacity var(--ows-dur-state) ease; }
+.ows-disclosure > .mantine-Accordion-item[data-active]:has(> .mantine-Accordion-panel > .mantine-Accordion-content > .ows-spec) > .ows-disclosure-bar .ows-disclosure-summary { opacity: 0; }
+.ows-spec {
+  --ows-spec-side: 220px;
+  --ows-spec-gap: 48px;
+  display: grid;
+  grid-template-columns: minmax(150px, var(--ows-spec-side)) minmax(0, 1fr);
+  column-gap: var(--ows-spec-gap);
+  row-gap: 20px;
+  align-items: start;
+  min-width: 0;
+}
+.ows-spec + .ows-spec { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--ows-border); }
+.ows-spec-side { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.ows-spec-label { font-size: 12px; font-weight: 600; color: var(--ows-muted); }
+.ows-spec-value {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+.ows-spec-value small { margin-left: 6px; font-size: 13px; font-weight: 600; letter-spacing: 0; color: var(--ows-muted); }
+.ows-spec-detail { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--ows-muted); font-variant-numeric: tabular-nums; }
+.ows-spec-bad { color: var(--mantine-color-red-text); font-weight: 600; }
+/* A domain: its name above its grid spacing, in red or orange when something is wrong with it */
+.ows-domain-name { font-size: 13px; font-weight: 700; color: var(--mantine-color-text); }
+.ows-domain-name[data-severity="error"] { color: var(--mantine-color-red-text); }
+.ows-domain-name[data-severity="warning"] { color: var(--mantine-color-orange-text); }
+.ows-domain-parent { align-items: center; }
+.ows-domain-parent-name { font-weight: 600; color: var(--mantine-color-text); }
+/* The vertical grid: the settings on the left, the levels to scale on the right, both as wide and
+   as tall: the drawing takes the height of the settings, whatever the height shown */
+.ows-vertical { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "mode range" "fields plot"; column-gap: 48px; row-gap: 20px; }
+.ows-vertical > * { width: 100%; max-width: 340px; justify-self: center; }
+.ows-vertical-mode { grid-area: mode; }
+.ows-vertical-range { grid-area: range; }
+.ows-vertical-fields { grid-area: fields; }
+.ows-vertical-plot { grid-area: plot; position: relative; min-height: 380px; }
+.ows-vertical-plot > * { position: absolute; inset: 0; }
+@media (max-width: 62em) {
+  .ows-vertical { grid-template-columns: minmax(0, 1fr); grid-template-areas: "mode" "fields" "range" "plot"; }
+  .ows-vertical-plot { min-height: 460px; }
+}
+.ows-profile { display: block; overflow: visible; }
+.ows-profile-move { transition: transform 560ms var(--ows-ease-out), opacity 320ms var(--ows-ease-out); }
+.ows-profile-tick { animation: ows-fade-in 320ms var(--ows-ease-out) both; }
+@media (prefers-reduced-motion: reduce) { .ows-profile-move, .ows-profile-tick { transition: none; animation: none; } }
+.ows-spec-tools { display: flex; gap: 6px; margin-top: 8px; }
+.ows-spec-body { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+.ows-spec-body > * { min-width: 0; }
+/* A drawing as wide as the whole section and centred on it, under the value (the windows staircase) */
+.ows-spec-body .ows-spec-wide { margin-left: calc(-1 * (var(--ows-spec-side) + var(--ows-spec-gap))); }
+/* The farms that use a turbine model, one line each */
+.ows-model-farm { padding-block: 9px; }
+.ows-model-farm:first-child { padding-top: 0; }
+.ows-model-farm + .ows-model-farm { border-top: 1px solid var(--ows-border); }
+@media (max-width: 62em) {
+  .ows-spec { grid-template-columns: minmax(0, 1fr); }
+  .ows-spec-body .ows-spec-wide { margin-left: 0; }
+}
+/* Results: the colour scale of the map, the timeline under it */
+.ows-info-icon { color: var(--ows-muted); flex: none; }
+.ows-map-legend { justify-content: center; }
+.ows-map-legend-bar { flex: 0 1 360px; height: 10px; border-radius: 999px; border: 1px solid var(--ows-border); }
+.ows-map-timeline { padding-inline: 2px; }
+/* Key figures (ui/Stat.tsx): one continuous band, a line between the figures; the label and its
+   unit in small type, the value in large type swapped character by character */
+.ows-stat-grid { border: 1px solid var(--ows-border); border-radius: 12px; overflow: hidden; }
+.ows-stat { min-width: 0; padding: 16px; }
+.ows-stat-grid .ows-stat { box-shadow: -1px 0 0 var(--ows-border), 0 -1px 0 var(--ows-border); }
+.ows-stat-label { font-size: 12px; font-weight: 600; color: var(--ows-muted); overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+/* A label too long for its tile goes on two lines, the dot never parted from its unit (a no-break
+   space between them, ui/Stat.tsx); the tiles of a band share their rows (label, value, note), so
+   that the values stay side by side, each label just above its value */
+@supports (grid-template-rows: subgrid) {
+  .ows-stat-grid > .ows-stat { display: grid; grid-template-columns: minmax(0, 1fr); grid-row: span 3; grid-template-rows: subgrid; }
+  .ows-stat-grid > .ows-stat > .ows-stat-head { align-self: end; }
+}
+/* A value too wide for its tile goes on several lines between its words; a word alone too wide
+   (a number) makes every value of the band one step smaller (data-fit, ui/Stat.tsx), down to the
+   size of the text, where such a word may at last go on two lines */
+.ows-stat-value { font-size: 24px; font-weight: 800; line-height: 34px; height: 34px; overflow: hidden; white-space: nowrap; min-width: 0; }
+.ows-stat-value[data-text] { height: auto; min-height: 34px; }
+.ows-stat-grid[data-fit="20"] .ows-stat-value { font-size: 20px; }
+.ows-stat-grid[data-fit="17"] .ows-stat-value { font-size: 17px; }
+.ows-stat-grid[data-fit="14.5"] .ows-stat-value { font-size: 14.5px; }
+.ows-stat-grid[data-fit="14.5"] .ows-swap-in .ows-swap-word { flex-wrap: wrap; }
+.ows-stat-grid[data-fit="14.5"] .ows-swap-in .ows-swap-word > span { white-space: break-spaces; }
+.ows-stat-hint { line-height: 1.6; max-width: 36ch; }
+/* A value swapped character by character (ui/Motion.tsx SwapText), the characters of a word held
+   together; the value leaving keeps its line */
+.ows-swap { position: relative; display: inline-block; vertical-align: top; }
+.ows-swap-in, .ows-swap-out, .ows-swap-word { display: inline-flex; white-space: pre; }
+.ows-swap-in { flex-wrap: wrap; }
+.ows-swap-out { position: absolute; left: 0; top: 0; }
+.ows-swap-word > span { display: inline-block; }
+.ows-swap-in .ows-swap-word > span { animation: ows-swap-in 380ms var(--ows-ease-out) both; animation-delay: calc(var(--after, 0ms) + var(--i) * 40ms); }
+.ows-swap-out .ows-swap-word > span { animation: ows-swap-out 380ms var(--ows-ease-out) both; animation-delay: calc(var(--after, 0ms) + var(--i) * 30ms); }
+@keyframes ows-swap-in { from { transform: translateY(12px); filter: blur(6px); opacity: 0; } }
+@keyframes ows-swap-out { to { transform: translateY(-12px); filter: blur(6px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .ows-swap-in .ows-swap-word > span { animation: none; } .ows-swap-out { display: none; } }
+
+/* Documentation: readable rows rather than tiles. */
+.ows-help-topic.mantine-Paper-root { border: 0; border-bottom: 1px solid var(--ows-border); border-radius: 0; background: var(--ows-row-bg, transparent) !important; padding: 16px 8px; }
+.ows-help-topic:hover { transform: none; box-shadow: none; --ows-row-bg: var(--ows-subtle); }
+
+/* ------------------------------------------------------------------------------- controls */
+.mantine-Button-root, .mantine-ActionIcon-root, .mantine-CloseButton-root {
+  transition: background-color var(--ows-dur-state) ease, border-color var(--ows-dur-state) ease, box-shadow var(--ows-dur-state) ease,
+    color var(--ows-dur-state) ease, filter var(--ows-dur-state) ease, transform var(--ows-dur-micro) var(--ows-ease-out);
+}
+:is(.mantine-Button-root, .mantine-ActionIcon-root, .mantine-CloseButton-root):not(:disabled):not([data-disabled]):not([data-loading]):active {
+  transform: scale(0.96);
+  transition-duration: 60ms;
+}
+.mantine-Button-root { font-weight: 500; border-radius: var(--ows-control-radius); }
+.mantine-Button-section svg { transition: transform var(--ows-dur-large) var(--ows-ease-out); }
+
+/* Default buttons: a card-like surface */
+.mantine-Button-root[data-variant="default"]:not(:disabled):not([data-disabled]) {
+  background-color: var(--ows-card);
+  border-color: var(--ows-border-strong);
+  box-shadow: var(--ows-shadow-card);
+}
+.mantine-Button-root[data-variant="default"]:not(:disabled):not([data-disabled]):hover { background-color: var(--ows-tile); }
+html[data-mantine-color-scheme="dark"] .mantine-Button-root[data-variant="default"]:not(:disabled):not([data-disabled]) { background-color: color-mix(in srgb, var(--ows-accent) 11%, transparent); }
+html[data-mantine-color-scheme="dark"] .mantine-Button-root[data-variant="default"]:not(:disabled):not([data-disabled]):hover { background-color: color-mix(in srgb, var(--ows-accent) 20%, transparent); }
+
+/* Inputs; a text wider than its field (a choice's name in a narrow window) ends with "…" while
+   the field is not being typed in */
+.mantine-Input-input {
+  border-radius: 10px;
+  text-overflow: ellipsis;
+  transition: border-color var(--ows-dur-state) ease, box-shadow var(--ows-dur-state) ease, background-color var(--ows-dur-state) ease;
+}
+:root[data-mantine-color-scheme="light"] .mantine-Input-input[data-variant="default"],
+:root[data-mantine-color-scheme="light"] .mantine-Input-input:not([data-variant]) { background: var(--ows-canvas); border-color: var(--ows-border-strong); }
+html[data-mantine-color-scheme="dark"] .mantine-Input-input[data-variant="default"],
+html[data-mantine-color-scheme="dark"] .mantine-Input-input:not([data-variant]) { background: color-mix(in srgb, var(--ows-accent) 8.5%, transparent); border-color: color-mix(in srgb, var(--ows-accent) 24%, transparent); box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ows-accent) 10%, transparent); }
+.mantine-Input-input:hover:not(:focus):not(:disabled) { border-color: var(--ows-border-strong); }
+html[data-mantine-color-scheme="dark"] .mantine-Input-input:hover:not(:focus):not(:disabled) { border-color: color-mix(in srgb, var(--ows-accent) 43%, transparent); }
+.mantine-Input-input:focus { border-color: var(--mantine-primary-color-filled); box-shadow: 0 0 0 3px var(--mantine-primary-color-light); }
+html[data-mantine-color-scheme="dark"] .mantine-Input-input:focus { border-color: var(--ows-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ows-accent) 35%, transparent); }
+
+/* Switches settle with a spring */
+.mantine-Switch-thumb { transition: inset-inline-start var(--ows-dur-large) var(--ows-ease-out), background-color var(--ows-dur-state) ease, width var(--ows-dur-state) ease !important; }
+.mantine-Switch-track, .mantine-Checkbox-input, .mantine-Radio-radio { transition: background-color var(--ows-dur-state) ease, border-color var(--ows-dur-state) ease, box-shadow var(--ows-dur-state) ease; }
+
+/* Tabs and selectors after the motion book: a rounded track, a pill in the green of the filled
+   buttons that glides and stretches to the choice, under its label in white; tabs add a halo under
+   the pointer (ui/GlideTabs.tsx, ui/surfaces.ts, ui/Pills.tsx) */
+.ows-glide-tabs, .mantine-SegmentedControl-root, .ows-pills { position: relative; isolation: isolate; border-radius: 999px; background: var(--ows-tile); border: 1px solid var(--ows-border); }
+.ows-glide-tabs { display: flex; flex-wrap: nowrap; gap: 2px; padding: 4px; overflow-x: auto; scrollbar-width: none; }
+.ows-glide-tabs::before { display: none; }
+.ows-glide-tabs .mantine-Tabs-tab { position: relative; z-index: 1; padding: 7px 13px; margin: 0; border: 0; border-radius: 999px; background: none; font-size: 13px; font-weight: 700; line-height: 1.5; color: var(--mantine-color-text); white-space: nowrap; }
+.ows-glide-tabs .mantine-Tabs-tab:hover, .ows-glide-tabs .mantine-Tabs-tab[data-active] { background: none; border-color: transparent; color: var(--mantine-color-text); }
+.mantine-SegmentedControl-label[data-active]:not([data-disabled]), .ows-glide-tabs .mantine-Tabs-tab[data-active], .ows-pill[data-active] { color: var(--ows-on-accent); }
+/* The label turns white as the pill lands on it (its leading edge arrives some 70 ms after the
+   click, however far it goes), and dark again at once as the pill leaves it */
+.ows-glide-tabs .mantine-Tabs-tab, .mantine-SegmentedControl-label, .ows-pill { --ows-label-fade: color 80ms ease; }
+:is(.ows-glide-tabs .mantine-Tabs-tab, .mantine-SegmentedControl-label, .ows-pill)[data-active] { --ows-label-fade: color 60ms ease 70ms; }
+.ows-glide-tabs .mantine-Tabs-tab, .mantine-SegmentedControl-label { transition: var(--ows-label-fade); }
+.ows-tab-pill, .ows-seg-pill, .ows-pill-glide { position: absolute; z-index: 0; border-radius: 999px; background: var(--mantine-primary-color-filled); pointer-events: none; }
+.ows-tab-pill, .ows-seg-pill { opacity: 0; }
+.ows-tab-flash { position: absolute; top: 0; bottom: 0; left: var(--sx, 0px); width: 100%; z-index: 0; border-radius: 999px; opacity: 0; pointer-events: none; transition: opacity 200ms; background: radial-gradient(90px circle at var(--fx, 50%) 50%, color-mix(in oklab, var(--ows-accent) 22%, transparent), transparent 70%); }
+.ows-glide-tabs:hover .ows-tab-flash { opacity: 1; }
+/* The content of the tab chosen comes in from its side (the one before leaves to the other side) */
+.mantine-Tabs-root[data-tab-moved] .mantine-Tabs-panel { animation: ows-panel-slide 420ms var(--ows-ease-out) both, ows-panel-fade 300ms ease both; }
+@keyframes ows-panel-slide { from { transform: translateX(calc(var(--ows-tab-dir, 1) * 40px)); } }
+@keyframes ows-panel-fade { from { opacity: 0; filter: blur(6px); } }
+
+/* Accordions: the + turns into a × with the panel; the panel's content comes out of a slight blur */
+.mantine-Accordion-chevron { transition: transform 420ms var(--ows-ease-out), color var(--ows-dur-state) ease; }
+.mantine-Accordion-chevron[data-rotate] { transform: rotate(135deg); color: var(--mantine-primary-color-filled); }
+.mantine-Accordion-control { transition: background-color var(--ows-dur-state) ease; }
+.mantine-Accordion-root[data-variant="separated"] .mantine-Accordion-item { border-radius: 12px; }
+
+.mantine-Anchor-root { text-underline-offset: 3px; }
+html[data-mantine-color-scheme="dark"] .mantine-Anchor-root { color: var(--mantine-color-text); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--ows-accent) 85%, transparent); }
+html[data-mantine-color-scheme="dark"] .mantine-Anchor-root:hover { text-decoration-color: var(--ows-link-hover); }
+
+/* Dark mode: filled elements of the accent (the dark green) carry white text and marks.
+   Alert colours (red family) and greys keep their own. */
+html[data-mantine-color-scheme="dark"] :is(.mantine-Button-root, .mantine-ActionIcon-root, .mantine-ThemeIcon-root):is([data-variant="filled"], :not([data-variant])):not(:disabled):not([data-disabled]):not([style*="-red-"]):not([style*="-orange-"]):not([style*="-yellow-"]):not([style*="-pink-"]):not([style*="-ember-"]):not([style*="-gray-"]):not([style*="-dark-"]):not([style*="-violet-"]):not([style*="-grape-"]):not([style*="-indigo-"]) {
+  --button-color: var(--ows-on-accent) !important;
+  --ai-color: var(--ows-on-accent) !important;
+  --ti-color: var(--ows-on-accent) !important;
+  --badge-color: var(--ows-on-accent) !important;
+  color: var(--ows-on-accent) !important;
+}
+html[data-mantine-color-scheme="dark"] .mantine-Switch-input:checked + .mantine-Switch-track .mantine-Switch-thumb { background-color: var(--ows-on-accent); border-color: var(--ows-on-accent); }
+html[data-mantine-color-scheme="dark"] :is(.mantine-Checkbox-icon, .mantine-Radio-icon) { color: var(--ows-on-accent); }
+/* Boxes and dots to tick: drawn in the dark green, empty or not */
+html[data-mantine-color-scheme="dark"] :is(.mantine-Checkbox-input, .mantine-Radio-radio):not(:disabled) { border-color: var(--ows-accent); }
+html[data-mantine-color-scheme="dark"] .mantine-Stepper-stepIcon[data-completed] { color: var(--ows-on-accent); }
+/* Scroll thumbs in the dark green, not Mantine's translucent white */
+html[data-mantine-color-scheme="dark"] .mantine-ScrollArea-thumb { background-color: color-mix(in srgb, var(--ows-accent) 75%, transparent); }
+html[data-mantine-color-scheme="dark"] .mantine-ScrollArea-thumb:hover { background-color: var(--ows-accent); }
+
+/* ------------------------------------------------------------------------------- floating layers */
+.mantine-Popover-dropdown, .mantine-Menu-dropdown, .mantine-Combobox-dropdown, .mantine-HoverCard-dropdown, .mantine-Modal-content {
+  border: 1px solid var(--ows-border-strong);
+  box-shadow: var(--ows-shadow-pop);
+}
+.mantine-Popover-dropdown, .mantine-Menu-dropdown, .mantine-Combobox-dropdown, .mantine-HoverCard-dropdown { border-radius: 12px; }
+:root :is(.mantine-Popover-dropdown, .mantine-Menu-dropdown, .mantine-Combobox-dropdown, .mantine-HoverCard-dropdown, .mantine-Modal-content) { background: var(--ows-pop); }
+/* The title stays at the top while the content scrolls: it keeps the background of its window */
+.mantine-Modal-header { background: inherit; z-index: 2; }
+.mantine-Modal-title { font-weight: 600; }
+.mantine-Menu-item, .mantine-Combobox-option { border-radius: 7px; transition: background-color var(--ows-dur-micro) ease; }
+.mantine-Tooltip-tooltip { font-size: 12px; padding: 5px 9px; border-radius: 7px; }
+html[data-mantine-color-scheme="dark"] .mantine-Tooltip-tooltip { background: var(--ows-tip); color: var(--mantine-color-text); border: 1px solid color-mix(in srgb, var(--ows-accent) 26%, transparent); }
+.mantine-Notification-root { border-radius: 12px; border: 1px solid var(--ows-border-strong); box-shadow: var(--ows-shadow-pop); }
+html[data-mantine-color-scheme="dark"] .mantine-Notification-root { background: var(--ows-pop); }
+/* A notice comes into focus as it arrives */
+.mantine-Notification-root { animation: ows-note-in 420ms var(--ows-ease-out) both; }
+@keyframes ows-note-in { from { filter: blur(8px); opacity: 0.4; } }
+
+/* ------------------------------------------------------------------------------- preparation guide */
+.ows-workflow { overflow: hidden; border-bottom: 1px solid var(--ows-border); padding-bottom: 8px; }
+.ows-workflow-heading { padding: 0 0 8px; }
+.ows-workflow-heading .mantine-Text-root { font-size: 12px; }
+.ows-workflow-heading svg { color: var(--mantine-color-forest-7); }
+html[data-mantine-color-scheme="dark"] .ows-workflow-heading svg { color: var(--ows-accent-2); }
+.ows-workflow:not([data-expanded]) .ows-workflow-heading { padding-bottom: 6px; }
+/* A rail: numbered stops joined by a line, the marker sliding to the current stop */
+.ows-rail { position: relative; display: flex; list-style: none; margin: 0; padding: 0 0 8px; }
+.ows-rail-stop { position: relative; z-index: 1; display: flex; align-items: center; flex: 1 1 auto; min-width: 0; animation: ows-fade-in var(--ows-dur-enter) ease both; animation-delay: calc(var(--ows-i, 0) * 45ms); }
+.ows-rail-stop:last-child { flex: 0 0 auto; }
+.ows-rail-stop:not(:last-child)::after { content: ""; flex: 1 1 auto; min-width: 8px; height: 1px; margin: 0 4px; background: var(--ows-border); }
+.ows-workflow-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 5px;
+  border-radius: 999px;
+  color: var(--ows-nav-text);
+  text-decoration: none;
+  font-size: 12px;
+  white-space: nowrap;
+  transition: color var(--ows-dur-state) ease, background-color var(--ows-dur-state) ease;
+}
+.ows-workflow-step:not([aria-current]):hover { background: var(--ows-subtle); color: var(--mantine-color-text); }
+.ows-workflow-step[aria-current="step"] { color: var(--mantine-color-text); font-weight: 600; }
+.ows-workflow-number {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  flex: none;
+  border-radius: 50%;
+  border: 1px solid var(--ows-border-strong);
+  background: var(--ows-card);
+  font-size: 12px;
+  font-weight: 600;
+  transition: background-color var(--ows-dur-large) ease, color var(--ows-dur-large) ease, border-color var(--ows-dur-large) ease, transform var(--ows-dur-large) var(--ows-ease-out);
+}
+.ows-workflow-step[aria-current="step"] .ows-workflow-number {
+  background: var(--mantine-primary-color-filled);
+  border-color: transparent;
+  color: var(--ows-on-accent);
+  box-shadow: none;
+}
+.ows-rail-glide { border-radius: 999px; background: var(--mantine-primary-color-light); pointer-events: none; transition-timing-function: var(--ows-ease-out); }
+.ows-next { font-size: 12px; }
+/* Narrow windows: only the current step keeps its name on screen (all keep it for readers) */
+@media (max-width: 1360px) {
+  .ows-workflow-step:not([aria-current]) .ows-workflow-label {
+    position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+  .ows-workflow-step:not([aria-current]) { padding-right: 5px; }
+}
+
+/* ------------------------------------------------------------------------------- next steps (overview)
+   A vertical list of the steps: a dot per step, ticked once done, joined by a line that fills down */
+.ows-next-steps { padding: 18px 16px 24px; background: transparent; }
+.ows-next-steps-title { margin: 2px 0 18px; font-size: 14.5px; }
+.ows-checklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.ows-check { position: relative; display: flex; align-items: center; gap: 14px; min-height: 44px; animation: ows-rise var(--ows-dur-enter) var(--ows-ease-out) both; animation-delay: calc(var(--k, 0) * 40ms); }
+.ows-check + .ows-check::before { content: ""; position: absolute; left: 10px; top: -9px; width: 2px; height: 18px; border-radius: 2px; background: var(--ows-border); }
+.ows-check[data-after="done"]::before { background: var(--mantine-primary-color-filled); transform-origin: 50% 0; animation: ows-line-down 420ms var(--ows-ease-out) both; animation-delay: calc(var(--k, 0) * 90ms + 120ms); }
+.ows-check-dot { flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--ows-border-strong); color: var(--ows-on-accent); transition: background-color var(--ows-dur-state) ease, border-color var(--ows-dur-state) ease; }
+.ows-check[data-state="done"] .ows-check-dot { border-color: var(--mantine-primary-color-filled); background: var(--mantine-primary-color-filled); }
+.ows-check[data-state="current"] .ows-check-dot { border: 2px solid var(--mantine-primary-color-filled); animation: ows-breathe 2.4s ease-in-out infinite; }
+.ows-check-link { color: var(--ows-muted); font-size: 13px; text-decoration: none; text-underline-offset: 3px; }
+.ows-check[data-state="done"] .ows-check-link { color: var(--mantine-color-text); }
+.ows-check[data-state="current"] .ows-check-link { color: var(--mantine-color-text); font-weight: 600; }
+.ows-check-link:hover { text-decoration: underline; }
+@keyframes ows-line-down { from { transform: scaleY(0); } }
+@media (prefers-reduced-motion: reduce) { .ows-check, .ows-check::before, .ows-check-dot { animation: none !important; } }
+
+/* ------------------------------------------------------------------------------- gliding highlights, pills */
+.ows-glide { border-radius: 8px; background: var(--mantine-primary-color-light); transition-timing-function: var(--ows-ease-out); pointer-events: none; }
+.ows-pills { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; }
+.ows-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 0;
+  background: transparent;
+  color: var(--mantine-color-text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: transform var(--ows-dur-micro) var(--ows-ease-out), var(--ows-label-fade);
+}
+.ows-pill:not(:disabled):active { transform: scale(0.95); }
+.ows-pill:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ------------------------------------------------------------------------------- farm workspace */
+.ows-farms-workspace { border: 1px solid var(--ows-border); border-radius: var(--ows-surface-radius); overflow: clip; }
+.ows-farms-workspace > .mantine-Grid-inner { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(320px, 1fr); gap: 0; align-items: stretch; }
+.ows-farms-map-column, .ows-farms-inspector { max-width: none; width: auto; min-width: 0; }
+/* The map fills the whole height beside the inspector: no empty band under it */
+.ows-farms-map-column { position: sticky !important; top: 64px; align-self: start; display: flex; flex-direction: column; }
+.ows-farms-map-frame.mantine-Paper-root { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; border: 0; border-radius: 0; background: transparent; }
+.ows-farms .ows-map { flex: none; height: clamp(440px, calc(100vh - 345px), 900px) !important; min-height: 0; border: 0; border-radius: 0; }
+.ows-farms-inspector { padding: 20px; border-left: 1px solid var(--ows-border); background: var(--ows-subtle); }
+/* The farms beside the map: one at a time behind tabs, its figures, three ways to add, its fields */
+.ows-farm-panel { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.ows-farm-tabs { display: flex; align-items: center; gap: 2px; border-bottom: 1px solid var(--ows-border); overflow-x: auto; scrollbar-width: none; }
+.ows-farm-tab { display: inline-flex; align-items: center; gap: 8px; flex: none; padding: 10px 14px; margin-bottom: -1px; border-bottom: 2px solid transparent; color: var(--ows-muted); font-size: 13px; font-weight: 700; white-space: nowrap; transition: color var(--ows-dur-state) ease, border-color var(--ows-dur-state) ease; }
+.ows-farm-tab:hover { color: var(--mantine-color-text); }
+.ows-farm-tab[aria-selected="true"] { color: var(--mantine-color-text); border-bottom-color: var(--mantine-primary-color-filled); }
+.ows-farm-tab-name { max-width: 18ch; overflow: hidden; text-overflow: ellipsis; }
+.ows-farm-new { margin-left: auto; }
+.ows-farm-sheet { flex: 1; display: flex; flex-direction: column; gap: 20px; animation: ows-sheet-in 300ms var(--ows-ease-out) both; }
+/* The panel as tall as the map: removing the farm at its foot, level with the bottom of the map */
+.ows-farms-inspector { display: flex; flex-direction: column; }
+.ows-farms-inspector > .ows-farm-panel { flex: 1; }
+.ows-farm-end { margin-top: auto; }
+.ows-farm-sheet .ows-stat-grid { background: var(--ows-card); }
+.ows-farm-sheet .ows-stat { padding: 12px 14px 14px; }
+.ows-farm-sheet .ows-stat .mantine-Switch-root { padding-block: 3px; }
+.ows-farm-ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--ows-border); border-radius: 12px; overflow: hidden; background: var(--ows-card); }
+.ows-farm-way { display: grid; justify-items: start; align-content: start; gap: 8px; padding: 12px 14px; font-size: 13px; font-weight: 600; color: var(--mantine-color-text); transition: background-color var(--ows-dur-state) ease; }
+.ows-farm-way + .ows-farm-way { border-left: 1px solid var(--ows-border); }
+.ows-farm-way svg { color: var(--ows-muted); transition: color var(--ows-dur-state) ease, transform var(--ows-dur-dialog) var(--ows-ease-out); }
+.ows-farm-way:hover { background: color-mix(in srgb, var(--mantine-color-text) 4%, transparent); }
+.ows-farm-way:hover svg { color: var(--mantine-primary-color-filled); transform: translateY(-1px); }
+.ows-farm-way[data-active] { background: var(--mantine-primary-color-light); }
+.ows-farm-way[data-active] svg { color: var(--mantine-primary-color-filled); }
+/* While turbines are placed by clicks: what to do, over the map, under its controls */
+.ows-map-banner { position: absolute; top: 56px; left: 50%; z-index: 3; transform: translateX(-50%); display: flex; align-items: center; gap: 12px; max-width: calc(100% - 24px); padding: 6px 6px 6px 14px; border: 1px solid var(--ows-border-strong); border-radius: 12px; background: var(--mantine-color-body); box-shadow: 0 4px 16px rgb(0 0 0 / 0.18); white-space: nowrap; animation: ows-banner-in 240ms var(--ows-ease-out) both; }
+.ows-map-banner > .mantine-Text-root { overflow: hidden; text-overflow: ellipsis; }
+.ows-map-banner[data-tone="warning"] > .mantine-Text-root { color: var(--mantine-color-orange-text); }
+@keyframes ows-banner-in { from { opacity: 0; transform: translate(-50%, -8px); } }
+/* The turbines of a farm: a scrolling table whose rows in view only are drawn */
+.ows-turbine-scroll { overflow: auto; border: 1px solid var(--ows-border); border-radius: 12px; overscroll-behavior: contain; }
+.ows-turbine-scroll .mantine-Table-thead { background: var(--mantine-color-body); }
+.ows-turbine-scroll .mantine-Table-tr { height: 44px; }
+.ows-turbine-scroll .mantine-Table-td, .ows-turbine-scroll .mantine-Table-th { padding-block: 0; }
+.ows-turbine-scroll .mantine-Table-tr[data-selected] { background: var(--mantine-primary-color-light); }
+.ows-turbine-number { color: var(--ows-muted); font-size: 12px; }
+/* Adding turbines: the way and the model on top, settings left and map right, figures at the bottom */
+.ows-add-body { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px; align-items: stretch; }
+.ows-add-side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.ows-add-map { min-height: min(572px, 60vh); display: flex; border: 1px solid var(--ows-border-strong); border-radius: var(--ows-surface-radius); overflow: hidden; }
+.ows-add-map > .ows-map { flex: 1; height: auto !important; border: 0; border-radius: 0; }
+.ows-add-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 16px; border-top: 1px solid var(--ows-border); }
+.ows-figures { display: flex; gap: 32px; flex-wrap: wrap; }
+.ows-figure { display: grid; gap: 2px; min-width: 0; }
+.ows-figure-label { font-size: 12px; font-weight: 500; color: var(--ows-muted); }
+.ows-figure-value { font-size: 20px; font-weight: 600; line-height: 1.15; white-space: nowrap; }
+.ows-figure-value small { margin-left: 4px; font-size: 13px; font-weight: 500; color: var(--ows-muted); }
+@media (max-width: 62em) { .ows-add-body { grid-template-columns: minmax(0, 1fr); } .ows-add-map { min-height: 380px; } }
+/* A sheet of positions, as in a spreadsheet: numbered rows, thin rules, figures in columns */
+.ows-coords { border: 1px solid var(--ows-border); border-radius: 12px; overflow: hidden; background: var(--ows-card); font-size: 12px; }
+.ows-coords-row { display: grid; grid-template-columns: 44px 1.1fr 1fr 1fr 0.7fr; height: 32px; }
+.ows-coords-row > * { min-width: 0; border-bottom: 1px solid var(--ows-border); }
+.ows-coords-row > * + * { border-left: 1px solid var(--ows-border); }
+.ows-coords-head > span { display: flex; align-items: center; padding: 0 10px; background: var(--ows-subtle); color: var(--ows-muted); font-weight: 600; font-size: 12px; }
+.ows-coords-scroll { overflow-y: auto; overscroll-behavior: contain; }
+.ows-coords-number { display: flex; align-items: center; justify-content: flex-end; padding: 0 10px; color: var(--ows-muted); font-size: 12px; }
+.ows-coords-row[data-invalid] .ows-coords-number { color: var(--mantine-color-red-6); box-shadow: inset 2px 0 0 var(--mantine-color-red-6); }
+.ows-coords-cell { width: 100%; height: 100%; padding: 0 10px; border-top: 0; border-right: 0; outline: none; background: transparent; color: var(--mantine-color-text); font: 500 13px/1 var(--mantine-font-family); font-variant-numeric: tabular-nums; }
+.ows-coords-cell:focus { background: var(--mantine-primary-color-light); box-shadow: inset 0 0 0 1.5px var(--mantine-primary-color-filled); }
+.ows-coords-cell::placeholder { color: var(--ows-muted); opacity: 0.6; }
+.ows-coords-row[data-blank] { cursor: text; }
+/* Read only: the positions produced, in the height left down to the bottom of the map */
+.ows-coords[data-read-only] { flex: 1 1 0; min-height: 168px; display: flex; flex-direction: column; }
+.ows-coords[data-read-only] > .ows-coords-scroll { flex: 1; min-height: 0; }
+.ows-coords[data-read-only] .ows-coords-row[data-blank] { cursor: default; }
+.ows-coords[data-read-only] .ows-coords-cell { display: block; line-height: 31px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.ows-appearance { display: grid; grid-template-columns: 64px minmax(0, 1fr); align-items: center; row-gap: 10px; }
+.ows-appearance .ows-appearance-label { font-size: 12px; }
+.ows-appearance-row { display: flex; align-items: center; justify-content: space-between; min-height: 26px; }
+.ows-swatch { cursor: pointer; border: 0; transition: transform var(--ows-dur-dialog) var(--ows-ease-out); }
+.ows-swatch:hover { transform: scale(1.14); }
+.ows-swatch[aria-checked="true"] { box-shadow: 0 0 0 2px var(--ows-card), 0 0 0 3.5px var(--ows-border-strong); }
+.ows-swatch-other { border: 1px dashed var(--ows-border-strong); color: var(--mantine-color-dimmed); }
+.ows-symbol[aria-checked="true"] { border-color: var(--ows-border-strong); }
+.ows-farm-table .mantine-Input-input { background: transparent; border-color: transparent; box-shadow: none; }
+.ows-farm-table .mantine-Input-input:hover { border-color: var(--ows-border); }
+.ows-farm-table .mantine-Input-input:focus { background: var(--ows-card); border-color: var(--mantine-primary-color-filled); }
+/* Below 1200 px, like the map and the farm sheet above it, the table goes under its count */
+@media (max-width: 75em) { .ows-farm-table .ows-spec { grid-template-columns: minmax(0, 1fr); } }
+.ows-map[data-picking] { outline: 2px solid var(--mantine-primary-color-filled); outline-offset: -2px; }
+/* Lasso on: a cross everywhere on the map (not the hand of a turbine) and the map's edge marked */
+.ows-map[data-lasso] { position: relative; }
+.ows-map[data-lasso]::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; box-shadow: inset 0 0 0 2px var(--mantine-primary-color-filled); }
+.ows-map[data-lasso] .maplibregl-canvas { cursor: crosshair !important; }
+/* What to do with the selected turbines, at the bottom of the map */
+.ows-farms-map-frame, .ows-map-frame { position: relative; overflow: hidden; }
+.ows-map-frame { border-radius: var(--ows-surface-radius); }
+.ows-selection-bar { position: absolute; left: 50%; bottom: 14px; z-index: 3; transform: translateX(-50%); animation: ows-selection-in 240ms var(--ows-ease-out) both; }
+.ows-selection-bar .ows-toolbar { background: var(--mantine-color-body); border-color: var(--ows-border-strong); box-shadow: 0 4px 16px rgb(0 0 0 / 0.2); }
+.ows-selection-count { display: grid; place-items: center; min-width: 30px; height: 30px; padding: 0 8px; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ows-tool[data-danger]:hover { color: var(--mantine-color-red-6); }
+@keyframes ows-selection-in { from { opacity: 0; transform: translate(-50%, 8px); } }
+@media (prefers-reduced-motion: reduce) { .ows-selection-bar, .ows-map-banner, .ows-farm-sheet { animation: none; } }
+@media (max-width: 1150px) {
+  .ows-farms-workspace > .mantine-Grid-inner { grid-template-columns: 1fr; }
+  .ows-farms-inspector { border-left: 0; border-top: 1px solid var(--ows-border); }
+  .ows-farms .ows-map { flex: none; height: 440px !important; min-height: 0; }
+  .ows-farms-map-column { position: static !important; }
+}
+
+/* ------------------------------------------------------------------------------- save bar */
+/* After the motion book: a dark bar (light in dark mode) grown out of a dot, its content in the
+   page's colour; a red count of errors, a bright save button that turns into waves, then a tick */
+.ows-savebar {
+  position: fixed;
+  left: calc(50% + var(--app-shell-navbar-offset, 0px) / 2);
+  bottom: 22px;
+  z-index: 150;
+  transform: translateX(-50%);
+  width: min(620px, calc(100vw - var(--app-shell-navbar-offset, 0px) - 40px));
+  min-height: 52px;
+  display: grid;
+  place-items: center;
+}
+.ows-savebar[data-done] { pointer-events: none; }
+.ows-savebar-blob { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); border-radius: 26px; background: var(--mantine-color-text); }
+.ows-savebar-content { position: relative; width: 100%; padding: 7px 7px 7px 18px; color: var(--mantine-color-body); font-size: 13px; font-weight: 700; }
+.ows-savebar-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 38px; }
+.ows-savebar-state { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.ows-savebar-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ows-savebar-errors { display: inline-flex; align-items: center; height: 22px; padding: 2px 8px; border-radius: 999px; overflow: hidden; background: color-mix(in oklab, var(--ows-danger) 85%, transparent); color: var(--ows-on-colour); font-size: 12px; white-space: pre; }
+.ows-savebar-actions { display: flex; align-items: center; gap: 4px; flex: none; }
+.ows-savebar-icon, .ows-savebar-discard { display: grid; place-items: center; height: 32px; border-radius: 999px; color: inherit; font-size: 13px; font-weight: 700; transition: background-color 160ms ease, opacity 160ms ease; }
+.ows-savebar-icon { width: 32px; }
+.ows-savebar-discard { padding: 0 12px; white-space: nowrap; }
+.ows-savebar-icon:hover:not(:disabled), .ows-savebar-discard:hover { background: color-mix(in srgb, var(--mantine-color-body) 14%, transparent); }
+.ows-savebar-icon:disabled { opacity: 0.35; cursor: default; }
+.ows-savebar-icon:focus-visible, .ows-savebar-discard:focus-visible, .ows-savebtn:focus-visible { outline: 2px solid var(--ows-accent-2); outline-offset: 2px; }
+.ows-savebtn { position: relative; display: grid; place-items: center; height: 38px; min-width: 38px; padding: 0 16px; border-radius: 999px; background: var(--ows-accent-2); color: var(--ows-on-accent-2); font-weight: 800; font-size: 13px; overflow: hidden; transition: padding 300ms var(--ows-ease-out); }
+.ows-savebtn > * { grid-area: 1 / 1; }
+.ows-savebtn-waves { display: none; gap: 3px; align-items: center; height: 14px; }
+.ows-savebtn-waves i { width: 3px; height: 100%; border-radius: 2px; background: var(--ows-on-accent-2); animation: ows-wave 700ms ease-in-out infinite; }
+.ows-savebtn-waves i:nth-child(2) { animation-delay: 120ms; }
+.ows-savebtn-waves i:nth-child(3) { animation-delay: 240ms; }
+@keyframes ows-wave { 50% { transform: scaleY(0.35); } }
+.ows-savebtn[data-busy] { padding: 0 12px; }
+.ows-savebtn[data-busy] .ows-savebtn-label, .ows-savebtn[data-done] .ows-savebtn-label { visibility: hidden; }
+.ows-savebtn[data-busy] .ows-savebtn-waves { display: flex; }
+.ows-savebtn-check path { fill: none; stroke: var(--ows-on-accent-2); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 20; stroke-dashoffset: 20; animation: ows-check-draw 360ms var(--ows-ease-out) forwards; }
+@keyframes ows-check-draw { to { stroke-dashoffset: 0; } }
+.ows-savebar-refused { padding: 2px 0 6px; color: color-mix(in oklab, var(--ows-danger) 55%, var(--mantine-color-body)); font-weight: 600; white-space: pre-line; }
+@media (prefers-reduced-motion: reduce) { .ows-savebtn-waves i, .ows-savebtn-check path { animation: none; stroke-dashoffset: 0; } }
+
+/* ------------------------------------------------------------------------------- command palette */
+.ows-palette .mantine-Modal-content { overflow: hidden; border-radius: 16px; }
+.ows-palette-input { border-bottom: 1px solid var(--ows-border); }
+.ows-palette-input .mantine-Input-input, .ows-palette-input .mantine-Input-input:focus { background: transparent !important; border: 0 !important; box-shadow: none !important; }
+.ows-palette-item { position: relative; z-index: 1; display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 10px; border-radius: 8px; color: var(--mantine-color-text); }
+.ows-palette-item svg:first-child { color: var(--mantine-color-dimmed); transition: color var(--ows-dur-state) ease; }
+.ows-palette-item[data-active] svg:first-child { color: var(--mantine-color-text); }
+.ows-palette-arrow { opacity: 0; transform: translateX(-4px); transition: opacity var(--ows-dur-state) ease, transform var(--ows-dur-state) var(--ows-ease-out); }
+.ows-palette-item[data-active] .ows-palette-arrow { opacity: 0.7; transform: none; }
+.ows-palette-foot { border-top: 1px solid var(--ows-border); background: var(--ows-subtle); }
+
+/* ------------------------------------------------------------------------------- data */
+.ows-num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* The dates of a previewed namelist (Physics) go on two lines when the window is narrow */
+.ows-num.ows-file-dates { white-space: normal; }
+.ows-mono { font-family: var(--mantine-font-family-monospace); font-size: 0.8125rem; }
+/* Turbine catalogue: one row per model, figures in aligned columns */
+.ows-catalog { border: 1px solid var(--ows-border); border-radius: 12px; overflow: hidden; }
+.ows-catalog-row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 14px; border-bottom: 1px solid var(--ows-border); transition: background-color 120ms ease; }
+.ows-catalog-row:last-child { border-bottom: 0; }
+button.ows-catalog-row:hover { background: var(--ows-subtle); }
+.ows-catalog-head { background: var(--ows-subtle); padding-block: 8px; }
+.ows-catalog-name { flex: 1 1 auto; min-width: 0; }
+.ows-catalog-figure { flex: 0 0 84px; text-align: right; }
+.ows-catalog-curve { height: 92px; border-top: 1px solid var(--ows-border); background: var(--ows-subtle); }
+.mantine-Table-th { color: var(--ows-muted); font-size: 0.75rem; font-weight: 600; }
+/* Numbers line up in every table */
+.mantine-Table-td { font-variant-numeric: tabular-nums; }
+.mantine-Table-td { padding-top: 10px; padding-bottom: 10px; }
+.mantine-Table-tr { transition: background-color var(--ows-dur-micro) ease; }
+.mantine-Table-tr[aria-selected="true"] > .mantine-Table-td:first-child { box-shadow: inset 2px 0 0 var(--mantine-primary-color-filled); }
+.mantine-Table-th svg { transition: transform var(--ows-dur-state) var(--ows-ease-out), opacity var(--ows-dur-state) ease; }
+:root[data-mantine-color-scheme="light"] .mantine-Table-thead[data-sticky] .mantine-Table-th { background-color: color-mix(in srgb, var(--ows-canvas) 97%, transparent); }
+html[data-mantine-color-scheme="dark"] .mantine-Table-thead[data-sticky] .mantine-Table-th { background-color: var(--ows-canvas); }
+/* In an open section, the header that stays on top takes the section's own colour */
+.mantine-Accordion-root[data-variant="contained"] .mantine-Accordion-item[data-active] .mantine-Table-thead[data-sticky] .mantine-Table-th { background-color: var(--item-filled-color); }
+html[data-mantine-color-scheme="dark"] .mantine-Table-table { --table-border-color: color-mix(in srgb, var(--ows-accent) 19%, transparent); }
+.ows-section-flush { padding-bottom: 0; }
+.ows-section-flush :is(.mantine-Table-th, .mantine-Table-td):first-child { padding-left: var(--ows-card-pad); }
+.ows-section-flush :is(.mantine-Table-th, .mantine-Table-td):last-child { padding-right: var(--ows-card-pad); }
+.mantine-Progress-section { transition-timing-function: var(--ows-ease-out) !important; }
+.mantine-Progress-root { background: var(--ows-subtle); }
+
+
+/* Map */
+.ows-map { width: 100%; height: 100%; min-height: 420px; border-radius: 10px; overflow: hidden; border: 1px solid var(--ows-border); }
+/* The controls and overlays on a map in the app's type (MapLibre gives its container Helvetica,
+   and its scale 10 px) */
+.maplibregl-map { font-family: var(--mantine-font-family); }
+.ows-map .maplibregl-ctrl-scale { font-size: 12px; background: color-mix(in srgb, var(--mantine-color-body) 78%, transparent); border-color: var(--ows-muted); color: var(--mantine-color-text); }
+.ows-map .maplibregl-ctrl-group { border-radius: 10px; box-shadow: var(--ows-shadow-card); }
+/* Dark mode: zoom buttons and credits on the black of the menus, their drawn icons turned light */
+html[data-mantine-color-scheme="dark"] .ows-map :is(.maplibregl-ctrl-group, .maplibregl-ctrl-attrib) { background-color: var(--ows-pop); box-shadow: 0 0 0 1px var(--ows-border-strong); }
+html[data-mantine-color-scheme="dark"] .ows-map :is(.maplibregl-ctrl-attrib, .maplibregl-ctrl-attrib a) { color: var(--ows-muted); }
+html[data-mantine-color-scheme="dark"] .ows-map .maplibregl-ctrl-group button + button { border-top-color: var(--ows-border); }
+html[data-mantine-color-scheme="dark"] .ows-map .maplibregl-ctrl button:not(:disabled):hover { background-color: var(--ows-subtle); }
+html[data-mantine-color-scheme="dark"] .ows-map :is(.maplibregl-ctrl-icon, .maplibregl-ctrl-attrib-button) { background-color: transparent; filter: invert(1); }
+/* The credits' mark is a full disc: in the grey of the secondary text, not white */
+html[data-mantine-color-scheme="dark"] .ows-map .maplibregl-ctrl-attrib-button { opacity: 0.6; }
+.ows-map-note { padding: 4px 9px; border: 1px solid var(--ows-border); border-radius: 999px; background: var(--mantine-color-body); color: var(--mantine-color-dimmed); font: 600 12px/1.3 var(--mantine-font-family); pointer-events: none; }
+.ows-map-note[hidden] { display: none; }
+.ows-map-farm-summary { display: flex; align-items: center; gap: 7px; padding: 7px 10px; border: 1px solid var(--ows-border-strong); border-radius: 12px; background: var(--mantine-color-body); color: var(--mantine-color-text); box-shadow: var(--ows-shadow-card); font: 600 12px/1.2 var(--mantine-font-family); cursor: pointer; white-space: nowrap; }
+.ows-map-farm-summary svg { width: 18px; height: 18px; color: var(--farm-color); flex-shrink: 0; }
+.ows-map-farm-summary:hover { border-color: var(--farm-color); }
+.ows-map-farm-summary:focus-visible { outline: 2px solid var(--farm-color); outline-offset: 3px; }
+.ows-map-farm-summary[data-disabled="true"] { border-style: dashed; opacity: 0.75; }
+.ows-map[data-picking] .ows-map-farm-summary { pointer-events: none; }
+/* Seen from afar: a small round mark with the farm's symbol and colour, no name */
+.ows-map-farm-summary[data-level="icon"] { padding: 5px; border-radius: 999px; border-color: var(--ows-border); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16); }
+.ows-map-farm-summary[data-level="icon"] svg { width: 12px; height: 12px; }
+/* Beside its drawn turbines, the name is a lighter tag above the farm */
+.ows-map-farm-summary[data-level="turbines"] { padding: 4px 8px; gap: 5px; border-radius: 999px; border-color: var(--ows-border); box-shadow: none; font-size: 12px; }
+.ows-map-farm-summary[data-level="turbines"] svg { width: 11px; height: 11px; }
+.ows-map-farm-summary > * { animation: ows-fade-in var(--ows-dur-state) var(--ows-ease-out) both; }
+
+/* Search fields that propose entries (WRF variables, namelist options) */
+.ows-picker { padding: 4px; border-radius: 12px; }
+.ows-picker .mantine-Combobox-header { padding: 6px 10px 4px; border: 0; }
+.ows-picker-option { padding: 8px 10px; border-radius: 8px; }
+.ows-picker-option[data-combobox-selected] { background: var(--mantine-primary-color-light); color: inherit; }
+.ows-picker-code { color: var(--ows-code); font-weight: 600; letter-spacing: 0.01em; }
+.ows-unit { padding: 1px 7px; border-radius: 999px; background: var(--ows-subtle); border: 1px solid var(--ows-border); color: var(--ows-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ows-variable-list { border-top: 1px solid var(--ows-border); }
+.ows-variable-row { padding: 8px 2px; border-bottom: 1px solid var(--ows-border); animation: ows-fade-in var(--ows-dur-state) var(--ows-ease-out) both; }
+
+/* Empty text elements take no room */
+.mantine-Text-root:empty { display: none; }
+
+/* Empty states */
+.ows-empty-icon { animation: ows-fade-in var(--ows-dur-enter) var(--ows-ease-out) both; }
+
+/* Live things (an import running): a breathing dot */
+
+/* ------------------------------------------------------------------------------- accessibility */
+:focus-visible { outline: 2px solid var(--mantine-primary-color-filled); outline-offset: 2px; }
+html[data-mantine-color-scheme="dark"] :focus-visible { outline-color: var(--ows-accent); }
+.ows-skip-link { position: absolute; left: -9999px; top: 0; z-index: 1000; padding: 8px 12px; background: var(--mantine-primary-color-filled); color: var(--ows-on-accent); }
+.ows-skip-link:focus { left: 8px; top: 8px; }
+
+/* First load: the menu entries arrive one after the other (class set briefly by main.tsx) */
+/* (opacity only: the gliding highlight measures the entries while they arrive) */
+html.ows-booting .ows-nav-link { animation: ows-fade-in var(--ows-dur-enter) ease both; animation-delay: calc(var(--ows-i, 0) * 25ms); }
+html.ows-booting .ows-sidebar-head, html.ows-booting .ows-topbar { animation: ows-fade-in 600ms ease both; }
+
+/* Calculation windows (spiral staircase): at the opening, the rail is drawn and the steps rise
+   one after the other, from the first date to the last (delays set by WindowStairs); the label
+   and the tooltip of the hovered step fade in */
+.ows-stair-in { animation: ows-stair-in 460ms var(--ows-ease-out) both; }
+.ows-rail-in { stroke-dasharray: 1; animation: ows-draw linear both; }
+.ows-stair-ground { animation: ows-fade-in 600ms ease both; }
+.ows-stair-lift { animation: ows-stair-lift var(--ows-dur-state) var(--ows-ease-out) both; }
+.ows-stair-label { animation: ows-enter var(--ows-dur-state) ease both; }
+.ows-stair-tip { animation: ows-fade-in var(--ows-dur-micro) ease both; }
+.ows-stairs:focus-visible { outline: 2px solid var(--mantine-primary-color-filled); outline-offset: 2px; border-radius: 8px; }
+@media (prefers-reduced-motion: reduce) { .ows-stair-in, .ows-rail-in, .ows-stair-ground, .ows-stair-lift, .ows-stair-label, .ows-stair-tip { animation: none; } }
+
+/* ------------------------------------------------------------------------------- keyframes */
+@keyframes ows-stair-in { from { opacity: 0; transform: translateY(14px); } }
+@keyframes ows-stair-lift { from { transform: translateY(0); opacity: 0.4; } to { transform: translateY(-3px); opacity: 1; } }
+@keyframes ows-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes ows-enter { from { opacity: 0; } }
+@keyframes ows-rise { from { opacity: 0; } }
+@keyframes ows-ping { 0% { transform: scale(1); opacity: 0.55; } 80%, 100% { transform: scale(2.8); opacity: 0; } }
+@keyframes ows-breathe { 0%, 100% { box-shadow: 0 0 0 0 var(--mantine-primary-color-light); } 50% { box-shadow: 0 0 0 6px var(--mantine-primary-color-light); } }
+@keyframes ows-fade-in { from { opacity: 0; } }
+/* Between project pages the new one comes from the side it lies on in the page order, the old one leaves the other way */
+@keyframes ows-page-in { from { opacity: 0; transform: translateX(var(--ows-page-in-x)); } }
+@keyframes ows-page-out { to { opacity: 0; transform: translateX(var(--ows-page-out-x)); } }
+
+/* ------------------------------------------------------------------------------- view transitions
+   Page changes: only the content cross-fades (the old one leaves quickly, the new one rises); the
+   sidebar, the top bar and the guide stay live, so their highlights glide on their own. */
+#ows-page-root { view-transition-name: ows-page; }
+::view-transition-group(*) { animation-duration: var(--ows-dur-dialog); animation-timing-function: var(--ows-ease-out); }
+html.ows-vt-page::view-transition-old(root), html.ows-vt-page::view-transition-new(root) { animation: none; }
+html.ows-vt-page::view-transition-old(root) { display: none; }
+html.ows-vt-page::view-transition-old(ows-page) { animation: ows-page-out 140ms ease-in both; }
+html.ows-vt-page::view-transition-new(ows-page) { animation: ows-page-in 320ms var(--ows-ease-out) both; }
+
+/* Light or dark: the new look spreads in a circle from the button */
+html.ows-vt-theme #ows-page-root { view-transition-name: none; }
+html.ows-vt-theme::view-transition-old(root) { animation: none; }
+html.ows-vt-theme::view-transition-new(root) { animation: ows-reveal 620ms var(--ows-ease-in-out); }
+@keyframes ows-reveal {
+  from { clip-path: circle(0 at var(--ows-reveal-x, 0) var(--ows-reveal-y, 100%)); }
+  to { clip-path: circle(var(--ows-reveal-r, 150vmax) at var(--ows-reveal-x, 0) var(--ows-reveal-y, 100%)); }
+}
+
+/* ------------------------------------------------------------------------------- reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ------------------------------------------------------------------------------- technical sheets (Compute) */
+/* ------------------------------------------------------------------------------- Compute sheets
+   Panels with a drawing on the left; rows come in one after the other, a light glides under the
+   row pointed at; the state mark beats when ready. */
+.ows-sheet {
+  position: relative;
+  padding: 18px 22px 16px;
+  border: 1px solid var(--ows-border);
+  border-radius: calc(var(--ows-surface-radius) + 4px);
+  background: var(--ows-tile);
+  animation: ows-sheet-in 520ms var(--ows-ease-out) both;
+}
+.ows-sheet + .ows-sheet, .ows-sheet + .ows-fold, .ows-sheet + * { margin-top: 20px; }
+.ows-sheet-title { margin: 0; font-size: 17px; font-weight: 600; }
+.ows-sheet-rows { position: relative; display: flex; flex-direction: column; margin-top: 10px; font-size: 13px; }
+.ows-sheet-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  column-gap: 16px;
+  padding: 8px 10px;
+  align-items: baseline;
+  animation: ows-row-in 460ms var(--ows-ease-out) both;
+}
+.ows-sheet-row:nth-child(3) { animation-delay: 35ms; }
+.ows-sheet-row:nth-child(4) { animation-delay: 70ms; }
+.ows-sheet-row:nth-child(5) { animation-delay: 105ms; }
+.ows-sheet-row:nth-child(6) { animation-delay: 140ms; }
+.ows-sheet-row:nth-child(7) { animation-delay: 175ms; }
+.ows-sheet-row:nth-child(n + 8) { animation-delay: 210ms; }
+.ows-sheet-glow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 0;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--mantine-primary-color-filled) 8%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 240ms var(--ows-ease-out), height 240ms var(--ows-ease-out), opacity 180ms ease;
+}
+.ows-sheet-key { color: var(--ows-muted); }
+.ows-sheet-value { min-width: 0; overflow-wrap: anywhere; }
+.ows-sheet-link { color: var(--mantine-primary-color-filled); font-size: 13px; font-weight: 500; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size 260ms var(--ows-ease-out); }
+.ows-sheet-link:hover:not(:disabled) { background-size: 100% 1px; }
+.ows-sheet-link:disabled { color: var(--ows-muted); opacity: 0.6; cursor: default; }
+.ows-sheet-link[data-danger] { color: var(--mantine-color-red-7); }
+.ows-sheet-dot { position: relative; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; background: var(--mantine-color-red-6); vertical-align: 1px; }
+.ows-sheet-dot[data-ok] { background: var(--mantine-primary-color-filled); }
+.ows-sheet-dot[data-ok]::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: inherit; animation: ows-ping 2.6s var(--ows-ease-out) infinite; }
+@keyframes ows-sheet-in { from { opacity: 0; transform: translateY(10px); } }
+@keyframes ows-row-in { from { opacity: 0; transform: translateY(6px); filter: blur(3px); } }
+
+
+/* The machines as plain tiles: name, one line of state and versions, quiet links */
+.ows-machine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 14px; }
+.ows-machine-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px 12px;
+  border: 1px solid var(--ows-border);
+  border-radius: var(--ows-surface-radius);
+  font-size: 13px;
+  transition: border-color 200ms ease;
+  animation: ows-row-in 460ms var(--ows-ease-out) both;
+}
+.ows-machine-tile:hover { border-color: var(--ows-border-strong); }
+.ows-machine-tile-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; min-width: 0; }
+.ows-machine-tile-name { min-width: 0; }
+.ows-machine-tile-default { flex: none; font-size: 12px; color: var(--ows-muted); }
+.ows-machine-tile-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; font-size: 13px; color: var(--ows-muted); }
+.ows-machine-tile-meta > :first-child { color: var(--mantine-color-text); }
+.ows-machine-tile-actions { margin-top: 2px; }
+.ows-machine-tile .ows-sheet-link { color: var(--ows-muted); font-size: 13px; transition: color 160ms ease, background-size 260ms var(--ows-ease-out); }
+.ows-machine-tile .ows-sheet-link:hover:not(:disabled) { color: var(--mantine-color-text); }
+.ows-machine-tile .ows-sheet-link[data-danger]:hover:not(:disabled) { color: var(--mantine-color-red-6); }
+
+/* An installation running: its share as a thin line under the state */
+.ows-install-state { display: inline-flex; flex-direction: column; gap: 8px; min-width: min(320px, 100%); }
+.ows-install-line { position: relative; display: block; height: 2px; border-radius: 2px; background: color-mix(in srgb, var(--mantine-color-text) 12%, transparent); overflow: hidden; }
+.ows-install-line > span { position: absolute; inset: 0; transform-origin: 0 50%; background: var(--mantine-primary-color-filled); transition: transform 600ms var(--ows-ease-out); }
+
+/* The steps of an installation, joined by a line that draws itself */
+.ows-steps { position: relative; height: 54px; margin: 6px 18px 4px; }
+.ows-steps-track { position: absolute; left: 0; right: 0; top: 7px; height: 2px; border-radius: 2px; background: color-mix(in srgb, var(--mantine-color-text) 12%, transparent); overflow: hidden; }
+.ows-steps-fill { position: absolute; inset: 0; transform-origin: 0 50%; background: var(--mantine-primary-color-filled); }
+.ows-steps[data-failed] .ows-steps-fill { background: var(--mantine-color-red-6); }
+.ows-steps-item { position: absolute; top: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.ows-steps-dot { position: relative; width: 16px; height: 16px; border-radius: 50%; border: 2px solid color-mix(in srgb, var(--mantine-color-text) 25%, transparent); background: var(--ows-canvas); transition: border-color 300ms ease, background-color 300ms ease; }
+.ows-steps-item[data-state="done"] .ows-steps-dot { border-color: var(--mantine-primary-color-filled); background: var(--mantine-primary-color-filled); }
+.ows-steps-item[data-state="now"] .ows-steps-dot { border-color: var(--mantine-primary-color-filled); }
+.ows-steps-item[data-state="now"] .ows-steps-dot::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; background: var(--mantine-primary-color-filled); animation: ows-ping 2s var(--ows-ease-out) infinite; }
+.ows-steps-label { font-size: 12px; color: var(--ows-muted); white-space: nowrap; }
+.ows-steps-item[data-state] .ows-steps-label { color: var(--mantine-color-text); }
+.ows-steps-item:nth-child(2) { transform: none; align-items: flex-start; }
+.ows-steps-item:last-child { transform: translateX(-100%); align-items: flex-end; }
+@media (max-width: 48em) {
+  .ows-sheet-row { grid-template-columns: 1fr; row-gap: 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ows-sheet, .ows-sheet-row, .ows-machine-tile { animation: none; }
+  .ows-sheet-dot[data-ok]::after, .ows-steps-dot::after { animation: none !important; }
+}
+
+/* Hovering a grid cell of the farm domain: the turbines it holds */
+.ows-cell-tip .maplibregl-popup-content { padding: 6px 10px; border-radius: 8px; font-size: 12px; line-height: 1.45; color: var(--mantine-color-text); background: var(--mantine-color-body); border: 1px solid var(--ows-border-strong); box-shadow: var(--ows-shadow-pop); }
+.ows-cell-tip .maplibregl-popup-tip { display: none; }
+.ows-stair-centre { animation: ows-enter var(--ows-dur-state) ease both; pointer-events: none; }
+/* Icon tools above maps and 3D views (ui/ToolBar.tsx), after the motion book: one tooltip that glides
+   from tool to tool; a menu grows out of the bar itself (the icons blur away, the entries come in one
+   after the other) */
+.ows-toolbar { position: relative; display: inline-flex; vertical-align: middle; overflow: hidden; border: 1px solid var(--ows-border-strong); border-radius: 12px; background: var(--ows-card); box-shadow: 0 1px 2px rgb(0 0 0 / 0.05); }
+.ows-toolbar-row { display: flex; align-items: center; padding: 5px; transition: opacity 200ms, filter 200ms; }
+.ows-toolbar[data-morph] { transition: width 380ms var(--ows-ease-out), height 380ms var(--ows-ease-out), border-radius 380ms var(--ows-ease-out); }
+.ows-toolbar[data-morph] .ows-toolbar-row { position: absolute; left: 0; bottom: 0; }
+.ows-toolbar[data-open] { border-radius: 16px; }
+.ows-toolbar[data-open] .ows-toolbar-row { opacity: 0; filter: blur(6px); pointer-events: none; }
+.ows-toolbar-menu { position: absolute; left: 0; top: 0; width: 260px; padding: 8px; display: grid; align-content: start; gap: 2px; opacity: 0; pointer-events: none; }
+.ows-toolbar[data-open] .ows-toolbar-menu { opacity: 1; pointer-events: auto; }
+.ows-toolbar-menu-label { display: flex; justify-content: space-between; gap: 8px; padding: 4px 8px; font-size: 12px; font-weight: 800; color: var(--ows-faint); }
+.ows-toolbar-menu-items { display: grid; gap: 2px; max-height: 240px; overflow-y: auto; }
+.ows-toolbar-menu-items button { all: unset; display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 8px; font-size: 13px; color: var(--mantine-color-text); cursor: pointer; opacity: 0; transform: translateY(6px); filter: blur(3px); transition: opacity 260ms, transform 260ms var(--ows-ease-out), filter 260ms, background-color 160ms; }
+.ows-toolbar[data-open] .ows-toolbar-menu-items button { opacity: 1; transform: none; filter: none; transition-delay: calc(120ms + var(--i) * 35ms), calc(120ms + var(--i) * 35ms), calc(120ms + var(--i) * 35ms), 0ms; }
+.ows-toolbar-menu-items button:hover, .ows-toolbar-menu-items button:focus-visible { background: var(--ows-accent-soft); }
+.ows-tool-tip { position: fixed; left: 0; top: 0; z-index: 400; width: max-content; max-width: 240px; padding: 4px 9px; border-radius: 7px; background: var(--mantine-color-text); color: var(--mantine-color-body); font-size: 12px; font-weight: 700; line-height: 1.35; pointer-events: none; opacity: 0; transition: transform 220ms var(--ows-ease-out), opacity 150ms; }
+.ows-tool-tip[data-on] { opacity: 1; }
+.ows-tool-tip > span { display: inline-block; animation: ows-tip-text 200ms var(--ows-ease-out); }
+.ows-tool-tip small { display: block; margin-top: 2px; font-size: 12px; font-weight: 500; opacity: 0.8; }
+@keyframes ows-tip-text { from { opacity: 0; filter: blur(3px); transform: translateY(3px); } }
+.ows-tool-group, .ows-tool-choice { display: inline-flex; align-items: center; gap: 2px; position: relative; }
+.ows-toolbar-row > * + * { margin-left: 9px; }
+.ows-toolbar-row > * + *::before { content: ""; position: absolute; left: -5px; top: 5px; bottom: 5px; width: 1px; background: var(--ows-border); }
+.ows-tool { display: grid; place-items: center; position: relative; z-index: 1; border-radius: 8px; color: var(--ows-muted); transition: color 160ms ease, background-color 160ms ease, transform 240ms var(--ows-ease-out); }
+.ows-tool:hover:not([data-active]), .ows-tool-group .ows-tool[data-active] { color: var(--mantine-color-text); background: var(--ows-accent-soft); }
+.ows-tool[data-active] { color: var(--mantine-color-text); }
+.ows-tool:active { transform: scale(0.88); }
+.ows-tool:focus-visible { outline: 2px solid var(--mantine-primary-color-filled); outline-offset: 1px; }
+.ows-tool[data-active] svg { animation: ows-tool-pop 280ms var(--ows-ease-out); }
+.ows-tool-slider { position: absolute; top: 0; left: 0; border-radius: 8px; background: var(--ows-accent-soft); transition: transform 340ms var(--ows-ease-out); }
+@keyframes ows-tool-pop { 0% { transform: scale(0.72); } 60% { transform: scale(1.14); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .ows-tool, .ows-tool-slider, .ows-tool[data-active] svg, .ows-toolbar, .ows-toolbar-row, .ows-toolbar-menu-items button, .ows-tool-tip, .ows-tool-tip > span { transition: none !important; animation: none !important; } }
+.ows-slider-icon { display: grid; place-items: center; color: var(--ows-muted); flex: none; }
+.ows-field-warning { color: var(--mantine-color-orange-6); }
+.ows-advice { position: absolute; top: 100%; left: 0; margin-top: 6px; display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--mantine-primary-color-filled); white-space: nowrap; animation: ows-enter var(--ows-dur-state) ease both; }
+.ows-advice:hover { text-decoration: underline; }
+/* Map tools (ui/map/ProjectMap.tsx): the page's choices in the top left, the icon bar in the top
+   right with the zoom under it, the measured distance */
+.maplibregl-ctrl.ows-map-tools { margin: 10px 10px 0 0; }
+.ows-map .maplibregl-ctrl-top-right { display: flex; flex-direction: column; align-items: flex-end; }
+.ows-map .maplibregl-ctrl-top-right > .maplibregl-ctrl-group { margin: 8px 10px 0 0; }
+.maplibregl-ctrl.ows-map-lead { margin: 10px 0 0 10px; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.maplibregl-ctrl.ows-map-lead:empty { display: none; }
+.ows-map-lead .ows-map-choice { display: flex; align-items: center; gap: 2px; padding: 3px; border: 1px solid var(--ows-border-strong); border-radius: 10px; background: var(--mantine-color-body); box-shadow: 0 1px 4px rgb(0 0 0 / 0.18); }
+.ows-map-choice-label { display: inline-flex; align-items: center; gap: 6px; padding: 0 8px 0 6px; color: var(--ows-muted); font: 600 12px/1 var(--mantine-font-family); white-space: nowrap; }
+.ows-map-choice .ows-pills { padding: 0; border: 0; background: var(--mantine-color-body); }
+.ows-map-choice .ows-pill { padding: 5px 10px; font-size: 12px; border-radius: 7px; }
+.ows-map-choice .ows-pill-glide { border-radius: 7px; }
+/* Over a map, a solid bar: readable on any base map */
+.ows-map-tools .ows-toolbar { background: var(--mantine-color-body); border-color: var(--ows-border-strong); box-shadow: 0 1px 4px rgb(0 0 0 / 0.18); }
+.ows-measure-label { display: inline-block; padding: 3px 8px; border-radius: 6px; background: var(--mantine-primary-color-filled); color: var(--ows-on-accent); font-size: 12px; font-weight: 700; white-space: nowrap; box-shadow: 0 1px 3px rgb(0 0 0 / 0.25); animation: ows-tool-pop 240ms var(--ows-ease-out) both; pointer-events: none; }
+/* Lists that arrive one item after the other (motion.dev "stagger") */
+.ows-stagger > * { animation: ows-stagger-in var(--ows-dur-enter) var(--ows-ease-out) both; }
+@keyframes ows-stagger-in { from { opacity: 0; transform: translateY(6px); } }
+.ows-stagger > :nth-child(2) { animation-delay: 40ms; }
+.ows-stagger > :nth-child(3) { animation-delay: 80ms; }
+.ows-stagger > :nth-child(4) { animation-delay: 120ms; }
+.ows-stagger > :nth-child(5) { animation-delay: 160ms; }
+.ows-stagger > :nth-child(6) { animation-delay: 200ms; }
+/* Square choices of a list (quantities of an export): a thin frame, the accent when chosen */
+.ows-pick { padding: 10px 12px; border: 1px solid var(--ows-border-strong); background: transparent; transition: border-color 120ms, background-color 120ms; }
+.ows-pick:hover { background: var(--ows-border); }
+.ows-pick[data-checked] { border-color: var(--mantine-primary-color-filled); }
+/* A quantity's name goes on two lines rather than losing its end (Export), clipped to its box as
+   before so that it is drawn at the same place */
+.ows-pick-name { overflow: hidden; overflow-wrap: anywhere; }
+/* Charts (ui/chart.tsx): a pale box, small muted axes, the reading in bold above the point or
+   bar; curves drawn once, a dashed cursor, the area up to the point read, a value ruler that
+   swells near the pointer; bars and petals grow then morph, the bar read becomes a bright pill. */
+.ows-chart { position: relative; background: var(--ows-tile); border: 1px solid var(--ows-border); border-radius: 12px; padding: 10px 12px; }
+.ows-chart svg { display: block; overflow: visible; }
+.ows-chart svg:focus-visible { outline: 2px solid var(--ows-accent-2); outline-offset: 3px; border-radius: 6px; }
+.ows-axis text, .ows-axis-text { font-size: 12px; fill: var(--ows-muted); font-variant-numeric: tabular-nums; }
+.ows-axis line { stroke: var(--ows-border); }
+.ows-readout { font-size: 12px; font-weight: 700; fill: var(--mantine-color-text); stroke: var(--ows-tile); stroke-width: 3px; paint-order: stroke; stroke-linejoin: round; font-variant-numeric: tabular-nums; pointer-events: none; }
+.ows-readout-dot { font-size: 9px; }
+.ows-chart-reading { min-height: 17px; margin-top: 4px; text-align: center; font-size: 12px; font-weight: 700; color: var(--mantine-color-text); font-variant-numeric: tabular-nums; }
+.ows-chart-mark text { font-size: 12px; font-weight: 700; }
+.ows-legend-key { display: inline-block; width: 10px; height: 10px; border-radius: 3px; }
+.ows-legend-key[data-pale] { opacity: 0.4; }
+.ows-ts-line { fill: none; stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; }
+.ows-ts-dots { fill: none; stroke-width: 3.2; stroke-linecap: round; }
+/* A chart in dots: the dots of the other series are finer, so that the first one still shows
+   around them where two values meet (as the dots under the pointer) */
+.ows-ts-dots[data-other] { stroke-width: 1.8; }
+.ows-ts-area { fill: color-mix(in oklab, var(--ows-accent) 22%, transparent); }
+.ows-ts-cursor { stroke: var(--ows-border-strong); stroke-dasharray: 3 3; }
+.ows-ts-dot { stroke: var(--ows-tile); stroke-width: 2; }
+.ows-mm-tick { stroke: var(--ows-border-strong); stroke-width: 1.4; stroke-linecap: round; }
+.ows-mm-tick[data-hot] { stroke: var(--ows-accent-2); }
+.ows-chart[data-unseen] .ows-ts-curves { opacity: 0; }
+.ows-ts-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: ows-ts-draw 1400ms cubic-bezier(0.3, 0, 0.2, 1) forwards; }
+@keyframes ows-ts-draw { to { stroke-dashoffset: 0; } }
+.ows-ts-reveal { transform-box: fill-box; transform-origin: 0 0; animation: ows-ts-reveal 1400ms cubic-bezier(0.3, 0, 0.2, 1) both; }
+@keyframes ows-ts-reveal { from { transform: scaleX(0); } }
+.ows-bar { fill: color-mix(in oklab, var(--ows-accent) 45%, var(--ows-tile)); transition: fill 160ms; }
+.ows-bar[data-hot] { fill: var(--ows-accent-2); }
+.ows-bar-pale { fill: var(--mantine-color-gray-6); opacity: 0.32; }
+.ows-bar-pale[data-hot] { opacity: 0.6; }
+/* Rose: the rose and its reading in one column, the keys beside it when wide enough, above
+   otherwise. The petal read stands out as the others step back (so do the part and the scale
+   class pointed); a pale beam runs from the hub along the direction read; the rings are drawn
+   from north when first seen. */
+.ows-rose-chart { display: grid; grid-template-columns: minmax(0, 400px); justify-content: center; align-items: center; row-gap: 4px; }
+.ows-rose-chart[data-wide][data-side] { grid-template-columns: minmax(0, 400px) max-content; column-gap: 36px; }
+.ows-rose-chart[data-wide] > .ows-rose-side { grid-column: 2; grid-row: 1; }
+.ows-rose-chart[data-wide] > .ows-rose { grid-column: 1; grid-row: 1; }
+.ows-rose-chart[data-wide] > .ows-chart-reading { grid-column: 1; grid-row: 2; }
+.ows-rose { width: 100%; aspect-ratio: 1; }
+.ows-petal { fill: var(--petal); transition: opacity 160ms ease; }
+.ows-petal-pale { fill: var(--mantine-color-gray-6); opacity: 0.32; }
+.ows-rose-petals > g { transition: opacity 160ms ease; }
+.ows-rose-petals[data-hovering] > g:not([data-lit]) { opacity: 0.3; }
+.ows-rose-petals > g[data-parting] .ows-petal:not([data-at]) { opacity: 0.6; }
+.ows-rose[data-picking] .ows-petal:not([data-on]) { opacity: 0.15; }
+.ows-rose-hub { fill: none; stroke: var(--ows-border); }
+.ows-rose-beam { fill: var(--mantine-color-text); opacity: 0; pointer-events: none; }
+.ows-rose-beam[data-on] { opacity: 0.05; }
+.ows-rose-grid { fill: none; stroke: var(--ows-border); stroke-dasharray: 1; animation: ows-draw 900ms var(--ows-ease-out) both; }
+.ows-chart[data-unseen] .ows-rose-grid { animation-play-state: paused; }
+/* The ring of ticks, like a watch's: it runs in as a wave once the chart is seen, then swells
+   around the pointer and follows it */
+.ows-rose-tick { stroke: var(--ows-muted); stroke-width: 1; stroke-linecap: round; transform-box: view-box; transition: transform 200ms var(--ows-ease-out), opacity 200ms ease; animation: ows-tick-in 420ms var(--ows-ease-out) backwards; }
+.ows-rose-tick[data-major] { stroke: var(--mantine-color-text); stroke-width: 1.4; }
+.ows-chart[data-unseen] .ows-rose-tick { animation-play-state: paused; }
+@keyframes ows-tick-in { from { transform: scaleY(0); opacity: 0; } }
+.ows-rose-ring { font-size: 12px; fill: var(--ows-muted); text-anchor: middle; stroke: var(--ows-tile); stroke-width: 3px; paint-order: stroke; font-variant-numeric: tabular-nums; }
+.ows-rose-points text { font-size: 12px; font-weight: 700; fill: var(--ows-muted); text-anchor: middle; }
+/* Scale of ordered classes: a block per class, coming in one after the other, the bounds at the
+   joints and the unit at the open end. Lying above the chart, or upright beside it (strong at the
+   top); each block is pointed over the whole width of its row */
+.ows-scale { width: min(100%, 320px); margin: 2px auto 8px; }
+.ows-scale-bar { display: flex; gap: 2px; height: 8px; }
+.ows-scale-block { position: relative; flex: 1; border-radius: 2px; transform-origin: left center; transition: opacity 160ms ease, transform 160ms var(--ows-ease-out); }
+.ows-scale-block::after { content: ""; position: absolute; inset: -8px 0 -22px; }
+.ows-scale-block:first-child { border-radius: 4px 2px 2px 4px; }
+.ows-scale-block:last-child { border-radius: 2px 4px 4px 2px; }
+.ows-scale-bar[data-picking] .ows-scale-block:not([data-on]) { opacity: 0.3; }
+.ows-scale-block[data-on] { transform: scaleY(1.5); }
+.ows-chart[data-unseen] .ows-scale-block { transform: scaleX(0); }
+.ows-chart:not([data-unseen]) .ows-scale-block { animation: ows-scale-in 420ms var(--ows-ease-out) backwards; animation-delay: calc(var(--i) * 45ms); }
+@keyframes ows-scale-in { from { transform: scaleX(0); } }
+.ows-scale-ticks { position: relative; height: 16px; margin-top: 5px; font-size: 12px; color: var(--ows-muted); font-variant-numeric: tabular-nums; pointer-events: none; }
+.ows-scale-ticks > span { position: absolute; top: 0; left: calc(var(--k) * 100% / var(--n)); transform: translateX(-50%); white-space: nowrap; }
+.ows-scale[data-upright] { display: flex; gap: 10px; width: auto; margin: 0; }
+.ows-scale[data-upright] .ows-scale-bar { flex-direction: column-reverse; width: 12px; height: calc(var(--n) * 24px - 2px); }
+.ows-scale[data-upright] .ows-scale-block { transform-origin: left bottom; }
+.ows-scale[data-upright] .ows-scale-block::after { inset: 0 -46px 0 -10px; }
+.ows-scale[data-upright] .ows-scale-block:first-child { border-radius: 2px 2px 4px 4px; }
+.ows-scale[data-upright] .ows-scale-block:last-child { border-radius: 4px 4px 2px 2px; }
+.ows-scale[data-upright] .ows-scale-block[data-on] { transform: scaleX(1.5); }
+.ows-chart[data-unseen] .ows-scale[data-upright] .ows-scale-block { transform: scaleY(0); }
+.ows-chart:not([data-unseen]) .ows-scale[data-upright] .ows-scale-block { animation-name: ows-scale-up; }
+@keyframes ows-scale-up { from { transform: scaleY(0); } }
+.ows-scale[data-upright] .ows-scale-ticks { height: auto; min-width: 30px; margin-top: 0; }
+.ows-scale[data-upright] .ows-scale-ticks > span { top: auto; left: 0; bottom: calc(var(--k) * 100% / var(--n)); transform: translateY(50%); line-height: 1; }
+/* Energy bars (results/EnergyBars.tsx): bars scrolling under a fixed axis, edges fading where
+   there is more to see */
+.ows-bars-scroll { flex: 1; min-width: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; cursor: grab; touch-action: pan-x; }
+.ows-bars-scroll:active { cursor: grabbing; }
+.ows-bars-scroll:not([data-start]):not([data-end]) { mask-image: linear-gradient(to right, transparent, #000 28px, #000 calc(100% - 28px), transparent); }
+.ows-bars-scroll[data-start]:not([data-end]) { mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent); }
+.ows-bars-scroll[data-end]:not([data-start]) { mask-image: linear-gradient(to right, transparent, #000 28px); }
+/* Curves of the turbine catalogue: drawn once */
+.ows-curve-draw { stroke-dasharray: 1; animation: ows-draw 640ms var(--ows-ease-out) both; }
+@media (prefers-reduced-motion: reduce) {
+  .ows-ts-draw { animation: none; stroke-dasharray: none; stroke-dashoffset: 0; }
+  .ows-ts-reveal, .ows-rose-grid, .ows-rose-tick, .ows-scale-block { animation: none; }
+  .ows-chart[data-unseen] .ows-ts-curves { opacity: 1; }
+}
+.ows-equations { padding: 8px 0 12px; }
+.ows-equation { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+.ows-equation .katex-display { margin: 4px 0; }
+/* Equations in the interface's typeface (Manrope), at a size close to the text; KaTeX keeps its
+   own fonts only for what Manrope cannot draw: large operators, radicals and tall delimiters */
+.ows-equation .katex { font-family: "Manrope Variable", sans-serif; font-size: 20px; color: var(--mantine-color-text); }
+.ows-equation .katex .mathnormal, .ows-equation .katex .mathit, .ows-equation .katex .boldsymbol { font-family: "Manrope Variable", sans-serif; font-style: italic; }
+.ows-equation .katex .mathrm, .ows-equation .katex .textrm, .ows-equation .katex .text { font-family: "Manrope Variable", sans-serif; }
+/* The ruler under the time sliders (ui/Ruler.tsx) */
+.ows-ruler { display: flex; justify-content: space-between; align-items: flex-start; height: 12px; margin-top: 2px; }
+.ows-ruler span { width: 1px; height: 4px; background: var(--ows-border-strong); transform-origin: 50% 0; transform: scaleY(calc(1 + var(--near, 0) * 1.8)); opacity: calc(0.45 + var(--near, 0) * 0.55); transition: transform 160ms var(--ows-ease-out), opacity 160ms ease; }
+.ows-ruler span[data-major] { height: 6px; }
+.ows-ruler span[data-current] { height: 9px; background: var(--mantine-primary-color-filled); opacity: 1; }
+/* Items of a FlipRow on their way out (ui/Motion.tsx) */
+.ows-flip-item[data-leaving] { animation: ows-flip-out var(--ows-dur-state, 160ms) var(--ows-ease-out) forwards; pointer-events: none; }
+@keyframes ows-flip-out { to { opacity: 0; transform: scale(0.94); } }
+/* The preview of an exported table: a header and two rows, square cells */
+.ows-preview { display: flex; gap: 0; overflow-x: auto; scrollbar-width: thin; border: 1px solid var(--ows-border-strong); border-radius: 4px; }
+.ows-preview .ows-flip-item { flex: none; width: 128px; border-left: 1px solid var(--ows-border); }
+.ows-preview .ows-flip-item:first-child { border-left: none; }
+.ows-preview-head { height: 60px; padding: 6px 10px; font-size: 12px; line-height: 1.3; font-weight: 600; background: var(--ows-border); display: flex; align-items: center; }
+/* Long column names (the turbines of a cell, in columns) wrap anywhere, three lines at most */
+.ows-preview-head > span { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; overflow-wrap: anywhere; }
+.ows-preview-cell { padding: 5px 10px; font-size: 12px; font-variant-numeric: tabular-nums; color: var(--ows-muted); border-top: 1px solid var(--ows-border); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Files written by an export: each one appears with its tick (delay set per file) */
+.ows-written > * { animation: ows-stagger-in 260ms var(--ows-ease-out) both; }
+.ows-stagger > :nth-child(n + 7) { animation-delay: 240ms; }
+.ows-turbine-tip .maplibregl-popup-content { padding: 7px 10px; border-radius: 8px; font-size: 12px; line-height: 1.5; color: var(--mantine-color-text); background: var(--mantine-color-body); border: 1px solid var(--ows-border-strong); box-shadow: var(--ows-shadow-pop); }
+.ows-turbine-tip .maplibregl-popup-content strong { display: block; font-weight: 600; }
+.ows-turbine-tip .maplibregl-popup-content div { color: var(--ows-muted); }
+.ows-turbine-tip .maplibregl-popup-tip { display: none; }
+
+/* ------------------------------------------------------------------ folder explorer (ui/FolderExplorer.tsx) */
+.ows-fx-canvas {
+  position: relative; height: min(62vh, 580px); overflow: hidden; touch-action: none; cursor: grab;
+  border: 1px solid var(--ows-border); border-radius: var(--ows-surface-radius);
+  background-color: var(--ows-tile);
+  background-image: radial-gradient(var(--ows-border-strong) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.ows-fx-canvas[data-held] { cursor: grabbing; }
+.ows-fx-canvas[data-static] { cursor: default; background-image: none; }
+.ows-fx-wait { position: absolute; inset: 0; margin: auto; }
+.ows-fx-world { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; transition: transform var(--ows-dur-large) var(--ows-ease-out); }
+.ows-fx-canvas[data-held] .ows-fx-world, .ows-fx-canvas[data-still] .ows-fx-world { transition: none; }
+.ows-fx-links { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+.ows-fx-node { position: absolute; left: 0; top: 0; transition: transform var(--ows-dur-large) var(--ows-ease-out); }
+
+/* A block: arrives from its parent (6 px, fading), leaves back into it, shorter */
+.ows-fx-block {
+  display: flex; align-items: center; gap: 8px; width: 100%; height: 100%; padding: 0 6px 0 10px;
+  border-radius: 10px; border: 1px solid var(--ows-border-strong); background: var(--ows-canvas);
+  font-size: 13px; line-height: 1; color: var(--mantine-color-text); cursor: pointer; user-select: none; outline: none;
+  animation: ows-fx-in var(--ows-dur-dialog) var(--ows-ease-out) var(--ows-fx-delay, 0ms) both;
+  transition: border-color var(--ows-dur-state) var(--ows-ease-out), background-color var(--ows-dur-state) var(--ows-ease-out), box-shadow var(--ows-dur-state) var(--ows-ease-out), opacity var(--ows-dur-state) var(--ows-ease-out);
+}
+.ows-fx-block:hover { border-color: color-mix(in srgb, var(--mantine-primary-color-filled) 45%, var(--ows-border-strong)); }
+.ows-fx-block[data-marked] { background: var(--mantine-primary-color-light); }
+.ows-fx-block[data-selected] { border-color: var(--mantine-primary-color-filled); box-shadow: 0 0 0 1px var(--mantine-primary-color-filled); }
+.ows-fx-block:focus-visible { box-shadow: 0 0 0 2px var(--mantine-primary-color-filled), 0 0 0 4px color-mix(in srgb, var(--mantine-primary-color-filled) 25%, transparent); }
+.ows-fx-block[data-disabled] { color: var(--ows-muted); cursor: default; }
+.ows-fx-block[data-dim] { opacity: 0.35; }
+.ows-fx-block[data-leaving] { pointer-events: none; animation: ows-fx-out var(--ows-dur-state) var(--ows-ease-out) both; }
+@keyframes ows-fx-in { from { opacity: 0; transform: translateX(-6px); } }
+@keyframes ows-fx-out { to { opacity: 0; transform: translateX(-6px); } }
+.ows-fx-icon { flex: none; color: var(--ows-muted); transition: color var(--ows-dur-state) var(--ows-ease-out), opacity var(--ows-dur-state) var(--ows-ease-out); }
+.ows-fx-icon[data-role] { color: var(--mantine-color-text); }
+.ows-fx-icon[data-expected], .ows-fx-block[data-selected] .ows-fx-icon { color: var(--mantine-primary-color-filled); }
+.ows-fx-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ows-fx-end { flex: none; display: flex; width: 22px; justify-content: center; }
+.ows-fx-chevron svg { transition: transform var(--ows-dur-state) var(--ows-ease-out); }
+.ows-fx-chevron[data-open] svg { transform: rotate(180deg); }
+/* Far away: names stay, chevrons and icons fade */
+.ows-fx-canvas[data-far] .ows-fx-end, .ows-fx-canvas[data-far] .ows-fx-icon:not([data-role]) { opacity: 0; }
+
+/* Links: drawn once from the parent, then follow their blocks; the chosen branch in colour */
+.ows-fx-edge {
+  fill: none; stroke: var(--ows-border-strong); stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 1;
+  animation: ows-fx-draw var(--ows-dur-large) var(--ows-ease-out) var(--ows-fx-delay, 0ms) both;
+  transition: d var(--ows-dur-large) var(--ows-ease-out), stroke var(--ows-dur-state) var(--ows-ease-out);
+}
+.ows-fx-edge[data-active] { stroke: var(--mantine-primary-color-filled); }
+.ows-fx-edge[data-leaving] { animation: ows-fx-fade var(--ows-dur-state) var(--ows-ease-out) both; }
+@keyframes ows-fx-draw { from { stroke-dashoffset: 1; } }
+@keyframes ows-fx-fade { to { opacity: 0; } }
+
+.ows-fx-tools { position: absolute; right: 10px; bottom: 10px; padding: 4px; border-radius: 10px; background: var(--ows-canvas); border: 1px solid var(--ows-border); }
+.ows-fx-crumb { padding: 2px 4px; border-radius: 6px; font-size: 13px; color: var(--ows-muted); transition: color var(--ows-dur-micro) var(--ows-ease-out), background-color var(--ows-dur-micro) var(--ows-ease-out); }
+.ows-fx-crumb:hover { color: var(--mantine-color-text); background: var(--ows-subtle); }
+.ows-fx-crumb[data-current] { color: var(--mantine-color-text); font-weight: 600; }
+.ows-fx-detail { animation: ows-fx-in var(--ows-dur-menu) var(--ows-ease-out) both; }
+
+/* The same tree as a list */
+.ows-fx-list { overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+.ows-fx-row { height: 34px; flex: none; padding-inline-start: calc(var(--ows-fx-depth) * 22px); }
+.ows-fx-row .ows-fx-block { border-color: transparent; background: transparent; }
+.ows-fx-row .ows-fx-block:hover { background: var(--ows-subtle); }
+.ows-fx-row .ows-fx-block[data-selected] { background: var(--mantine-primary-color-light); box-shadow: none; }
+.ows-fx-row .ows-fx-chevron[data-open] svg { transform: rotate(90deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ows-fx-world, .ows-fx-node, .ows-fx-block, .ows-fx-edge, .ows-fx-icon, .ows-fx-chevron svg, .ows-fx-crumb, .ows-fx-detail { transition: none; animation: none; }
+}
+
+/* ------------------------------------------------------------- files found in a folder (ui/FoundTree.tsx) */
+.ows-found {
+  overflow: auto; max-height: 380px; padding: 14px;
+  border: 1px solid var(--ows-border); border-radius: var(--ows-surface-radius); background-color: var(--ows-tile);
+}
+.ows-found-world { position: relative; }
+.ows-found .ows-fx-block { cursor: default; }
+.ows-found .ows-fx-block[data-action] { cursor: pointer; }
+.ows-found .ows-fx-block:not([data-action]):hover { border-color: var(--ows-border-strong); }
+.ows-found-lines { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
+.ows-found-mono { font-family: var(--mantine-font-family-monospace); font-size: 12px; }
+.ows-found-range { color: var(--ows-muted); }
+
+/* ---------------------------------------------------------------- calculation state (run/RunProgress.tsx) */
+.ows-run-state { display: inline-flex; align-items: center; gap: 8px; color: var(--ows-muted); }
+.ows-run-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ows-muted); flex: none; }
+.ows-run-state[data-state="running"] { color: var(--mantine-color-text); }
+.ows-run-state[data-state="running"] .ows-run-dot { background: var(--mantine-primary-color-filled); animation: ows-run-pulse 1.6s var(--ows-ease-in-out) infinite; }
+.ows-run-state[data-state="done"] .ows-run-dot { background: var(--mantine-primary-color-filled); }
+.ows-run-state[data-state="error"] { color: var(--mantine-color-red-6); }
+.ows-run-state[data-state="error"] .ows-run-dot { background: var(--mantine-color-red-6); }
+@keyframes ows-run-pulse { 50% { opacity: 0.35; } }
+.ows-estimate { color: var(--ows-muted); font-size: 13px; }
+.ows-estimate[data-load="busy"] { color: var(--mantine-color-orange-6); }
+.ows-estimate[data-load="full"] { color: var(--mantine-color-red-6); }
+@media (prefers-reduced-motion: reduce) { .ows-run-state[data-state="running"] .ows-run-dot { animation: none; } }
+.ows-run-ring { flex: none; }
+.ows-run-ring-track { fill: none; stroke: var(--ows-border-strong); stroke-width: 2.2; }
+.ows-run-ring-done { fill: none; stroke: var(--mantine-primary-color-filled); stroke-width: 2.2; stroke-linecap: round; }
+.ows-run-state[data-state="error"] .ows-run-ring-done { stroke: var(--mantine-color-red-6); }
+
+/* ------------------------------------------------------------ engine installation (compute/EngineWizard.tsx) */
+.ows-install-checks { border: 1px solid var(--ows-border); border-radius: var(--ows-surface-radius); }
+.ows-install-check { padding: 12px 14px; min-width: 0; }
+.ows-install-check + .ows-install-check { border-inline-start: 1px solid var(--ows-border); }
+.ows-install-value { margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color var(--ows-dur-state) var(--ows-ease-out); }
+.ows-install-value[data-ok="true"] { color: var(--mantine-primary-color-filled); }
+.ows-install-value[data-ok="false"] { color: var(--mantine-color-red-6); }
+.ows-install-checks[data-loading] .ows-install-value { opacity: 0.55; }
+.ows-install-note { min-height: 18px; }
+.ows-install-link { font-size: 12px; color: var(--ows-muted); text-decoration: underline; text-decoration-color: var(--ows-border-strong); text-underline-offset: 3px; transition: color var(--ows-dur-micro) var(--ows-ease-out); }
+.ows-install-link:hover { color: var(--mantine-color-text); }
+.ows-install-fixed { padding: 8px 12px; border: 1px solid var(--ows-border); border-radius: var(--ows-control-radius); color: var(--ows-muted); }
+.ows-install-progress { animation: ows-fx-in var(--ows-dur-dialog) var(--ows-ease-out) both; }
+/* Read from the bottom: the end in view, the line being written marked, the older lines fading upwards */
+.ows-install-log { display: flex; flex-direction: column-reverse; margin: 0; padding-inline: 6px; max-height: 240px; overflow: auto; white-space: pre-wrap; color: var(--ows-muted); -webkit-mask-image: linear-gradient(to bottom, transparent, #000 45%); mask-image: linear-gradient(to bottom, transparent, #000 45%); }
+.ows-install-log > span { display: block; }
+.ows-log-now { display: block; margin-inline: -6px; padding: 1px 6px; border-radius: 4px; color: var(--mantine-color-text); background: var(--mantine-primary-color-light); }
+.ows-install-log:hover { -webkit-mask-image: none; mask-image: none; }
+@media (prefers-reduced-motion: reduce) { .ows-install-progress { animation: none; } }
+/* The folds of the window are lighter than those of a page */
+.ows-install-fold .mantine-Accordion-control { padding-block: 10px !important; }
+.ows-install-fold .ows-disclosure-title { font-size: 14.5px !important; }
+.ows-install-fold .mantine-Accordion-content { padding-bottom: 16px !important; }
+
+/* Settings › storage: the disk of the data folder fills from the left when it appears */
+.ows-disk { display: flex; height: 8px; margin-top: -8px; border-radius: 999px; background: var(--ows-subtle); overflow: hidden; }
+.ows-disk > span { height: 100%; transform-origin: 0 50%; animation: ows-disk-fill 900ms var(--ows-ease-out) 200ms both; }
+.ows-disk-app { min-width: 4px; background: var(--mantine-primary-color-filled); }
+.ows-disk-other { background: var(--ows-border-strong); animation-delay: 380ms !important; }
+@keyframes ows-disk-fill { from { transform: scaleX(0); } }
+
+/* Glossary words: a highlight sweeps across the word, its definition unfolds under it */
+.ows-term { border-radius: 4px; background: linear-gradient(var(--mantine-primary-color-light), var(--mantine-primary-color-light)) no-repeat 0 0 / 0% 100%; transition: background-size 280ms var(--ows-ease-out); }
+.ows-term:hover, .ows-term:focus-visible { background-size: 100% 100%; }
+
+/* Help › a guide: its text and, beside it, its headings as dashes (the one read is longer) */
+.ows-guide { display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 40px; align-items: start; }
+.ows-guide-toc { position: sticky; top: 16px; display: flex; flex-direction: column; gap: 2px; animation: ows-blur-in 420ms var(--ows-ease-out) 260ms both; }
+.ows-toc-item { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 4px 0; border: 0; background: none; color: var(--ows-muted); font: inherit; font-size: 13px; text-align: left; cursor: pointer; transition: color 160ms ease; }
+.ows-toc-item[data-level="3"] { padding-left: 12px; }
+.ows-toc-dash { flex: none; width: 10px; height: 2px; border-radius: 2px; background: var(--ows-border-strong); transition: width 240ms var(--ows-ease-out), background-color 240ms ease; }
+.ows-toc-item:hover { color: var(--mantine-color-text); }
+.ows-toc-item:hover .ows-toc-dash { width: 16px; }
+.ows-toc-item[data-active] { color: var(--mantine-color-text); }
+.ows-toc-item[data-active] .ows-toc-dash { width: 24px; background: var(--mantine-primary-color-filled); }
+.ows-toc-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 75em) { .ows-guide { grid-template-columns: minmax(0, 1fr); } .ows-guide-toc { display: none; } }
+
+/* Videos and reports: the clapperboard closes on its button; saved animations as strips, the one
+   pointed at opens and its frames follow the pointer */
+.ows-clap-bar { transform-box: view-box; transform-origin: 4px 10px; transform: rotate(-18deg); transition: transform 240ms cubic-bezier(0.3, 1.4, 0.5, 1); }
+:is(button, a):hover .ows-clap-bar, :is(button, a):focus-visible .ows-clap-bar { transform: rotate(0deg); }
+.ows-strips { display: flex; gap: 6px; height: 150px; margin-bottom: var(--mantine-spacing-md); }
+.ows-strip { position: relative; flex: 1 1 0; min-width: 0; border-radius: 10px; overflow: hidden; background: var(--ows-subtle); cursor: ew-resize; transition: flex-grow 420ms var(--ows-ease-out); }
+.ows-strip[data-open] { flex-grow: 5; }
+.ows-strip video { display: block; width: 100%; height: 100%; object-fit: cover; opacity: 0.5; transition: opacity 300ms ease; }
+.ows-strip[data-open] video { opacity: 1; }
+.ows-strip-name { position: absolute; left: 10px; right: 10px; bottom: 8px; overflow: hidden; color: var(--ows-on-colour); font-size: 12px; white-space: nowrap; text-overflow: ellipsis; text-shadow: 0 1px 3px rgb(0 0 0 / 0.6); opacity: 0; transition: opacity 200ms ease; }
+.ows-strip[data-open] .ows-strip-name { opacity: 1; }
+
+/* Sliders: the thumb springs to a value clicked or keyed, with a slight overshoot (never while it
+   is dragged); while dragged, the rail thickens under it */
+:is(.mantine-Slider-thumb, .mantine-RangeSlider-thumb):not([data-dragging]) { transition: left 320ms cubic-bezier(0.34, 1.45, 0.55, 1), box-shadow 160ms ease; }
+:is(.mantine-Slider-root, .mantine-RangeSlider-root):not(:has([data-dragging])) :is(.mantine-Slider-bar, .mantine-RangeSlider-bar) { transition: width 320ms cubic-bezier(0.34, 1.45, 0.55, 1), inset-inline-start 320ms cubic-bezier(0.34, 1.45, 0.55, 1); }
+:is(.mantine-Slider-track, .mantine-RangeSlider-track) { transition: height 160ms var(--ows-ease-out); }
+:is(.mantine-Slider-root, .mantine-RangeSlider-root):has([data-dragging]) :is(.mantine-Slider-track, .mantine-RangeSlider-track) { height: calc(var(--slider-size) * 1.8); }
+
+/* Theme button: the sun and the moon turn into each other */
+.ows-sunmoon { overflow: visible; transition: transform 480ms var(--ows-ease-out); }
+.ows-sunmoon-disc { r: 4.6px; transition: r 420ms cubic-bezier(0.34, 1.4, 0.55, 1); }
+.ows-sunmoon-bite { cx: 30px; cy: -6px; transition: cx 420ms var(--ows-ease-out), cy 420ms var(--ows-ease-out); }
+.ows-sunmoon-rays { transform-box: view-box; transform-origin: 12px 12px; transition: transform 420ms var(--ows-ease-out), opacity 260ms ease; }
+.ows-sunmoon[data-moon] { transform: rotate(-24deg); }
+.ows-sunmoon[data-moon] .ows-sunmoon-disc { r: 8px; }
+.ows-sunmoon[data-moon] .ows-sunmoon-bite { cx: 17px; cy: 8px; }
+.ows-sunmoon[data-moon] .ows-sunmoon-rays { transform: rotate(-60deg) scale(0.5); opacity: 0; }
+
+/* Save bar: the count of errors rolls to its new value */
+.ows-roll { display: inline-flex; overflow: hidden; vertical-align: top; }
+.ows-roll > span { display: inline-block; }
+.ows-roll > span[data-way="up"] { animation: ows-roll-up 300ms var(--ows-ease-out); }
+.ows-roll > span[data-way="down"] { animation: ows-roll-down 300ms var(--ows-ease-out); }
+@keyframes ows-roll-up { from { transform: translateY(10px); opacity: 0; filter: blur(3px); } }
+@keyframes ows-roll-down { from { transform: translateY(-10px); opacity: 0; filter: blur(3px); } }
+
+/* What is running (a run, an installation, an import): a slow light passes over its label */
+.ows-running { --ows-run-fg: var(--mantine-color-text); background: linear-gradient(100deg, var(--ows-run-fg) 42%, var(--mantine-primary-color-filled) 50%, var(--ows-run-fg) 58%) 100% 0 / 260% 100% no-repeat; -webkit-background-clip: text; background-clip: text; color: transparent; animation: ows-running 2.6s linear infinite; }
+@keyframes ows-running { 0% { background-position: 100% 0; } 60%, 100% { background-position: 0% 0; } }
+
+/* Maps: revealed once by a light band sweeping across them when their style is in */
+.ows-map[data-reveal] .maplibregl-canvas { animation: ows-map-reveal 900ms var(--ows-ease-out) both; }
+@keyframes ows-map-reveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+.ows-map[data-reveal]::after { content: ""; position: absolute; inset: 0 auto 0 0; z-index: 2; width: 16%; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--mantine-primary-color-filled) 32%, transparent), transparent); pointer-events: none; animation: ows-map-band 900ms var(--ows-ease-out) both; }
+@keyframes ows-map-band { from { transform: translateX(-100%); } 80% { opacity: 1; } to { transform: translateX(625%); opacity: 0; } }
+
+/* Ticks of checkboxes are traced from left to right */
+.mantine-Checkbox-input:checked + .mantine-Checkbox-icon { animation: ows-tick-reveal 300ms var(--ows-ease-out) both; }
+@keyframes ows-tick-reveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+/* Ctrl+K: results come in one after the other out of a blur; Tab on a project writes its name
+   before the text and its pages slide in */
+.ows-palette-item { animation: ows-result-in 280ms var(--ows-ease-out) both; animation-delay: calc(var(--i, 0) * 28ms); }
+@keyframes ows-result-in { from { opacity: 0; filter: blur(4px); transform: translateY(4px); } }
+.ows-palette-lead { display: flex; align-items: center; gap: 8px; width: 100%; min-width: 0; padding-left: 12px; color: var(--mantine-color-dimmed); }
+.ows-palette-lead > svg { flex: none; }
+/* The magnifier turns as the search opens, and leans when its button is hovered */
+.ows-palette-lead > svg:first-child { animation: ows-loupe 520ms var(--ows-ease-out) both; }
+@keyframes ows-loupe { from { opacity: 0; transform: rotate(-90deg) scale(0.7); } to { opacity: 1; transform: none; } }
+.ows-search-button > svg { flex: none; transition: transform var(--ows-dur-dialog) var(--ows-ease-out); }
+.ows-search-button:hover > svg { transform: rotate(-16deg) scale(1.06); }
+.ows-palette-chip { flex: none; display: inline-flex; align-items: center; gap: 6px; max-width: 200px; padding: 0; border: 0; background: none; font: inherit; font-size: 13px; font-weight: 600; color: var(--mantine-color-text); cursor: pointer; animation: ows-chip-in 260ms var(--ows-ease-out) both; }
+.ows-palette-chip-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ows-palette-chip > span:last-child { color: var(--mantine-color-dimmed); font-weight: 500; }
+@keyframes ows-chip-in { from { opacity: 0; transform: translateX(-6px); filter: blur(3px); } }
+.ows-palette-pane[data-way="in"] { animation: ows-pane-in 260ms var(--ows-ease-out) both; }
+@keyframes ows-pane-in { from { opacity: 0; transform: translateX(18px); } }
+
+/* Text erased in one go leaves in drifting letters */
+.ows-vanish { position: fixed; inset: 0; z-index: 1000; pointer-events: none; }
+.ows-vanish > span { position: absolute; white-space: pre; line-height: 1; transform: translateY(-50%); animation: ows-vanish 620ms var(--ows-ease-out) both; animation-delay: calc(var(--k) * 14ms); }
+@keyframes ows-vanish { to { transform: translate(var(--dx), calc(-50% + var(--dy))) scale(0.45); opacity: 0; filter: blur(4px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ows-palette-item, .ows-palette-chip, .ows-palette-pane { animation: none !important; }
+  .ows-palette-lead > svg:first-child { animation: none !important; }
+  .ows-search-button > svg { transition: none !important; }
+}

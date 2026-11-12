@@ -1,0 +1,166 @@
+id: nrel-reference-5mw-126
+name: NREL Reference 5MW 126
+origin: reference model
+power_curve_type: theoretical
+cut_in_wind_speed: 3
+rated_wind_speed: 11.4
+cut_out_wind_speed: 25
+source: https://raw.githubusercontent.com/NatLabRockies/turbine-models/main/turbine_models/data/Offshore/NREL_Reference_5MW_126.csv
+license: BSD-3-Clause (NREL turbine-models)
+turbine:
+  name: NREL Reference 5MW 126
+  hub_height_m: 90.0
+  rotor_diameter_m: 126.0
+  standing_thrust_coefficient: 0.1
+  rated_power_mw: 5.0
+  curve:
+  - wind_speed: 3.0
+    thrust_coefficient: 1.132
+    power_kw: 40.52
+  - wind_speed: 4.0
+    thrust_coefficient: 0.9995
+    power_kw: 177.67
+  - wind_speed: 5.0
+    thrust_coefficient: 0.9177
+    power_kw: 403.9
+  - wind_speed: 6.0
+    thrust_coefficient: 0.8608
+    power_kw: 737.59
+  - wind_speed: 7.0
+    thrust_coefficient: 0.8154
+    power_kw: 1187.18
+  - wind_speed: 7.1
+    thrust_coefficient: 0.8116
+    power_kw: 1239.25
+  - wind_speed: 7.2
+    thrust_coefficient: 0.8079
+    power_kw: 1292.52
+  - wind_speed: 7.3
+    thrust_coefficient: 0.8044
+    power_kw: 1347.32
+  - wind_speed: 7.4
+    thrust_coefficient: 0.801
+    power_kw: 1403.26
+  - wind_speed: 7.5
+    thrust_coefficient: 0.7977
+    power_kw: 1460.7
+  - wind_speed: 7.6
+    thrust_coefficient: 0.7945
+    power_kw: 1519.64
+  - wind_speed: 7.7
+    thrust_coefficient: 0.7915
+    power_kw: 1580.17
+  - wind_speed: 7.8
+    thrust_coefficient: 0.7886
+    power_kw: 1642.11
+  - wind_speed: 7.9
+    thrust_coefficient: 0.7872
+    power_kw: 1705.76
+  - wind_speed: 8.0
+    thrust_coefficient: 0.7871
+    power_kw: 1771.17
+  - wind_speed: 9.0
+    thrust_coefficient: 0.7858
+    power_kw: 2518.55
+  - wind_speed: 10.0
+    thrust_coefficient: 0.7838
+    power_kw: 3448.38
+  - wind_speed: 10.1
+    thrust_coefficient: 0.7836
+    power_kw: 3552.14
+  - wind_speed: 10.2
+    thrust_coefficient: 0.7833
+    power_kw: 3657.95
+  - wind_speed: 10.3
+    thrust_coefficient: 0.7812
+    power_kw: 3765.12
+  - wind_speed: 10.4
+    thrust_coefficient: 0.7773
+    power_kw: 3873.93
+  - wind_speed: 10.5
+    thrust_coefficient: 0.7735
+    power_kw: 3984.48
+  - wind_speed: 10.6
+    thrust_coefficient: 0.7697
+    power_kw: 4096.58
+  - wind_speed: 10.7
+    thrust_coefficient: 0.766
+    power_kw: 4210.72
+  - wind_speed: 10.8
+    thrust_coefficient: 0.7623
+    power_kw: 4326.15
+  - wind_speed: 10.9
+    thrust_coefficient: 0.7588
+    power_kw: 4443.4
+  - wind_speed: 11.0
+    thrust_coefficient: 0.7552
+    power_kw: 4562.5
+  - wind_speed: 11.1
+    thrust_coefficient: 0.7518
+    power_kw: 4683.42
+  - wind_speed: 11.2
+    thrust_coefficient: 0.7484
+    power_kw: 4806.16
+  - wind_speed: 11.3
+    thrust_coefficient: 0.7451
+    power_kw: 4929.93
+  - wind_speed: 11.4
+    thrust_coefficient: 0.7178
+    power_kw: 5000.92
+  - wind_speed: 11.5
+    thrust_coefficient: 0.6722
+    power_kw: 5000.16
+  - wind_speed: 11.6
+    thrust_coefficient: 0.6383
+    power_kw: 4999.98
+  - wind_speed: 11.7
+    thrust_coefficient: 0.6102
+    power_kw: 4999.96
+  - wind_speed: 11.8
+    thrust_coefficient: 0.5855
+    power_kw: 4999.98
+  - wind_speed: 11.9
+    thrust_coefficient: 0.5632
+    power_kw: 5000.0
+  - wind_speed: 12.0
+    thrust_coefficient: 0.5429
+    power_kw: 5000.0
+  - wind_speed: 13.0
+    thrust_coefficient: 0.3993
+    power_kw: 5000.01
+  - wind_speed: 14.0
+    thrust_coefficient: 0.3105
+    power_kw: 5000.01
+  - wind_speed: 15.0
+    thrust_coefficient: 0.2486
+    power_kw: 5000.02
+  - wind_speed: 16.0
+    thrust_coefficient: 0.2035
+    power_kw: 5000.0
+  - wind_speed: 17.0
+    thrust_coefficient: 0.1696
+    power_kw: 5000.02
+  - wind_speed: 18.0
+    thrust_coefficient: 0.1435
+    power_kw: 5000.03
+  - wind_speed: 19.0
+    thrust_coefficient: 0.1229
+    power_kw: 5000.02
+  - wind_speed: 20.0
+    thrust_coefficient: 0.1065
+    power_kw: 5000.04
+  - wind_speed: 21.0
+    thrust_coefficient: 0.093
+    power_kw: 5000.02
+  - wind_speed: 22.0
+    thrust_coefficient: 0.0816
+    power_kw: 5000.05
+  - wind_speed: 23.0
+    thrust_coefficient: 0.0722
+    power_kw: 5000.01
+  - wind_speed: 24.0
+    thrust_coefficient: 0.0644
+    power_kw: 5000.0
+  - wind_speed: 25.0
+    thrust_coefficient: 0.0578
+    power_kw: 5000.04

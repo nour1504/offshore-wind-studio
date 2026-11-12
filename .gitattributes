@@ -1,0 +1,6 @@
+# Scripts run inside Linux containers must keep LF line endings
+* text=auto eol=lf
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.png binary
+*.jpg binary

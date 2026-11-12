@@ -1,0 +1,192 @@
+diff --git a/Registry/Registry.EM_COMMON b/Registry/Registry.EM_COMMON
+index d0065b6..7de1744 100644
+--- a/Registry/Registry.EM_COMMON
++++ b/Registry/Registry.EM_COMMON
+@@ -808,6 +808,11 @@ state    real   ts_tslb         ?!       misc      -         -      -        "TS
+ state    real   ts_clw          ?!       misc      -         -      -        "TS_CLW"         "Column integrated cloud water"
+ state    real   ts_rainc        ?!       misc      -         -      -        "TS_RAINC"       "Cumulus precip"
+ state    real   ts_rainnc       ?!       misc      -         -      -        "TS_RAINNC"      "Grid-scale precip"
++state    real   ts_lmo          ?!       misc      -         -      -        "TS_LMO"         "Inverse Monin-Obukhov length (RMOL)"
++state    real   ts_ri           ?!       misc      -         -      -        "TS_RI"          "Bulk Richardson number (BR)"
++state    real   ts_ust          ?!       misc      -         -      -        "TS_UST"         "Friction velocity (UST)"
++state    real   ts_pblh         ?!       misc      -         -      -        "TS_PBLH"        "PBL height (PBLH)"
++state    real   ts_power        ?!       misc      -         -      -        "TS_POWER"       "Wind farm power in the grid cell (POWER / 1000)"
+ 
+ # Time series of vertical profile of U, V, GHT, THETA, QVAPOR, PRESSURE
+ state    real   ts_u_profile   ?!k       misc      -         -      -        "TS_U_PROFILE"   "Wind u-Component, earth relative, vertical profile" "m/s"
+@@ -817,6 +822,7 @@ state    real   ts_gph_profile ?!k       misc      -         -      -        "TS
+ state    real   ts_th_profile  ?!k       misc      -         -      -        "TS_TH_PROFILE"  "Total potential temperature, vertical profile" "K"
+ state    real   ts_qv_profile  ?!k       misc      -         -      -        "TS_QV_PROFILE"  "Water vapor mixing ratio, vertical profile" "kg/kg"
+ state    real   ts_p_profile   ?!k       misc      -         -      -        "TS_P_PROFILE"   "Pressure, vertical profile" "Pa"
++state    real   ts_tke_profile ?!k       misc      -         -      -        "TS_TKE_PROFILE" "TKE of the PBL scheme (QKE/2 with MYNN; TKE_PBL with MYJ, QNSE, BouLac), vertical profile" "m2 s-2"
+ 
+ 
+ # urban model variables
+diff --git a/share/wrf_timeseries.F b/share/wrf_timeseries.F
+index 3aa9f77..c6ed72e 100644
+--- a/share/wrf_timeseries.F
++++ b/share/wrf_timeseries.F
+@@ -35,13 +35,13 @@ SUBROUTINE calc_ts_locations( grid )
+    CHARACTER (LEN=132) :: message
+    CHARACTER (LEN=24) :: ts_profile_filename
+ #if (WRF_CHEM == 1)
+-   INTEGER, PARAMETER :: TS_FIELDS = 8
++   INTEGER, PARAMETER :: TS_FIELDS = 9
+    CHARACTER (LEN=2), DIMENSION(TS_FIELDS) :: &
+-      ts_file_endings = (/ 'UU', 'VV', 'PH', 'TH', 'QV' ,'WW', 'PR', 'O3'/)
++      ts_file_endings = (/ 'UU', 'VV', 'PH', 'TH', 'QV' ,'WW', 'PR', 'O3', 'TK'/)
+ #else
+-   INTEGER, PARAMETER :: TS_FIELDS = 7
++   INTEGER, PARAMETER :: TS_FIELDS = 8
+    CHARACTER (LEN=2), DIMENSION(TS_FIELDS) :: &
+-      ts_file_endings = (/ 'UU', 'VV', 'PH', 'TH', 'QV' ,'WW', 'PR'/) 
++      ts_file_endings = (/ 'UU', 'VV', 'PH', 'TH', 'QV' ,'WW', 'PR', 'TK'/)
+ #endif
+    INTEGER   ierr
+    CHARACTER (len=19) simulation_start_date
+@@ -329,6 +329,7 @@ SUBROUTINE calc_ts( grid )
+    USE module_domain
+    USE module_configure, ONLY : model_config_rec, grid_config_rec_type, model_to_grid_config_rec
+    USE module_model_constants
++   USE module_state_description, ONLY : MYNNPBLSCHEME, MYJPBLSCHEME, QNSEPBLSCHEME, BOULACSCHEME
+ 
+    IMPLICIT NONE
+ 
+@@ -463,6 +464,16 @@ SUBROUTINE calc_ts( grid )
+             END IF
+             grid%ts_qv_profile(n,i,k)  = grid%moist(ix,k,iy,P_QV)
+             grid%ts_p_profile(n,i,k)   = grid%pb(ix,k,iy)+grid%p(ix,k,iy)
++            ! TKE of the boundary layer scheme: MYNN carries twice the TKE (QKE), MYJ, QNSE
++            ! and BouLac the TKE itself (TKE_PBL); the other schemes have none (missing value)
++            SELECT CASE ( model_config_rec%bl_pbl_physics(grid%id) )
++            CASE ( MYNNPBLSCHEME )
++               grid%ts_tke_profile(n,i,k) = 0.5*grid%qke(ix,k,iy)
++            CASE ( MYJPBLSCHEME, QNSEPBLSCHEME, BOULACSCHEME )
++               grid%ts_tke_profile(n,i,k) = grid%tke_pbl(ix,k,iy)
++            CASE DEFAULT
++               grid%ts_tke_profile(n,i,k) = 1.E30
++            END SELECT
+             END DO
+ #endif
+ #if (WRF_CHEM == 1)
+@@ -484,6 +495,17 @@ SUBROUTINE calc_ts( grid )
+          grid%ts_rainc(n,i)  = grid%rainc(ix,iy)
+          grid%ts_rainnc(n,i) = grid%rainnc(ix,iy)
+          grid%ts_tsk(n,i)  = grid%tsk(ix,iy)
++         grid%ts_lmo(n,i)  = grid%rmol(ix,iy)
++         grid%ts_ri(n,i)   = grid%br(ix,iy)
++         grid%ts_ust(n,i)  = grid%ust(ix,iy)
++         grid%ts_pblh(n,i) = grid%pblh(ix,iy)
++         ! Power of the wind farm scheme in the grid cell (kW); POWER exists only where a
++         ! wind farm scheme runs (windfarm_opt > 0)
++         IF ( model_config_rec%windfarm_opt(grid%id) > 0 ) THEN
++            grid%ts_power(n,i) = grid%power(ix,iy)/1000.
++         ELSE
++            grid%ts_power(n,i) = 0.
++         END IF
+          IF ( model_config_rec%process_time_series == 2 ) THEN
+             !!! Solar diagnostics
+             grid%ts_cldfrac2d(n,i) = grid%cldfrac2d(ix,iy)
+@@ -559,6 +581,7 @@ SUBROUTINE calc_ts( grid )
+          grid%ts_th_profile(n,i,k)    = 1.E30
+          grid%ts_qv_profile(n,i,k)    = 1.E30
+          grid%ts_p_profile(n,i,k)     = 1.E30
++         grid%ts_tke_profile(n,i,k)   = 1.E30
+          END DO
+ #endif   
+ #if (WRF_CHEM == 1)
+@@ -580,6 +603,11 @@ SUBROUTINE calc_ts( grid )
+          grid%ts_clw(n,i)  = 1.E30
+          grid%ts_rainc(n,i)  = 1.E30
+          grid%ts_rainnc(n,i) = 1.E30
++         grid%ts_lmo(n,i)    = 1.E30
++         grid%ts_ri(n,i)     = 1.E30
++         grid%ts_ust(n,i)    = 1.E30
++         grid%ts_pblh(n,i)   = 1.E30
++         grid%ts_power(n,i)  = 1.E30
+          IF ( model_config_rec%process_time_series == 2 ) THEN
+             !!! Solar diagnostics
+             grid%ts_cldfrac2d(n,i) = 1.E30
+@@ -705,6 +733,11 @@ SUBROUTINE write_ts( grid )
+    ts_buf(:,:) = grid%ts_p_profile(:,:,k)
+    CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_p_profile(:,:,k),grid%ts_buf_size*grid%max_ts_locs)
+    END DO
++
++   DO k=1,grid%max_ts_level
++   ts_buf(:,:) = grid%ts_tke_profile(:,:,k)
++   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_tke_profile(:,:,k),grid%ts_buf_size*grid%max_ts_locs)
++   END DO
+ #endif         
+ #if (WRF_CHEM == 1)
+    DO k=1,grid%max_ts_level
+@@ -749,6 +782,21 @@ SUBROUTINE write_ts( grid )
+    ts_buf(:,:) = grid%ts_rainnc(:,:)
+    CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_rainnc(:,:),grid%ts_buf_size*grid%max_ts_locs)
+ 
++   ts_buf(:,:) = grid%ts_lmo(:,:)
++   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_lmo(:,:),grid%ts_buf_size*grid%max_ts_locs)
++
++   ts_buf(:,:) = grid%ts_ri(:,:)
++   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_ri(:,:),grid%ts_buf_size*grid%max_ts_locs)
++
++   ts_buf(:,:) = grid%ts_ust(:,:)
++   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_ust(:,:),grid%ts_buf_size*grid%max_ts_locs)
++
++   ts_buf(:,:) = grid%ts_pblh(:,:)
++   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_pblh(:,:),grid%ts_buf_size*grid%max_ts_locs)
++
++   ts_buf(:,:) = grid%ts_power(:,:)
++   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_power(:,:),grid%ts_buf_size*grid%max_ts_locs)
++
+    IF ( model_config_rec%process_time_series == 2 ) THEN
+       !!! Solar diagnostics
+       ts_buf(:,:) = grid%ts_cldfrac2d(:,:)
+@@ -888,7 +936,7 @@ SUBROUTINE write_ts( grid )
+ 
+ #if (EM_CORE == 1)
+             IF ( model_config_rec%process_time_series == 1 ) THEN
+-               WRITE(UNIT=iunit,FMT='(i2,f13.6,i5,i5,i5,1x,14(f13.5,1x))')  &
++               WRITE(UNIT=iunit,FMT='(i2,f13.6,i5,i5,i5,1x,18(f13.5,1x),f13.2)')  &
+                                  grid%id, grid%ts_hour(n,i),                &
+                                  grid%id_tsloc(i), ix, iy,                  &
+                                  grid%ts_t(n,i),                            &
+@@ -904,7 +952,12 @@ SUBROUTINE write_ts( grid )
+                                  grid%ts_tslb(n,i),                         &
+                                  grid%ts_rainc(n,i),                        &
+                                  grid%ts_rainnc(n,i),                       &
+-                                 grid%ts_clw(n,i)
++                                 grid%ts_clw(n,i),                          &
++                                 grid%ts_lmo(n,i),                          &
++                                 grid%ts_ri(n,i),                           &
++                                 grid%ts_ust(n,i),                          &
++                                 grid%ts_pblh(n,i),                         &
++                                 grid%ts_power(n,i)
+             ELSE
+                !!! WRF-Solar diagnostics
+                WRITE(UNIT=iunit,FMT='(i2,f13.6,i5,i5,i5,1x,50(f13.5,1x))')  &
+@@ -1115,6 +1168,25 @@ SUBROUTINE write_ts( grid )
+          END DO
+          CLOSE(UNIT=iunit)
+ 
++         !Write TKE profile to separate file
++         iunit = get_unused_unit()
++            IF ( iunit <= 0 ) THEN
++            CALL wrf_error_fatal('Error in write_ts: could not find a free Fortran unit.')
++            END IF
++         !Recreate filename for TKE profiles
++         k = LEN_TRIM(ts_profile_filename)
++         WRITE(ts_profile_filename(k-1:k),'(A2)') 'TK'
++
++         OPEN(UNIT=iunit, FILE=TRIM(ts_profile_filename), STATUS='unknown', POSITION='append', FORM='formatted')
++
++         DO n=1,grid%next_ts_time - 1
++
++            WRITE(UNIT=iunit,FMT=profile_format)  &
++                              grid%ts_hour(n,i),             &
++                              grid%ts_tke_profile(n,i,1:grid%max_ts_level)
++         END DO
++         CLOSE(UNIT=iunit)
++
+ #endif   
+ #if (WRF_CHEM == 1)
+          !Write O3 profile to separate file

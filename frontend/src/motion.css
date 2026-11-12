@@ -1,0 +1,630 @@
+/*
+ * The motion design of the interface (with motion.ts): the home page's living background and orbs
+ * of projects, and the expressive transitions added on top of styles.css. Only transform, opacity
+ * and filter move where possible; everything rests for reduced animations (the global rule of
+ * styles.css, and the motion library's reducedMotion="user").
+ */
+
+/* ------------------------------------------------------------------------------- home: frame */
+:root {
+  --ows-pin-dot: #0e4d2c;
+  --ows-pin-plate: rgba(255, 255, 255, 0.72);
+  --ows-pin-card: rgba(255, 255, 255, 0.9);
+}
+html[data-mantine-color-scheme="dark"] {
+  --ows-pin-dot: #8ff0b8;
+  --ows-pin-plate: rgba(1, 6, 3, 0.55);
+  --ows-pin-card: rgba(4, 14, 9, 0.9);
+}
+.ows-home-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - 44px - 24px - 56px);
+}
+.ows-home-page > .ows-page-head { position: relative; z-index: 3; align-items: center; }
+/* The name of the application, small, on the row of the actions (no icon before it) */
+.ows-home-page > .ows-page-head h1 { font-size: 17px; line-height: 1.4; }
+.ows-home-page .ows-page-icon { display: none; }
+.ows-home-page > .ows-page-content { flex: 1; display: flex; flex-direction: column; }
+
+/* ------------------------------------------------------------------------------- home: background */
+.ows-home-backdrop {
+  position: absolute;
+  inset: -24px -28px -56px;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--ows-canvas);
+  animation: ows-fade-in 700ms ease both;
+}
+.ows-home-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* Keeps the actions readable at the top */
+.ows-home-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, var(--ows-canvas) 0, color-mix(in srgb, var(--ows-canvas) 55%, transparent) 60px, transparent 140px);
+}
+@media (max-width: 48em) {
+  .ows-home-backdrop { inset: -20px -14px -48px; }
+}
+
+/* ------------------------------------------------------------------------------- home: the word
+   In the middle, light and wide; its letters thicken and rise near the pointer */
+.ows-home-stage {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-height: 440px;
+  display: grid;
+  place-items: center;
+  padding-bottom: 6vh;
+  pointer-events: none;
+}
+.ows-home-heading { position: relative; display: flex; align-items: flex-start; gap: 12px; pointer-events: auto; }
+.ows-home-word {
+  position: relative;
+  display: inline-flex;
+  padding: 0.04em 0.06em 0.12em;
+  border: 0;
+  background: none;
+  color: var(--mantine-color-text);
+  font: inherit;
+  font-size: clamp(60px, 8.6vw, 140px);
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  cursor: pointer;
+  text-shadow: 0 0 22px color-mix(in srgb, var(--ows-canvas) 55%, transparent);
+}
+.ows-home-letter {
+  --near: 0;
+  display: inline-block;
+  font-weight: calc(280 + var(--near) * 340);
+  transform: translateY(calc(var(--near) * -0.06em));
+  transition: font-weight 420ms var(--ows-ease-out), transform 420ms var(--ows-ease-out), color 420ms ease;
+  white-space: pre;
+}
+.ows-home-word:hover .ows-home-letter { color: color-mix(in srgb, var(--mantine-color-text) calc(100% - var(--near) * 30%), var(--ows-pin-dot)); }
+/* A line drawn under the word on hover or focus: it opens */
+.ows-home-word::after {
+  content: "";
+  position: absolute;
+  left: 0.08em;
+  right: 0.08em;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--ows-pin-dot), transparent);
+  transform: scaleX(0);
+  transition: transform 700ms var(--ows-ease-out);
+}
+.ows-home-word:hover::after, .ows-home-word:focus-visible::after { transform: scaleX(1); }
+.ows-home-word:focus-visible { outline: none; }
+/* Once the projects are open, the name goes back to the word */
+.ows-home-title {
+  display: inline-block;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: color 160ms ease;
+}
+.ows-home-title:hover { color: var(--ows-pin-dot); }
+.ows-home-title:focus-visible { outline: 2px solid var(--mantine-primary-color-filled); outline-offset: 3px; }
+.ows-home-empty { position: relative; z-index: 1; }
+
+/* ------------------------------------------------------------------------------- home: the orbs
+   Over each orb drawn by the nebula: a round button, and for a project its name beside it, smaller
+   and fainter towards the back of the sphere */
+.ows-orbs {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  outline: none;
+  cursor: grab;
+}
+.ows-orbs:active { cursor: grabbing; }
+.ows-orb { --r: 24px; --depth: 1; position: absolute; left: 0; top: 0; width: 0; height: 0; will-change: transform; }
+.ows-orb-hit {
+  position: absolute;
+  left: calc(var(--r) * -1);
+  top: calc(var(--r) * -1);
+  width: calc(var(--r) * 2);
+  height: calc(var(--r) * 2);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+.ows-orb-hit:focus-visible { outline: 2px solid var(--mantine-primary-color-filled); outline-offset: 4px; }
+.ows-orb-label {
+  position: absolute;
+  left: calc(var(--r) + 8px);
+  top: 0;
+  transform: translateY(-50%) scale(calc(0.82 + var(--depth) * 0.22));
+  transform-origin: 0 50%;
+  opacity: calc(0.38 + var(--depth) * 0.62);
+}
+.ows-orb[data-side="left"] .ows-orb-label { left: auto; right: calc(var(--r) + 8px); transform-origin: 100% 50%; }
+.ows-orb[data-side="left"] .ows-pin-item { flex-direction: row-reverse; }
+.ows-orb:hover .ows-orb-label, .ows-orb:focus-within .ows-orb-label { opacity: 1; }
+.ows-orb-free {
+  display: block;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: var(--ows-pin-plate);
+  backdrop-filter: blur(6px);
+  color: var(--ows-muted);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.ows-pin-item { position: relative; display: flex; }
+.ows-pin-name {
+  display: block;
+  padding: 2px 7px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--ows-pin-plate);
+  backdrop-filter: blur(6px);
+  color: var(--mantine-color-text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1.35;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+.ows-pin-name:hover { background: color-mix(in srgb, var(--mantine-primary-color-filled) 16%, var(--ows-pin-plate)); }
+.ows-pin-name:focus-visible { outline: 2px solid var(--mantine-primary-color-filled); outline-offset: 2px; }
+/* Beside the name on hover or focus: its period and figures, its description, its actions */
+.ows-pin-card {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  padding-left: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-4px, -50%);
+  transition: opacity 160ms ease, transform 220ms var(--ows-ease-out), visibility 0s linear 220ms;
+  z-index: 2;
+}
+.ows-orb[data-side="left"] .ows-pin-card { left: auto; right: 100%; padding: 0 8px 0 0; transform: translate(4px, -50%); }
+.ows-pin-item:hover .ows-pin-card, .ows-pin-item:focus-within .ows-pin-card, .ows-pin-item[data-menu] .ows-pin-card {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -50%);
+  transition: opacity 160ms ease, transform 220ms var(--ows-ease-out), visibility 0s;
+}
+.ows-pin-card-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 6px 5px 10px;
+  border-radius: 8px;
+  background: var(--ows-pin-card);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 0 1px var(--ows-border), 0 10px 26px -12px rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+}
+.ows-pin-facts { display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--ows-muted); }
+.ows-pin-state { display: inline-flex; align-items: center; gap: 6px; }
+.ows-pin-description { margin: 0; max-width: 260px; overflow: hidden; text-overflow: ellipsis; font-size: 12px; color: var(--ows-muted); }
+.ows-pin-actions { display: flex; }
+
+/* State of the last run, as a dot */
+.ows-state-dot { position: relative; display: inline-block; flex: none; width: 8px; height: 8px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--ows-muted); }
+.ows-state-dot[data-state="succeeded"] { background: var(--ows-state-ok); box-shadow: none; }
+.ows-state-dot[data-state="failed"] { background: var(--ows-state-failed); box-shadow: none; }
+.ows-state-dot:is([data-state="running"], [data-state="queued"]) { background: var(--ows-state-ok); box-shadow: none; }
+.ows-state-dot[data-state="running"]::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--ows-state-ok); animation: ows-ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite; }
+
+/* ------------------------------------------------------------------------------- opening a project
+   The project's page grows out of its name (the page itself changes at once) */
+html.ows-vt-open::view-transition-new(ows-page) { animation: ows-open-in 600ms var(--ows-ease-out) both; }
+html.ows-vt-open::view-transition-old(ows-page) { animation: ows-open-out 320ms ease-in both; }
+@keyframes ows-open-in {
+  from { clip-path: var(--ows-open-from, inset(40% 40% round 18px)); opacity: 0.4; }
+  35% { opacity: 1; }
+  to { clip-path: xywh(0 0 100% 100% round 0px); opacity: 1; }
+}
+@keyframes ows-open-out { to { opacity: 0; filter: blur(8px); transform: scale(1.015); } }
+
+/* ------------------------------------------------------------------------------- run choice: the stack
+   The runs come out of a pile (newest in front, older ones smaller and fainter behind) and settle
+   into the list, one after the other */
+.ows-run-stack .mantine-Select-option { padding: 2px 3px; background: transparent !important; }
+.ows-run-card {
+  --i: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: 9px;
+  border: 1px solid var(--ows-border);
+  background: var(--ows-card);
+  position: relative;
+  z-index: calc(40 - min(var(--i), 30));
+  transform-origin: 50% 0;
+  animation: ows-run-unstack 560ms cubic-bezier(0.2, 1.25, 0.35, 1) both;
+  animation-delay: calc(min(var(--i), 10) * 26ms);
+  transition: border-color var(--ows-dur-micro) ease, background-color var(--ows-dur-micro) ease;
+}
+.ows-run-card-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mantine-Select-option:hover .ows-run-card, .mantine-Select-option[data-combobox-selected] .ows-run-card { border-color: var(--ows-border-strong); background: var(--ows-subtle); }
+.ows-run-card[data-checked] { border-color: color-mix(in srgb, var(--mantine-primary-color-filled) 55%, transparent); color: var(--mantine-color-text); font-weight: 600; }
+@keyframes ows-run-unstack {
+  from {
+    transform: translateY(calc(min(var(--i), 10) * -100% + min(var(--i), 10) * -3px)) scale(calc(1 - min(var(--i), 6) * 0.05));
+    opacity: calc(1 - min(var(--i), 5) * 0.18);
+  }
+}
+
+/* ------------------------------------------------------------------------------- date dial (Data)
+   The small watch of a date field zooms into four rings until their tops span the screen */
+.ows-date-input { cursor: pointer; }
+.ows-watch { display: grid; place-items: center; width: 22px; height: 22px; color: var(--ows-muted); transition: opacity 200ms ease; }
+.ows-watch[data-open] { opacity: 0; }
+.ows-watch-case { fill: none; stroke: currentColor; stroke-width: 1.3; }
+.ows-watch-tick { stroke: currentColor; stroke-width: 1.2; }
+.ows-watch-hand { stroke: var(--mantine-color-text); stroke-width: 1.6; stroke-linecap: round; }
+.ows-watch-minute { stroke-width: 1.1; stroke: var(--mantine-primary-color-filled); }
+.ows-dial {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  outline: none;
+  /* The page goes out of focus behind the rings while they open; once open, an opaque ground and no
+     blur left to compute at each image */
+  background: color-mix(in srgb, var(--ows-canvas) calc(var(--zoom, 1) * 100%), transparent);
+  -webkit-backdrop-filter: blur(calc(var(--zoom, 1) * 14px));
+  backdrop-filter: blur(calc(var(--zoom, 1) * 14px));
+}
+.ows-dial[data-open] { -webkit-backdrop-filter: none; backdrop-filter: none; }
+.ows-dial-face {
+  position: absolute;
+  inset: 0;
+  display: block;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+  /* The rings fade out above and below, once open */
+  -webkit-mask-image: linear-gradient(to bottom, rgb(0 0 0 / calc(1 - var(--detail, 1))) 0, #000 14%, #000 68%, rgb(0 0 0 / calc(1 - var(--detail, 1))) 86%);
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / calc(1 - var(--detail, 1))) 0, #000 14%, #000 68%, rgb(0 0 0 / calc(1 - var(--detail, 1))) 86%);
+}
+.ows-dial-face[data-other] { cursor: pointer; }
+.ows-dial-face[data-held="x"] { cursor: grabbing; }
+.ows-dial-face[data-held="y"] { cursor: ns-resize; }
+.ows-dial-ghost { stroke: color-mix(in srgb, var(--mantine-color-text) 55%, transparent); stroke-width: 1; }
+.ows-dial-band { fill: none; stroke: color-mix(in srgb, var(--mantine-primary-color-filled) 7%, transparent); }
+/* Every look below follows the slide and the turn image by image, without transitions:
+   --near (1 on the ring in front, 0 a ring away) and --c (1 for the value under the needle, 0 a value away) */
+.ows-dial-track {
+  fill: none;
+  stroke: color-mix(in srgb, color-mix(in srgb, var(--mantine-primary-color-filled) 50%, transparent) calc(var(--near, 0) * 100%), var(--ows-border));
+  stroke-width: calc(1px + 0.4px * var(--near, 0));
+}
+.ows-dial-tick {
+  --tick: color-mix(in srgb, var(--ows-muted) 75%, transparent);
+  stroke: color-mix(in srgb, var(--mantine-primary-color-filled) calc(var(--c, 0) * 100%), var(--tick));
+  stroke-width: calc(1px + 1.6px * var(--c, 0));
+  stroke-linecap: round;
+}
+.ows-dial-tick[data-major] { --tick: color-mix(in srgb, var(--mantine-color-text) 72%, transparent); stroke-width: calc(1.4px + 1.2px * var(--c, 0)); }
+/* Values: 12 px, 13 on the ring in front; the chosen one 17, 26 in front */
+.ows-dial-label {
+  --ink: color-mix(in srgb, var(--mantine-color-text) calc(var(--near, 0) * 100%), var(--ows-muted));
+  font-size: calc(12px + 1px * var(--near, 0) + (5px + 8px * var(--near, 0)) * var(--c, 0));
+  font-weight: calc(400 + 300 * var(--c, 0));
+  fill: color-mix(in srgb, var(--mantine-primary-color-filled) calc(var(--c, 0) * 100%), var(--ink));
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+.ows-dial-label[data-major] { --ink: color-mix(in srgb, var(--mantine-color-text) calc(78% + 22% * var(--near, 0)), transparent); }
+.ows-dial-name {
+  font-size: calc(12px + 1px * var(--near, 0));
+  font-weight: calc(600 + 100 * var(--near, 0));
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  fill: color-mix(in srgb, var(--mantine-primary-color-filled) calc(var(--near, 0) * 100%), var(--ows-muted));
+  pointer-events: none;
+}
+/* The needle under the chosen value, solid on the ring in front: the value stands clear above it */
+.ows-dial-needle {
+  stroke: var(--mantine-primary-color-filled);
+  stroke-width: calc(1px + 0.6px * var(--near, 0));
+  stroke-linecap: round;
+  stroke-dasharray: calc(2px + 40px * var(--near, 0)) calc(5px - 5px * var(--near, 0));
+}
+.ows-dial-bead { fill: var(--mantine-primary-color-filled); r: calc(3.5px * var(--near, 0)); }
+.ows-dial-centre {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(20px, 5vh, 48px);
+  /* Comes up with the rings as they open */
+  transform: translate(-50%, calc((1 - var(--detail, 1)) * 18px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: calc(100vw - 32px);
+  pointer-events: none;
+}
+.ows-dial-day { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; }
+.ows-dial-row { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; justify-content: center; pointer-events: auto; }
+.ows-dial-pick { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 2px 10px; min-width: 64px; }
+.ows-dial-pick-name { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ows-muted); }
+/* The ring chosen: its name in white on the green pill, like its value */
+.ows-dial-rings .mantine-SegmentedControl-label[data-active]:not([data-disabled]) .ows-dial-pick-name { color: inherit; }
+.ows-dial-pick-value { font-size: 13px; font-weight: 600; }
+.ows-dial-actions { display: flex; gap: 10px; }
+
+/* ------------------------------------------------------------------------------- levels in 3D (Domains)
+   Sheets at their true heights over the domains; a click spreads them evenly (the wheel further)
+   and tilts the view between them. Camera angles and framing (scale and shift keeping the column
+   in view) are properties that glide; the labels follow, facing the eye. */
+@property --cam-x { syntax: "<angle>"; inherits: true; initial-value: 58deg; }
+@property --cam-z { syntax: "<angle>"; inherits: true; initial-value: -36deg; }
+@property --fit { syntax: "<number>"; inherits: true; initial-value: 1; }
+@property --fit-x { syntax: "<length>"; inherits: true; initial-value: 0px; }
+@property --fit-y { syntax: "<length>"; inherits: true; initial-value: 0px; }
+.ows-stack3d {
+  --ows-stack-low: #34c472;
+  --ows-stack-high: #4f8fe8;
+  --ows-stack-rotor: #f0912f;
+  --ows-stack-sea: #127a8a;
+  --ows-stack-sea-deep: #0b4f63;
+  --ows-stack-grid: color-mix(in srgb, var(--mantine-color-text) 9%, transparent);
+  --ows-stack-edge: 62%;
+  --ows-stack-fill: 4%;
+  position: relative;
+  height: 540px;
+  overflow: hidden;
+  border-radius: 14px;
+  outline: none;
+  cursor: pointer;
+  background: radial-gradient(ellipse 58% 46% at 50% 70%, color-mix(in srgb, var(--mantine-primary-color-filled) 10%, transparent), transparent 75%);
+}
+.ows-stack3d[data-settled] { transition: --cam-x 900ms var(--ows-ease-out), --cam-z 900ms var(--ows-ease-out), --fit 900ms var(--ows-ease-out), --fit-x 900ms var(--ows-ease-out), --fit-y 900ms var(--ows-ease-out); }
+/* The wheel moves the view at once, the sheets all together */
+.ows-stack3d[data-settled][data-wheel] { transition-duration: 320ms; }
+.ows-stack3d:focus-visible { outline: 2px solid var(--ows-accent-2); outline-offset: -2px; }
+[data-mantine-color-scheme="light"] .ows-stack3d {
+  --ows-stack-low: #15934d;
+  --ows-stack-high: #2f6fd0;
+  --ows-stack-rotor: #d9730f;
+  --ows-stack-grid: color-mix(in srgb, var(--mantine-color-text) 12%, transparent);
+  --ows-stack-edge: 80%;
+  --ows-stack-fill: 6%;
+}
+.ows-stack3d-camera { position: absolute; inset: 0; display: grid; place-items: center; perspective: 1600px; translate: var(--fit-x) var(--fit-y); pointer-events: none; }
+.ows-stack3d-stage { position: relative; transform-style: preserve-3d; transform: scale3d(var(--fit), var(--fit), var(--fit)) rotateX(var(--cam-x)) rotateZ(var(--cam-z)); }
+.ows-stack3d-ground {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--ows-border-strong);
+  background-color: color-mix(in srgb, var(--ows-stack-sea) 22%, var(--ows-canvas));
+  background-image: linear-gradient(to right, var(--ows-stack-grid) 1px, transparent 1px), linear-gradient(to bottom, var(--ows-stack-grid) 1px, transparent 1px);
+  box-shadow: 0 0 70px color-mix(in srgb, var(--ows-stack-sea) 30%, transparent);
+}
+[data-mantine-color-scheme="light"] .ows-stack3d-ground { background-color: color-mix(in srgb, var(--ows-stack-sea) 12%, var(--ows-canvas)); box-shadow: 0 18px 60px color-mix(in srgb, var(--ows-stack-sea-deep) 22%, transparent); }
+.ows-stack3d-domain { position: absolute; border: 1.5px solid color-mix(in srgb, var(--mantine-color-text) 55%, transparent); }
+.ows-stack3d-domain[data-outer] { border-color: transparent; }
+.ows-stack3d-sheet {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  border: 1px solid color-mix(in srgb, var(--sheet) var(--ows-stack-edge), transparent);
+  background-color: color-mix(in srgb, var(--sheet) var(--ows-stack-fill), transparent);
+  transition: background-color 300ms ease;
+}
+.ows-stack3d-sheet[data-odd] { border-style: solid; background-color: color-mix(in srgb, var(--sheet) calc(var(--ows-stack-fill) * 0.4), transparent); }
+.ows-stack3d-sheet[data-rotor] { border-width: 1.5px; }
+.ows-stack3d[data-spread] .ows-stack3d-sheet { background-color: color-mix(in srgb, var(--sheet) calc(var(--ows-stack-fill) * 2.4), transparent); }
+/* Labels and ruler marks turned back to face the eye, whatever the tilt, at the same size whatever the framing */
+.ows-stack3d-face { display: inline-block; transform-origin: 0 50%; transform: rotateZ(calc(var(--cam-z) * -1)) rotateX(calc(var(--cam-x) * -1)) scale(calc(1 / var(--fit))); }
+.ows-stack3d-label {
+  position: absolute;
+  left: 100%;
+  top: 100%;
+  margin-top: -8px;
+  padding-left: 14px;
+  transform-style: preserve-3d;
+  font-size: 12px;
+  color: var(--ows-muted);
+  white-space: nowrap;
+}
+.ows-stack3d-sheet[data-rotor] .ows-stack3d-label { color: var(--ows-stack-rotor); font-weight: 600; }
+.ows-stack3d-mark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+.ows-stack3d-mark::before { content: ""; position: absolute; right: 0; top: -0.5px; width: 14px; height: 1px; background: color-mix(in srgb, var(--mantine-color-text) 55%, transparent); }
+.ows-stack3d-mark > span { position: absolute; right: 18px; top: -8px; font-size: 12px; line-height: 16px; color: var(--ows-muted); white-space: nowrap; transform-origin: 100% 50%; }
+.ows-stack3d-plane { position: absolute; transform-origin: 50% 100%; transform: rotateX(-90deg); pointer-events: none; }
+.ows-stack3d-plane svg { display: block; overflow: visible; }
+.ows-stack3d-tower { stroke: var(--mantine-color-text); }
+.ows-stack3d-blade { stroke: var(--mantine-color-text); }
+.ows-stack3d-hub { fill: var(--mantine-color-text); }
+/* Zoomed, the view says so (the heights are no longer to scale) */
+.ows-stack3d-note { position: absolute; left: 14px; bottom: 12px; font-size: 12px; font-weight: 700; color: var(--ows-amber); opacity: 0; transition: opacity 300ms; pointer-events: none; }
+.ows-stack3d[data-spread] .ows-stack3d-note { opacity: 1; }
+/* The curtain sweeps across the domain and back, paused off screen */
+.ows-stack3d-sweep { animation: ows-stack-sweep 3.6s var(--ows-ease-out) infinite alternate; }
+.ows-stack3d[data-paused] .ows-stack3d-sweep { animation-play-state: paused; }
+@keyframes ows-stack-sweep { from { translate: 0 calc(var(--half) * -1); } to { translate: 0 var(--half); } }
+@media (prefers-reduced-motion: reduce) {
+  .ows-stack3d[data-settled] { transition: none; }
+  .ows-stack3d-sweep { animation: none; }
+}
+
+/* ------------------------------------------------------------------------------- shared motion
+   Page header in three beats (icon, title letter by letter: the only words animated so, actions);
+   section dashes on long pages;
+   menus whose highlight glides; buttons, loading, errors and notifications. */
+.ows-letters-word { display: inline-block; white-space: nowrap; }
+.ows-letters-word > span { display: inline-block; white-space: pre; animation: ows-letter-in 520ms var(--ows-ease-out) both; animation-delay: calc(var(--ows-at, 60ms) + var(--i) * 18ms); }
+@keyframes ows-letter-in { from { opacity: 0; filter: blur(8px); transform: translateY(6px); } }
+
+/* In an opened section and in a dialog, the rows come out of the blur one after the other */
+.mantine-Accordion-item[data-active] .mantine-Accordion-content { animation: ows-fade-in 260ms ease both; }
+:where(.mantine-Accordion-item[data-active] .mantine-Accordion-content > * > *, .mantine-Modal-body > * > *) { animation: ows-blur-in 440ms var(--ows-ease-out) both; }
+:where(.mantine-Accordion-item[data-active] .mantine-Accordion-content > * > *:nth-child(2), .mantine-Modal-body > * > *:nth-child(1)) { animation-delay: 50ms; }
+:where(.mantine-Accordion-item[data-active] .mantine-Accordion-content > * > *:nth-child(3), .mantine-Modal-body > * > *:nth-child(2)) { animation-delay: 95ms; }
+:where(.mantine-Accordion-item[data-active] .mantine-Accordion-content > * > *:nth-child(4), .mantine-Modal-body > * > *:nth-child(3)) { animation-delay: 135ms; }
+:where(.mantine-Accordion-item[data-active] .mantine-Accordion-content > * > *:nth-child(5), .mantine-Modal-body > * > *:nth-child(4)) { animation-delay: 170ms; }
+:where(.mantine-Accordion-item[data-active] .mantine-Accordion-content > * > *:nth-child(6), .mantine-Modal-body > * > *:nth-child(5)) { animation-delay: 200ms; }
+:where(.mantine-Accordion-item[data-active] .mantine-Accordion-content > * > *:nth-child(n + 7), .mantine-Modal-body > * > *:nth-child(n + 6)) { animation-delay: 225ms; }
+@keyframes ows-blur-in { from { opacity: 0; filter: blur(8px); transform: translateY(4px); } }
+
+.ows-dashes { position: fixed; right: 12px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: flex-end; gap: 4px; z-index: 50; animation: ows-blur-in 500ms var(--ows-ease-out) 300ms both; }
+.ows-dash { position: relative; display: flex; align-items: center; justify-content: flex-end; width: 36px; height: 14px; }
+.ows-dash-line { width: 12px; height: 2px; border-radius: 2px; background: color-mix(in srgb, var(--mantine-color-text) 30%, transparent); transition: width 280ms var(--ows-ease-out), background-color 200ms ease; }
+.ows-dash:hover .ows-dash-line { width: 20px; background: var(--mantine-color-text); }
+.ows-dash[data-active] .ows-dash-line { width: 30px; background: var(--mantine-primary-color-filled); }
+.ows-dash-name { position: absolute; right: 42px; padding: 3px 9px; border-radius: 7px; border: 1px solid var(--ows-border); background: var(--ows-canvas); font-size: 12px; white-space: nowrap; opacity: 0; transform: translateX(6px); transition: opacity 160ms ease, transform 220ms var(--ows-ease-out); pointer-events: none; }
+.ows-dash:hover .ows-dash-name, .ows-dash:focus-visible .ows-dash-name { opacity: 1; transform: none; }
+@media (max-width: 1499px) { .ows-dashes { display: none; } }
+
+/* Menus and lists: one highlight glides from item to item (ui/menuGlide.ts) */
+[data-list-glide]::before {
+  content: "";
+  position: absolute;
+  left: var(--gl-x);
+  top: 0;
+  width: var(--gl-w);
+  height: var(--gl-h);
+  transform: translateY(var(--gl-y));
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--mantine-primary-color-filled) 13%, transparent);
+  transition: transform 170ms cubic-bezier(0.2, 0.9, 0.3, 1), height 170ms ease, width 170ms ease, opacity 140ms ease;
+  pointer-events: none;
+  z-index: 0;
+}
+[data-list-glide][data-list-glide-off]::before { opacity: 0; }
+[data-list-glide][data-list-glide-instant]::before { transition: none; }
+[data-list-glide] :is([data-combobox-option], .mantine-Menu-item) { position: relative; z-index: 1; }
+[data-list-glide] :is([data-combobox-option], .mantine-Menu-item):is(:hover, [data-hovered], [data-combobox-selected]) { background-color: transparent !important; }
+[data-list-glide] [data-combobox-option][data-combobox-selected] { color: var(--mantine-color-text) !important; }
+
+/* The main button: a light wave runs over its letters on hover */
+.mantine-Button-root[data-variant="filled"]:not(:disabled):not([data-disabled]):not([data-loading]):hover .mantine-Button-label {
+  -webkit-mask-image: linear-gradient(90deg, #000 40%, rgb(0 0 0 / 0.3) 50%, #000 60%);
+  mask-image: linear-gradient(90deg, #000 40%, rgb(0 0 0 / 0.3) 50%, #000 60%);
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  animation: ows-label-wave 520ms var(--ows-ease-out) both;
+}
+@keyframes ows-label-wave { from { -webkit-mask-position: 100% 0; mask-position: 100% 0; } to { -webkit-mask-position: 0 0; mask-position: 0 0; } }
+
+/* Loading: a green light runs over the placeholders */
+.mantine-Skeleton-root[data-animate]::after {
+  background: linear-gradient(100deg, transparent 30%, color-mix(in srgb, var(--mantine-primary-color-filled) 20%, transparent) 50%, transparent 70%), var(--ows-skeleton, color-mix(in srgb, var(--mantine-color-text) 10%, transparent)) !important;
+  background-size: 250% 100%, 100% 100% !important;
+  animation: ows-shimmer 1.6s linear infinite !important;
+}
+@keyframes ows-shimmer { from { background-position: 125% 0, 0 0; } to { background-position: -125% 0, 0 0; } }
+
+/* A field in error trembles once */
+.mantine-Input-input[data-error] { animation: ows-shake 360ms ease 1; }
+@keyframes ows-shake { 20% { transform: translateX(-3px); } 40% { transform: translateX(3px); } 60% { transform: translateX(-2px); } 80% { transform: translateX(1px); } }
+
+/* Notifications arrive in pieces: icon, title, text, then the close button */
+.mantine-Notification-icon { animation: ows-tool-pop 420ms var(--ows-ease-out) both; }
+.mantine-Notification-title { animation: ows-blur-in 380ms var(--ows-ease-out) 80ms both; }
+.mantine-Notification-description { animation: ows-blur-in 380ms var(--ows-ease-out) 150ms both; }
+.mantine-Notification-closeButton { animation: ows-blur-in 380ms var(--ows-ease-out) 260ms both; }
+
+/* Segmented selectors (ui/surfaces.ts): the track and the pill of the motion book (styles.css),
+   labels in bold ink; the default size as in the book, the small ones kept small */
+.mantine-SegmentedControl-root { --sc-padding-sm: 6px 14px; --sc-font-size: 13px; --sc-radius: 999px; padding: 3px; }
+.mantine-SegmentedControl-root[data-glide] .mantine-SegmentedControl-indicator { opacity: 0; }
+.mantine-SegmentedControl-label:not([data-disabled]) { font-weight: 700; color: var(--mantine-color-text); }
+/* Choices too wide to sit side by side in their room (ui/surfaces.ts): closer together first, then
+   one under the other, the corners of the track rounded around those of the pill */
+.mantine-SegmentedControl-root[data-tight] { --sc-padding-sm: 6px 6px; --sc-padding-xs: 2px 3px; }
+.mantine-SegmentedControl-root[data-stacked] { flex-direction: column; border-radius: 20px; }
+.mantine-SegmentedControl-root[data-stacked][data-size="xs"] { border-radius: 15px; }
+.mantine-SegmentedControl-root[data-stacked] .mantine-SegmentedControl-label { white-space: normal; }
+
+/* Tables: one highlight glides from row to row (ui/surfaces.ts) */
+.mantine-Table-table[data-row-glide] { position: relative; --table-highlight-on-hover-color: transparent; }
+.mantine-Table-table[data-row-glide]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: var(--row-h, 0);
+  transform: translateY(var(--row-y, 0));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--mantine-primary-color-filled) 10%, transparent);
+  pointer-events: none;
+  transition: transform 180ms cubic-bezier(0.2, 0.9, 0.3, 1), height 180ms ease, opacity 160ms ease;
+}
+.mantine-Table-table[data-row-off]::after { opacity: 0; }
+.mantine-Table-table[data-row-instant]::after { transition: none; }
+
+/* Comparing projects: the column of the project just chosen slides into place, row after row */
+.ows-compare { transition: opacity 200ms ease; }
+.ows-compare[data-reading] { opacity: 0.5; }
+.ows-compare-col[data-enter] { animation: ows-col-in 440ms var(--ows-ease-out) both; animation-delay: calc(var(--row, 0) * 16ms); }
+.ows-compare-col[data-side="a"] { --from: -18px; }
+.ows-compare-col[data-side="b"] { --from: 18px; }
+@keyframes ows-col-in { from { opacity: 0; transform: translateX(var(--from, 18px)); filter: blur(4px); } }
+
+/* A short note that appears beside a title, a figure that changes in a check cell */
+.ows-note-in { display: inline-block; animation: ows-blur-in 380ms var(--ows-ease-out) both; }
+.ows-install-swap { display: inline-flex; align-items: center; animation: ows-blur-in 360ms var(--ows-ease-out) both; }
+
+/* A run's state reads as a coloured word after a small dot */
+.ows-state-line { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.ows-state-line[data-size="md"] { font-size: 14.5px; }
+.ows-state-line[data-size="xs"] { font-size: 12px; }
+.ows-state-line[data-state="failed"] { color: var(--mantine-color-red-6); }
+
+/* What is done gets a tick traced from its foot to its tip */
+.ows-drawn-check path { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: ows-draw 420ms var(--ows-ease-out) forwards; animation-delay: calc(260ms + var(--k, 0) * 120ms); }
+
+/* Figures fill in the order of the work: a line draws on top of each step done */
+.ows-stat { position: relative; }
+.ows-stat[data-filled]::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--mantine-primary-color-filled); transform-origin: 0 50%; animation: ows-tile-fill 700ms var(--ows-ease-out) both; animation-delay: calc(450ms + var(--k, 0) * 220ms); pointer-events: none; }
+@keyframes ows-tile-fill { from { transform: scaleX(0); } }
+
+/* Map: a ring spreads from a turbine placed or clicked (ui/map/ProjectMap.tsx) */
+.ows-map-ripple { display: block; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--ows-map-ripple); pointer-events: none; animation: ows-map-ripple 720ms cubic-bezier(0.2, 0.8, 0.3, 1) forwards; }
+@keyframes ows-map-ripple { from { transform: scale(0.4); opacity: 0.9; } to { transform: scale(3.4); opacity: 0; } }
+
+/* Focus rings for the keyboard only; with it, one ring glides from section header to section header */
+html[data-input="pointer"] :focus-visible { outline: none !important; }
+html[data-input="pointer"] .mantine-SegmentedControl-input:focus-visible + .mantine-SegmentedControl-label { outline: none !important; }
+.ows-focus-glide { position: absolute; left: 0; top: 0; z-index: 6; border-radius: 14px; box-shadow: 0 0 0 2px var(--mantine-primary-color-filled); opacity: 0; pointer-events: none; }
+html[data-mantine-color-scheme="dark"] .ows-focus-glide { box-shadow: 0 0 0 2px var(--ows-accent); }
+:is(.ows-page-content, .mantine-Modal-body) .mantine-Accordion-control:focus-visible { outline-color: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ows-drawn-check path { animation: none !important; stroke-dashoffset: 0; }
+  .ows-letters-word > span, .ows-page-actions, .ows-page-help, .ows-dashes, .mantine-Tabs-panel, .mantine-Input-input[data-error],
+  .mantine-Notification-icon, .mantine-Notification-title, .mantine-Notification-description, .mantine-Notification-closeButton { animation: none !important; }
+  .mantine-Button-root .mantine-Button-label { animation: none !important; -webkit-mask-image: none !important; mask-image: none !important; }
+  [data-list-glide]::before { transition: none; }
+  .mantine-Skeleton-root[data-animate]::after { animation: none !important; }
+  .ows-roll > span { animation: none !important; }
+}

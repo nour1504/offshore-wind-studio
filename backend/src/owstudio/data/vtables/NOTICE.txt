@@ -1,0 +1,7 @@
+Variable tables (Vtables) of WPS 4.7.0, copied unchanged from ungrib/Variable_Tables of the
+official WRF Preprocessing System (https://github.com/wrf-model/WPS), developed at the National
+Center for Atmospheric Research (NCAR) and distributed in the public domain.
+
+They are shipped with Offshore Wind Studio so that a table can be shown, chosen, checked against
+input files and used as the starting point of a custom table without a WPS installation. Runs
+use the tables of the engine's own WPS installation when a standard table is selected.
