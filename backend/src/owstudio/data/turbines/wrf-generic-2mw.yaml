@@ -1,0 +1,38 @@
+id: wrf-generic-2mw
+name: WRF generic 2 MW
+origin: example table shipped with WRF (run/wind-turbine-1.tbl)
+power_curve_type: idealized
+cut_in_wind_speed: 4
+rated_wind_speed: 16
+cut_out_wind_speed: 25
+source: https://github.com/wrf-model/WRF/blob/v4.8.0/run/wind-turbine-1.tbl
+license: Public domain (WRF)
+turbine:
+  name: WRF generic 2 MW
+  hub_height_m: 75.0
+  rotor_diameter_m: 85.0
+  standing_thrust_coefficient: 0.13
+  rated_power_mw: 2.0
+  curve:
+  - {wind_speed: 4, thrust_coefficient: 0.805, power_kw: 50}
+  - {wind_speed: 5, thrust_coefficient: 0.805, power_kw: 150}
+  - {wind_speed: 6, thrust_coefficient: 0.805, power_kw: 280}
+  - {wind_speed: 7, thrust_coefficient: 0.805, power_kw: 460}
+  - {wind_speed: 8, thrust_coefficient: 0.805, power_kw: 700}
+  - {wind_speed: 9, thrust_coefficient: 0.805, power_kw: 990}
+  - {wind_speed: 10, thrust_coefficient: 0.79, power_kw: 1300}
+  - {wind_speed: 11, thrust_coefficient: 0.74, power_kw: 1600}
+  - {wind_speed: 12, thrust_coefficient: 0.7, power_kw: 1850}
+  - {wind_speed: 13, thrust_coefficient: 0.4, power_kw: 1950}
+  - {wind_speed: 14, thrust_coefficient: 0.3, power_kw: 1990}
+  - {wind_speed: 15, thrust_coefficient: 0.25, power_kw: 1995}
+  - {wind_speed: 16, thrust_coefficient: 0.2, power_kw: 2000}
+  - {wind_speed: 17, thrust_coefficient: 0.16, power_kw: 2000}
+  - {wind_speed: 18, thrust_coefficient: 0.14, power_kw: 2000}
+  - {wind_speed: 19, thrust_coefficient: 0.12, power_kw: 2000}
+  - {wind_speed: 20, thrust_coefficient: 0.1, power_kw: 2000}
+  - {wind_speed: 21, thrust_coefficient: 0.08, power_kw: 2000}
+  - {wind_speed: 22, thrust_coefficient: 0.07, power_kw: 2000}
+  - {wind_speed: 23, thrust_coefficient: 0.06, power_kw: 2000}
+  - {wind_speed: 24, thrust_coefficient: 0.055, power_kw: 2000}
+  - {wind_speed: 25, thrust_coefficient: 0.05, power_kw: 2000}

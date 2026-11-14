@@ -1,0 +1,64 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Zone d'implantation"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              7.79,
+              55.478
+            ],
+            [
+              7.85,
+              55.478
+            ],
+            [
+              7.85,
+              55.505
+            ],
+            [
+              7.79,
+              55.505
+            ],
+            [
+              7.79,
+              55.478
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "E01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.8,
+          55.485
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "E02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.809,
+          55.485
+        ]
+      }
+    }
+  ]
+}
